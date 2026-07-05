@@ -315,6 +315,24 @@ html.custom-cursor-active * {
   cursor: none !important;
 }
 
+@keyframes bit-fade {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  20% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.animate-bit-fade {
+  animation: bit-fade 700ms ease-out forwards;
+}
+
 /**
  * Using the elevate system.
  * Automatic contrast adjustment.
