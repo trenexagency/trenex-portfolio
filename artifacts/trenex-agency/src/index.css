@@ -307,6 +307,14 @@
   }
 }
 
+/* Custom cursor: native cursor is hidden only once the JS cursor system
+   confirms a fine-pointer (mouse) device is in use — touch devices keep
+   their default behavior since the component never mounts there. */
+html.custom-cursor-active,
+html.custom-cursor-active * {
+  cursor: none !important;
+}
+
 /**
  * Using the elevate system.
  * Automatic contrast adjustment.

@@ -190,6 +190,7 @@ export function Hero() {
         <a
           href="#services"
           data-testid="link-view-services"
+          data-magnetic
           className="group inline-flex items-center gap-3 border border-white/20 px-8 py-3 text-sm font-medium uppercase tracking-[0.25em] text-white transition-all duration-300 hover:border-[#FF1F1F] hover:text-[#FF1F1F] hover:shadow-[0_0_24px_rgba(255,31,31,0.25)]"
         >
           <span>View Services</span>

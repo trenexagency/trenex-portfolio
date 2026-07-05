@@ -171,6 +171,7 @@ export function LoadingScreen({ onEnter }: LoadingScreenProps) {
 
                 <motion.button
                   data-testid="button-enter-experience"
+                  data-magnetic
                   onClick={handleEnter}
                   className="group relative mt-14 flex items-center gap-3 border border-[#FF1F1F]/50 px-9 py-3.5 text-sm font-medium uppercase tracking-[0.3em] text-white transition-all duration-300 hover:border-[#FF1F1F] hover:shadow-[0_0_30px_rgba(255,31,31,0.35)]"
                   initial={{ opacity: 0, y: 16 }}

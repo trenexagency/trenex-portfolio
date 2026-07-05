@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { LoadingScreen } from "@/components/LoadingScreen";
+import { CustomCursor } from "@/components/CustomCursor";
 import { Hero } from "@/components/sections/Hero";
 import { Services } from "@/components/sections/Services";
 import { Contact } from "@/components/sections/Contact";
@@ -18,6 +19,7 @@ function Home() {
 
   return (
     <div className="min-h-screen w-full bg-[#050505]">
+      <CustomCursor />
       {!entered && <LoadingScreen onEnter={() => setEntered(true)} />}
       {entered && (
         <>

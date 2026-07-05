@@ -51,6 +51,7 @@ export function Contact() {
       <motion.a
         href="mailto:hello@trenex.agency"
         data-testid="link-contact-email"
+        data-magnetic
         className="group relative mt-12 flex items-center gap-3 border border-[#FF1F1F]/50 px-9 py-3.5 text-sm font-medium uppercase tracking-[0.3em] text-white transition-all duration-300 hover:border-[#FF1F1F] hover:shadow-[0_0_30px_rgba(255,31,31,0.35)]"
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
