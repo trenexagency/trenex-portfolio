@@ -66,12 +66,12 @@ export function LoadingScreen({ onEnter }: LoadingScreenProps) {
                   transition={{ duration: 0.8, ease: "easeOut" }}
                 >
                   <motion.div
-                    className="absolute h-28 w-28 rounded-full"
+                    className="absolute h-52 w-52 rounded-full sm:h-60 sm:w-60 md:h-72 md:w-72"
                     animate={{
                       boxShadow: [
-                        "0 0 20px 4px rgba(255,31,31,0.25)",
-                        "0 0 44px 10px rgba(255,31,31,0.5)",
-                        "0 0 20px 4px rgba(255,31,31,0.25)",
+                        "0 0 40px 10px rgba(255,31,31,0.25)",
+                        "0 0 80px 20px rgba(255,31,31,0.5)",
+                        "0 0 40px 10px rgba(255,31,31,0.25)",
                       ],
                     }}
                     transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
@@ -79,7 +79,13 @@ export function LoadingScreen({ onEnter }: LoadingScreenProps) {
                   <img
                     src={logoUrl}
                     alt="Trenex Agency"
-                    className="relative h-20 w-20 object-contain md:h-24 md:w-24"
+                    className="relative h-32 w-32 object-contain sm:h-40 sm:w-40 md:h-48 md:w-48"
+                    style={{
+                      filter:
+                        "drop-shadow(0 0 22px rgba(255,31,31,0.6)) drop-shadow(0 0 48px rgba(255,31,31,0.35))",
+                    }}
+                    decoding="async"
+                    loading="eager"
                     data-testid="img-logo-loading"
                   />
                 </motion.div>
@@ -121,12 +127,12 @@ export function LoadingScreen({ onEnter }: LoadingScreenProps) {
                   transition={{ duration: 0.7, ease: "easeOut" }}
                 >
                   <motion.div
-                    className="absolute h-24 w-24 rounded-full"
+                    className="absolute h-44 w-44 rounded-full sm:h-52 sm:w-52 md:h-60 md:w-60"
                     animate={{
                       boxShadow: [
-                        "0 0 18px 3px rgba(255,31,31,0.2)",
-                        "0 0 36px 8px rgba(255,31,31,0.45)",
-                        "0 0 18px 3px rgba(255,31,31,0.2)",
+                        "0 0 30px 6px rgba(255,31,31,0.2)",
+                        "0 0 60px 14px rgba(255,31,31,0.45)",
+                        "0 0 30px 6px rgba(255,31,31,0.2)",
                       ],
                     }}
                     transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
@@ -134,7 +140,13 @@ export function LoadingScreen({ onEnter }: LoadingScreenProps) {
                   <img
                     src={logoUrl}
                     alt="Trenex Agency"
-                    className="relative h-16 w-16 object-contain md:h-20 md:w-20"
+                    className="relative h-28 w-28 object-contain sm:h-32 sm:w-32 md:h-36 md:w-36"
+                    style={{
+                      filter:
+                        "drop-shadow(0 0 20px rgba(255,31,31,0.55)) drop-shadow(0 0 42px rgba(255,31,31,0.3))",
+                    }}
+                    decoding="async"
+                    loading="eager"
                     data-testid="img-logo-enter"
                   />
                 </motion.div>

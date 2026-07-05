@@ -7,6 +7,8 @@ import { siteConfig, services } from "@/data/site";
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
+  const farLayerRef = useRef<HTMLDivElement>(null);
+  const midLayerRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
@@ -18,16 +20,30 @@ export function Hero() {
       const x = (e.clientX / innerWidth - 0.5) * 2;
       const y = (e.clientY / innerHeight - 0.5) * 2;
 
+      gsap.to(farLayerRef.current, {
+        x: x * 18,
+        y: y * 12,
+        duration: 1.8,
+        ease: "power3.out",
+      });
+
+      gsap.to(midLayerRef.current, {
+        x: x * 32,
+        y: y * 20,
+        duration: 1.4,
+        ease: "power3.out",
+      });
+
       gsap.to(glowRef.current, {
-        x: x * 40,
-        y: y * 40,
-        duration: 1.2,
+        x: x * 55,
+        y: y * 35,
+        duration: 1.1,
         ease: "power3.out",
       });
 
       gsap.to(headlineRef.current, {
-        x: x * 10,
-        y: y * 6,
+        x: x * 14,
+        y: y * 8,
         duration: 1.2,
         ease: "power3.out",
       });
@@ -43,23 +59,76 @@ export function Hero() {
       id="hero"
       className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-[#050505] px-6 text-center"
     >
-      <div
-        ref={glowRef}
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(circle at 50% 25%, rgba(255,31,31,0.16), transparent 55%)",
-        }}
-      />
+      {/* Cinematic depth background */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        {/* far depth layer — slow, subtle drift */}
+        <div
+          ref={farLayerRef}
+          className="absolute -inset-1/3 opacity-40 blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle at 30% 20%, rgba(255,31,31,0.10), transparent 55%), radial-gradient(circle at 75% 80%, rgba(255,31,31,0.08), transparent 50%)",
+          }}
+        />
+
+        {/* mid depth layer — moderate parallax */}
+        <div
+          ref={midLayerRef}
+          className="absolute -inset-1/4 opacity-50 blur-2xl"
+          style={{
+            background:
+              "radial-gradient(circle at 55% 40%, rgba(255,31,31,0.14), transparent 45%)",
+          }}
+        />
+
+        {/* drifting fog — independent of pointer, slow ambient motion */}
+        <motion.div
+          className="absolute h-[70vw] w-[70vw] rounded-full bg-white/[0.035] mix-blend-screen blur-[110px]"
+          style={{ top: "-15%", left: "-20%" }}
+          animate={{ x: [0, 60, -20, 0], y: [0, 30, -10, 0] }}
+          transition={{ duration: 26, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute h-[55vw] w-[55vw] rounded-full bg-[#FF1F1F]/[0.06] mix-blend-screen blur-[100px]"
+          style={{ bottom: "-20%", right: "-15%" }}
+          animate={{ x: [0, -50, 20, 0], y: [0, -25, 15, 0] }}
+          transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        {/* dynamic pulsing light behind content */}
+        <motion.div
+          ref={glowRef}
+          className="absolute inset-0"
+          animate={{ opacity: [0.7, 1, 0.7] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          style={{
+            background:
+              "radial-gradient(circle at 50% 30%, rgba(255,31,31,0.22), transparent 55%)",
+          }}
+        />
+
+        {/* cinematic vignette */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,0.55) 100%)",
+          }}
+        />
+      </div>
+
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,transparent,#050505_92%)]" />
 
-      <Particles count={35} />
+      {/* near soft-focus embers for depth-of-field */}
+      <Particles count={16} sizeRange={[3, 6]} blurPx={2} className="opacity-50" />
+      {/* sharp far field particles */}
+      <Particles count={55} />
 
       <motion.span
         className="relative mb-6 font-mono text-xs uppercase tracking-[0.4em] text-[#FF1F1F]"
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, ease: "easeOut" }}
+        initial={{ opacity: 0, y: 12, filter: "blur(6px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
       >
         {siteConfig.name}
       </motion.span>
@@ -70,17 +139,17 @@ export function Hero() {
       >
         <motion.span
           className="block"
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.15, ease: "easeOut" }}
+          initial={{ opacity: 0, y: 28, filter: "blur(10px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 1, delay: 0.15, ease: "easeOut" }}
         >
           We Build Digital
         </motion.span>
         <motion.span
           className="block text-[#FF1F1F]"
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.3, ease: "easeOut" }}
+          initial={{ opacity: 0, y: 28, filter: "blur(10px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 1, delay: 0.32, ease: "easeOut" }}
         >
           Experiences.
         </motion.span>
