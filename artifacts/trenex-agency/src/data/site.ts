@@ -4,15 +4,17 @@
  */
 
 export const siteConfig = {
-  name: "Trenex Agency",
-  tagline: "We build brands that move.",
+  name: "TRENEX AGENCY",
+  headline: "We Build Digital Experiences.",
+  subheadline: "Design. Motion. Code.",
   description:
-    "A premium creative studio crafting bold visuals, cinematic video, and high-performance web experiences.",
+    "TRENEX is a futuristic creative agency engineering premium brands, cinematic motion, and high-performance digital products.",
 };
 
 export const navLinks: { label: string; href: string }[] = [
   { label: "Home", href: "#hero" },
   { label: "Services", href: "#services" },
+  { label: "Contact", href: "#contact" },
 ];
 
 export interface Service {

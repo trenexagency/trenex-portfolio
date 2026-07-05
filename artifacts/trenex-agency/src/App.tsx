@@ -8,6 +8,7 @@ import { Footer } from "@/components/layout/Footer";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { Hero } from "@/components/sections/Hero";
 import { Services } from "@/components/sections/Services";
+import { Contact } from "@/components/sections/Contact";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
@@ -16,13 +17,14 @@ function Home() {
   const [entered, setEntered] = useState(false);
 
   return (
-    <div className="min-h-screen w-full bg-black">
+    <div className="min-h-screen w-full bg-[#050505]">
       {!entered && <LoadingScreen onEnter={() => setEntered(true)} />}
       {entered && (
         <>
           <Header />
           <Hero />
           <Services />
+          <Contact />
           <Footer />
         </>
       )}
