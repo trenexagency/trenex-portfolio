@@ -1,20 +1,31 @@
+import { useState } from "react";
 import { Switch, Route, Router as WouterRouter } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { LoadingScreen } from "@/components/LoadingScreen";
+import { Hero } from "@/components/sections/Hero";
+import { Services } from "@/components/sections/Services";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
 
 function Home() {
+  const [entered, setEntered] = useState(false);
+
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gray-50">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900">Replit Agent is building...</h1>
-        <p className="mt-2 text-sm text-gray-600">Your app will appear here once it's ready.</p>
-      </div>
+    <div className="min-h-screen w-full bg-black">
+      {!entered && <LoadingScreen onEnter={() => setEntered(true)} />}
+      {entered && (
+        <>
+          <Header />
+          <Hero />
+          <Services />
+          <Footer />
+        </>
+      )}
     </div>
   );
 }
@@ -33,9 +44,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-          <Header />
           <Router />
-          <Footer />
         </WouterRouter>
         <Toaster />
       </TooltipProvider>

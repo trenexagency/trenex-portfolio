@@ -24,23 +24,25 @@ A premium animated agency portfolio website built with React, GSAP, Framer Motio
 ## Where things live
 
 - `artifacts/trenex-agency/` — the portfolio site (React + Vite artifact, served at `/`)
-  - `src/components/layout/` — Header, Footer, and other page-shell components
-  - `src/components/sections/` — page sections (hero, work, services, etc.) — not yet built
-  - `src/components/three/Scene.tsx` — shared React Three Fiber `<Canvas>` wrapper; build 3D compositions as children of this
+  - `src/components/layout/` — Header, Footer
+  - `src/components/LoadingScreen.tsx` — animated intro loader with progress bar + "Enter Experience" gate
+  - `src/components/sections/` — Hero, Services (more sections to come: About, Work, Contact)
+  - `src/components/three/Scene.tsx` — shared React Three Fiber `<Canvas>` wrapper; build 3D compositions as children of this (not yet used on the page)
   - `src/animations/` — shared GSAP hook (`useGsapAnimation`) and Framer Motion variants (`variants.ts`)
   - `src/lib/gsap.ts` — GSAP instance with `ScrollTrigger` pre-registered; always import gsap from here, not directly from `gsap`
   - `src/lib/three-config.ts` — shared camera/DPR defaults for R3F scenes
-  - `src/data/site.ts` — static site copy/content, kept separate from components
-  - `src/index.css` — theme tokens (currently placeholder `red` values — must be replaced with a real palette before the site is designed)
+  - `src/data/site.ts` — static site copy/content (tagline, services list), kept separate from components
+  - `src/index.css` — dark luxury theme tokens: black background, white text, red accent `hsl(0 100% 56%)` (#FF1F1F)
 
 ## Architecture decisions
 
-- Project was scaffolded only (folder structure + dependencies) per explicit user request — no pages/sections built yet.
+- Dark luxury theme (black/white/red #FF1F1F) is baked into the CSS theme tokens directly — there is no light/dark toggle, the site is always dark.
+- Homepage flow: `LoadingScreen` gates the page behind an animated intro + "Enter Experience" button before revealing Header/Hero/Services.
 - No backend/OpenAPI spec set up for this artifact; it's a presentation-first static site.
 
 ## Product
 
-Premium animated portfolio/marketing site for Trenex Agency. Not yet built — only the project scaffold and dependencies (GSAP, Framer Motion, React Three Fiber, Three.js) are in place.
+Premium animated one-page portfolio for Trenex Agency. Built so far: animated loading screen with "Enter Experience" gate, Hero section, and Services section (Graphic Design, Video Editing, Web Development). Still to build: additional sections (About/Work/Contact) and 3D visuals via the R3F scene wrapper.
 
 ## User preferences
 
