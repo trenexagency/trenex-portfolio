@@ -1,5 +1,13 @@
 import { motion } from "framer-motion";
+import { Palette, Clapperboard, Code2 } from "lucide-react";
 import { services } from "@/data/site";
+import { ServiceCard } from "./ServiceCard";
+
+const icons = [
+  <Palette key="palette" className="h-8 w-8" strokeWidth={1.5} />,
+  <Clapperboard key="clapperboard" className="h-8 w-8" strokeWidth={1.5} />,
+  <Code2 key="code" className="h-8 w-8" strokeWidth={1.5} />,
+];
 
 export function Services() {
   return (
@@ -20,37 +28,9 @@ export function Services() {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {services.map((service, i) => (
-            <motion.div
-              key={service.title}
-              data-testid={`card-service-${service.index}`}
-              className="group relative flex flex-col justify-between gap-12 overflow-hidden rounded-sm border border-white/10 bg-white/[0.02] p-8 transition-all duration-500 hover:-translate-y-2 hover:border-[#FF1F1F]/60 hover:shadow-[0_0_45px_rgba(255,31,31,0.18)] md:p-10"
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.6, delay: i * 0.12, ease: "easeOut" }}
-            >
-              <span
-                className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
-                style={{ background: "radial-gradient(circle, rgba(255,31,31,0.35), transparent 70%)" }}
-              />
-
-              <span className="relative font-mono text-sm text-white/30 transition-colors duration-500 group-hover:text-[#FF1F1F]">
-                {service.index}
-              </span>
-
-              <div className="relative">
-                <h3 className="mb-4 text-2xl font-semibold text-white md:text-3xl">
-                  {service.title}
-                </h3>
-                <p className="text-sm leading-relaxed text-white/50 md:text-base">
-                  {service.description}
-                </p>
-              </div>
-
-              <span className="relative h-px w-0 bg-[#FF1F1F] transition-all duration-500 group-hover:w-full" />
-            </motion.div>
+            <ServiceCard key={service.title} service={service} icon={icons[i]} delay={i * 0.15} />
           ))}
         </div>
       </div>

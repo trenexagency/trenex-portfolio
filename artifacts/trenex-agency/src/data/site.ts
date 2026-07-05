@@ -19,27 +19,35 @@ export const navLinks: { label: string; href: string }[] = [
 
 export interface Service {
   title: string;
+  tagline: string;
   description: string;
   index: string;
+  capabilities: string[];
 }
 
 export const services: Service[] = [
   {
     index: "01",
     title: "Graphic Design",
+    tagline: "Identity Systems",
     description:
       "Distinct visual identities, brand systems, and design assets crafted to make your brand unforgettable.",
+    capabilities: ["Brand Identity", "Art Direction", "Design Systems"],
   },
   {
     index: "02",
     title: "Video Editing",
+    tagline: "Motion & Story",
     description:
       "Cinematic edits, motion graphics, and story-driven content that captures attention and holds it.",
+    capabilities: ["Cinematic Editing", "Motion Graphics", "Color Grading"],
   },
   {
     index: "03",
     title: "Web Development",
+    tagline: "Digital Engineering",
     description:
       "Fast, immersive, and meticulously engineered websites built to convert and impress.",
+    capabilities: ["Interactive Builds", "Performance", "3D & Motion"],
   },
 ];
