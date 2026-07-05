@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Trenex Agency"
+version = "1.0.0"
+id = "artifacts/trenex-agency"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 20818
+
+[services.development]
+run = "pnpm --filter @workspace/trenex-agency run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/trenex-agency", "run", "build" ]
+publicDir = "artifacts/trenex-agency/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "20818"
+BASE_PATH = "/"
