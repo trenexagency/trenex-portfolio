@@ -57,7 +57,7 @@ export function Hero() {
     <section
       ref={sectionRef}
       id="hero"
-      className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-[#050505] px-6 text-center"
+      className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden px-6 text-center"
     >
       {/* Cinematic depth background */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">

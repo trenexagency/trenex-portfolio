@@ -3,7 +3,7 @@ import { services } from "@/data/site";
 
 export function Services() {
   return (
-    <section id="services" className="relative w-full bg-[#050505] px-6 py-28 md:py-36">
+    <section id="services" className="relative w-full bg-[#050505]/90 px-6 py-28 md:py-36">
       <div className="mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

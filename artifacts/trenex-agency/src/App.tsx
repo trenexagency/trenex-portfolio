@@ -7,6 +7,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { CustomCursor } from "@/components/CustomCursor";
+import { AmbientBackground } from "@/components/three/AmbientBackground";
 import { Hero } from "@/components/sections/Hero";
 import { Services } from "@/components/sections/Services";
 import { Contact } from "@/components/sections/Contact";
@@ -18,17 +19,18 @@ function Home() {
   const [entered, setEntered] = useState(false);
 
   return (
-    <div className="min-h-screen w-full bg-[#050505]">
+    <div className="relative min-h-screen w-full">
+      <AmbientBackground />
       <CustomCursor />
       {!entered && <LoadingScreen onEnter={() => setEntered(true)} />}
       {entered && (
-        <>
+        <div className="relative z-10">
           <Header />
           <Hero />
           <Services />
           <Contact />
           <Footer />
-        </>
+        </div>
       )}
     </div>
   );
