@@ -100,10 +100,10 @@ export function ServiceCard({ service, icon, delay }: ServiceCardProps) {
             {icon}
           </div>
 
-          <h3 className="mb-3 text-2xl font-semibold tracking-tight text-white sm:mb-4 sm:text-3xl md:text-4xl">
+          <h3 className="mb-3 text-2xl font-semibold leading-tight tracking-tight text-white sm:mb-4 sm:text-3xl md:text-4xl">
             {service.title}
           </h3>
-          <p className="max-w-xs text-sm leading-relaxed text-white/50 md:text-base">
+          <p className="max-w-xs text-sm leading-relaxed text-white/55 md:text-base md:leading-[1.65]">
             {service.description}
           </p>
         </div>
@@ -124,7 +124,10 @@ export function ServiceCard({ service, icon, delay }: ServiceCardProps) {
           className="relative mt-8 flex items-center gap-3 text-sm font-medium text-white/40 transition-colors duration-500 group-hover:text-[#FF1F1F]"
         >
           <span className="h-px w-8 bg-current transition-all duration-500 group-hover:w-14" />
-          <span className="uppercase tracking-[0.2em]">Explore</span>
+          <span className="uppercase tracking-[0.2em]">Explore Service</span>
+          <span aria-hidden className="transition-transform duration-500 group-hover:translate-x-1">
+            &rarr;
+          </span>
         </div>
       </motion.div>
     </motion.div>

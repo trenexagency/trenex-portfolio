@@ -52,23 +52,23 @@ export const services: Service[] = [
     title: "Graphic Design",
     tagline: "Identity Systems",
     description:
-      "Distinct visual identities, brand systems, and design assets crafted to make your brand unforgettable.",
-    capabilities: ["Brand Identity", "Art Direction", "Design Systems"],
+      "Strategic brand identities and visual systems designed to make your business instantly recognizable, memorable, and trusted.",
+    capabilities: ["Brand Identity", "Logo Design", "Brand Guidelines"],
   },
   {
     index: "02",
     title: "Video Editing",
     tagline: "Motion & Story",
     description:
-      "Cinematic edits, motion graphics, and story-driven content that captures attention and holds it.",
-    capabilities: ["Cinematic Editing", "Motion Graphics", "Color Grading"],
+      "High-impact video content crafted to capture attention, increase engagement, and tell your story with cinematic precision.",
+    capabilities: ["Commercial Editing", "Motion Graphics", "Color Grading"],
   },
   {
     index: "03",
     title: "Web Development",
     tagline: "Digital Engineering",
     description:
-      "Fast, immersive, and meticulously engineered websites built to convert and impress.",
-    capabilities: ["Interactive Builds", "Performance", "3D & Motion"],
+      "Modern high-performance websites engineered for speed, user experience, lead generation, and business growth.",
+    capabilities: ["Web Design", "Performance", "3D Experiences"],
   },
 ];
