@@ -1,28 +1,27 @@
 import { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from "framer-motion";
+import { SiFigma, SiDavinciresolve, SiHtml5, SiCss, SiJavascript, SiReact, SiNodedotjs, SiGithub } from "react-icons/si";
 import {
-  SiFigma,
-  SiDavinciresolve,
-  SiHtml5,
-  SiJavascript,
-  SiReact,
-  SiNodedotjs,
-  SiGithub,
-} from "react-icons/si";
-import { FaPaintBrush, FaPenNib, FaFileAlt, FaFilm, FaMagic, FaCut, FaCss3Alt } from "react-icons/fa";
+  PhotoshopIcon,
+  IllustratorIcon,
+  IndesignIcon,
+  PremiereIcon,
+  AfterEffectsIcon,
+  CapCutIcon,
+} from "@/components/icons/BrandIcons";
 import { expertise, type ExpertiseTool } from "@/data/site";
 
 const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
-  photoshop: FaPaintBrush,
-  illustrator: FaPenNib,
+  photoshop: PhotoshopIcon,
+  illustrator: IllustratorIcon,
   figma: SiFigma,
-  indesign: FaFileAlt,
-  premiere: FaFilm,
-  aftereffects: FaMagic,
+  indesign: IndesignIcon,
+  premiere: PremiereIcon,
+  aftereffects: AfterEffectsIcon,
   davinci: SiDavinciresolve,
-  capcut: FaCut,
+  capcut: CapCutIcon,
   html5: SiHtml5,
-  css3: FaCss3Alt,
+  css3: SiCss,
   javascript: SiJavascript,
   react: SiReact,
   nodejs: SiNodedotjs,
