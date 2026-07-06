@@ -11,7 +11,14 @@ const icons = [
 
 export function Services() {
   return (
-    <section id="services" className="relative w-full bg-[#050505]/90 px-6 py-28 md:py-36">
+    <motion.section
+      id="services"
+      className="relative w-full bg-[#050505]/90 px-6 py-28 md:py-36"
+      initial={{ opacity: 0, filter: "blur(8px)" }}
+      whileInView={{ opacity: 1, filter: "blur(0px)" }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 1.1, ease: "easeOut" }}
+    >
       <div className="mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -34,6 +41,6 @@ export function Services() {
           ))}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

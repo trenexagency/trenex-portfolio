@@ -2,11 +2,13 @@ import { Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { CAMERA_DEFAULTS, DPR } from "@/lib/three-config";
 import { isWebGLAvailable } from "@/lib/webgl";
+import { initScrollProgressTracking } from "@/lib/scrollProgress";
 import { ParticleField } from "./ParticleField";
 import { CameraDrift } from "./CameraDrift";
 import { AmbientRedLighting } from "./AmbientRedLighting";
 import { CanvasErrorBoundary } from "./CanvasErrorBoundary";
 import { VolumetricFog } from "./VolumetricFog";
+import { ScrollDepthLayers } from "./ScrollDepthLayers";
 
 /**
  * Persistent full-page 3D backdrop: a dark, sparse particle field with slow
@@ -24,6 +26,7 @@ export function AmbientBackground() {
 
   useEffect(() => {
     setWebglSupported(isWebGLAvailable());
+    return initScrollProgressTracking();
   }, []);
 
   return (
@@ -48,6 +51,7 @@ export function AmbientBackground() {
                 opacity={0.18}
                 rotationSpeed={0.008}
               />
+              <ScrollDepthLayers />
             </Suspense>
           </Canvas>
         </CanvasErrorBoundary>

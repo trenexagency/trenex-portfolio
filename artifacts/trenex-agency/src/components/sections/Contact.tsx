@@ -4,9 +4,13 @@ import { siteConfig } from "@/data/site";
 
 export function Contact() {
   return (
-    <section
+    <motion.section
       id="contact"
       className="relative flex min-h-[70vh] w-full flex-col items-center justify-center overflow-hidden bg-[#050505]/90 px-6 py-28 text-center"
+      initial={{ opacity: 0, filter: "blur(8px)" }}
+      whileInView={{ opacity: 1, filter: "blur(0px)" }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 1.1, ease: "easeOut" }}
     >
       <div
         className="pointer-events-none absolute inset-0"
@@ -73,6 +77,6 @@ export function Contact() {
       >
         {siteConfig.name}
       </motion.span>
-    </section>
+    </motion.section>
   );
 }
