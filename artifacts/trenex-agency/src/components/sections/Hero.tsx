@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Particles } from "@/components/Particles";
+import { HeroLogo } from "./HeroLogo";
 import { gsap } from "@/lib/gsap";
 import { siteConfig, services } from "@/data/site";
 
@@ -9,7 +10,12 @@ export function Hero() {
   const glowRef = useRef<HTMLDivElement>(null);
   const farLayerRef = useRef<HTMLDivElement>(null);
   const midLayerRef = useRef<HTMLDivElement>(null);
+  const nearLayerRef = useRef<HTMLDivElement>(null);
+  const particlesFarRef = useRef<HTMLDivElement>(null);
+  const particlesMidRef = useRef<HTMLDivElement>(null);
+  const particlesNearRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -34,6 +40,27 @@ export function Hero() {
         ease: "power3.out",
       });
 
+      gsap.to(particlesFarRef.current, {
+        x: x * 10,
+        y: y * 6,
+        duration: 1.9,
+        ease: "power3.out",
+      });
+
+      gsap.to(particlesMidRef.current, {
+        x: x * 24,
+        y: y * 16,
+        duration: 1.5,
+        ease: "power3.out",
+      });
+
+      gsap.to(particlesNearRef.current, {
+        x: x * 48,
+        y: y * 30,
+        duration: 1.1,
+        ease: "power3.out",
+      });
+
       gsap.to(glowRef.current, {
         x: x * 55,
         y: y * 35,
@@ -45,6 +72,13 @@ export function Hero() {
         x: x * 14,
         y: y * 8,
         duration: 1.2,
+        ease: "power3.out",
+      });
+
+      gsap.to(logoRef.current, {
+        x: x * 10,
+        y: y * 6,
+        duration: 1.6,
         ease: "power3.out",
       });
     };
@@ -79,6 +113,14 @@ export function Hero() {
             background:
               "radial-gradient(circle at 55% 40%, rgba(255,31,31,0.14), transparent 45%)",
           }}
+        />
+
+        {/* volumetric red fog — slow independent drift, soft-edged */}
+        <motion.div
+          className="absolute h-[80vw] w-[80vw] rounded-full bg-[#FF1F1F]/[0.05] mix-blend-screen blur-[130px]"
+          style={{ top: "5%", left: "50%", translateX: "-50%" }}
+          animate={{ opacity: [0.5, 0.85, 0.5], scale: [1, 1.08, 1] }}
+          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
         />
 
         {/* drifting fog — independent of pointer, slow ambient motion */}
@@ -119,10 +161,27 @@ export function Hero() {
 
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,transparent,#050505_92%)]" />
 
-      {/* near soft-focus embers for depth-of-field */}
-      <Particles count={16} sizeRange={[3, 6]} blurPx={2} className="opacity-50" />
-      {/* sharp far field particles */}
-      <Particles count={55} />
+      {/* background depth particles — slowest, sharpest, furthest */}
+      <div ref={particlesFarRef} className="contents">
+        <Particles count={60} sizeRange={[1, 2]} className="opacity-70" />
+      </div>
+      {/* midground particles — moderate parallax */}
+      <div ref={particlesMidRef} className="contents">
+        <Particles count={28} sizeRange={[2, 4]} className="opacity-55" />
+      </div>
+      {/* foreground soft-focus embers — nearest, largest, most parallax */}
+      <div ref={particlesNearRef} className="contents">
+        <Particles count={12} sizeRange={[4, 7]} blurPx={2.5} className="opacity-45" />
+      </div>
+
+      <motion.div
+        ref={logoRef}
+        initial={{ opacity: 0, scale: 0.85 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.9, ease: "easeOut" }}
+      >
+        <HeroLogo />
+      </motion.div>
 
       <motion.span
         className="relative mb-6 font-mono text-xs uppercase tracking-[0.4em] text-[#FF1F1F]"
@@ -135,28 +194,42 @@ export function Hero() {
 
       <h1
         ref={headlineRef}
-        className="relative max-w-4xl text-5xl font-semibold uppercase leading-[1.08] tracking-tight text-white sm:text-6xl md:text-7xl"
+        className="relative max-w-5xl text-6xl font-semibold uppercase leading-[1.02] tracking-tighter text-white sm:text-7xl md:text-8xl lg:text-9xl"
       >
         <motion.span
           className="block"
-          initial={{ opacity: 0, y: 28, filter: "blur(10px)" }}
+          initial={{ opacity: 0, y: 40, filter: "blur(14px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 1, delay: 0.15, ease: "easeOut" }}
+          transition={{ duration: 1.1, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
         >
           We Build Digital
         </motion.span>
         <motion.span
           className="block text-[#FF1F1F]"
-          initial={{ opacity: 0, y: 28, filter: "blur(10px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 1, delay: 0.32, ease: "easeOut" }}
+          initial={{ opacity: 0, y: 40, filter: "blur(14px)" }}
+          animate={{
+            opacity: 1,
+            y: 0,
+            filter: "blur(0px)",
+            textShadow: [
+              "0 0 24px rgba(255,31,31,0.35)",
+              "0 0 48px rgba(255,31,31,0.65)",
+              "0 0 24px rgba(255,31,31,0.35)",
+            ],
+          }}
+          transition={{
+            opacity: { duration: 1.1, delay: 0.32, ease: [0.16, 1, 0.3, 1] },
+            y: { duration: 1.1, delay: 0.32, ease: [0.16, 1, 0.3, 1] },
+            filter: { duration: 1.1, delay: 0.32, ease: [0.16, 1, 0.3, 1] },
+            textShadow: { duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 },
+          }}
         >
           Experiences.
         </motion.span>
       </h1>
 
       <motion.p
-        className="relative mt-8 max-w-xl text-balance text-base text-white/60 md:text-lg"
+        className="relative mt-10 max-w-xl text-balance text-base text-white/60 md:text-lg"
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}

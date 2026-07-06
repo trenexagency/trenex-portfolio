@@ -6,6 +6,7 @@ import { ParticleField } from "./ParticleField";
 import { CameraDrift } from "./CameraDrift";
 import { AmbientRedLighting } from "./AmbientRedLighting";
 import { CanvasErrorBoundary } from "./CanvasErrorBoundary";
+import { VolumetricFog } from "./VolumetricFog";
 
 /**
  * Persistent full-page 3D backdrop: a dark, sparse particle field with slow
@@ -37,6 +38,7 @@ export function AmbientBackground() {
             <Suspense fallback={null}>
               <CameraDrift />
               <AmbientRedLighting />
+              <VolumetricFog />
               <ParticleField count={220} spread={8} size={0.05} opacity={0.55} rotationSpeed={0.015} />
               <ParticleField
                 count={70}
