@@ -19,6 +19,9 @@ export function Hero() {
     const section = sectionRef.current;
     if (!section) return;
 
+    const isFinePointer = window.matchMedia("(pointer: fine)").matches;
+    if (!isFinePointer) return;
+
     const handlePointerMove = (e: PointerEvent) => {
       const { innerWidth, innerHeight } = window;
       const x = (e.clientX / innerWidth - 0.5) * 2;
@@ -82,7 +85,7 @@ export function Hero() {
     <section
       ref={sectionRef}
       id="hero"
-      className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden px-6 text-center"
+      className="relative flex min-h-[100svh] w-full flex-col items-center justify-center overflow-hidden px-5 py-28 text-center sm:px-6 sm:py-32"
     >
       {/* Cinematic depth background */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -177,7 +180,7 @@ export function Hero() {
 
       <h1
         ref={headlineRef}
-        className="relative max-w-5xl text-[2.75rem] font-semibold uppercase leading-[1.05] tracking-tighter text-white sm:text-7xl md:text-8xl lg:text-9xl"
+        className="relative max-w-5xl text-[2.5rem] font-semibold uppercase leading-[1.05] tracking-tighter text-white sm:text-7xl md:text-8xl lg:text-9xl 2xl:text-[10rem]"
       >
         <motion.span
           className="block"

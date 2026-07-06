@@ -23,18 +23,31 @@ import { ScrollDepthLayers } from "./ScrollDepthLayers";
  */
 export function AmbientBackground() {
   const [webglSupported, setWebglSupported] = useState(false);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
 
   useEffect(() => {
     setWebglSupported(isWebGLAvailable());
     return initScrollProgressTracking();
   }, []);
 
+  useEffect(() => {
+    const mql = window.matchMedia("(max-width: 767px)");
+    setIsSmallScreen(mql.matches);
+    const handleChange = (e: MediaQueryListEvent) => setIsSmallScreen(e.matches);
+    mql.addEventListener("change", handleChange);
+    return () => mql.removeEventListener("change", handleChange);
+  }, []);
+
+  const dpr: [number, number] = isSmallScreen ? [1, 1.5] : DPR;
+  const primaryCount = isSmallScreen ? 110 : 220;
+  const secondaryCount = isSmallScreen ? 35 : 70;
+
   return (
     <div className="pointer-events-none fixed inset-0 z-0 bg-[#050505]">
       {webglSupported && (
         <CanvasErrorBoundary>
           <Canvas
-            dpr={DPR}
+            dpr={dpr}
             camera={CAMERA_DEFAULTS}
             gl={{ antialias: false, alpha: true, failIfMajorPerformanceCaveat: false }}
           >
@@ -42,9 +55,9 @@ export function AmbientBackground() {
               <CameraDrift />
               <AmbientRedLighting />
               <VolumetricFog />
-              <ParticleField count={220} spread={8} size={0.05} opacity={0.55} rotationSpeed={0.015} />
+              <ParticleField count={primaryCount} spread={8} size={0.05} opacity={0.55} rotationSpeed={0.015} />
               <ParticleField
-                count={70}
+                count={secondaryCount}
                 spread={11}
                 size={0.03}
                 color="#FFFFFF"

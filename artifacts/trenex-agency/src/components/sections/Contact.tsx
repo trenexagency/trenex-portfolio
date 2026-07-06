@@ -6,7 +6,7 @@ export function Contact() {
   return (
     <motion.section
       id="contact"
-      className="relative flex min-h-[70vh] w-full flex-col items-center justify-center overflow-hidden bg-[#050505]/90 px-6 py-28 text-center"
+      className="relative flex min-h-[70svh] w-full flex-col items-center justify-center overflow-hidden bg-[#050505]/90 px-5 py-20 text-center sm:px-6 sm:py-28"
       initial={{ opacity: 0, filter: "blur(8px)" }}
       whileInView={{ opacity: 1, filter: "blur(0px)" }}
       viewport={{ once: true, amount: 0.15 }}
@@ -31,7 +31,7 @@ export function Contact() {
       </motion.span>
 
       <motion.h2
-        className="relative mt-6 max-w-2xl text-4xl font-semibold uppercase leading-tight tracking-tight text-white md:text-6xl"
+        className="relative mt-6 max-w-2xl text-3xl font-semibold uppercase leading-tight tracking-tight text-white sm:text-4xl md:text-6xl"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.6 }}
@@ -56,7 +56,7 @@ export function Contact() {
         href="mailto:hello@trenex.agency"
         data-testid="link-contact-email"
         data-magnetic
-        className="group relative mt-12 flex items-center gap-3 border border-[#FF1F1F]/50 px-9 py-3.5 text-sm font-medium uppercase tracking-[0.3em] text-white transition-all duration-300 hover:border-[#FF1F1F] hover:shadow-[0_0_30px_rgba(255,31,31,0.35)]"
+        className="group relative mt-10 flex max-w-full flex-wrap items-center justify-center gap-3 break-all border border-[#FF1F1F]/50 px-6 py-3.5 text-xs font-medium uppercase tracking-[0.2em] text-white transition-all duration-300 hover:border-[#FF1F1F] hover:shadow-[0_0_30px_rgba(255,31,31,0.35)] sm:mt-12 sm:break-normal sm:px-9 sm:text-sm sm:tracking-[0.3em]"
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.6 }}

@@ -62,7 +62,7 @@ export function ServiceCard({ service, icon, delay }: ServiceCardProps) {
         onPointerLeave={handlePointerLeave}
         data-testid={`card-service-${service.index}`}
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        className="relative flex h-full min-h-[26rem] flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-white/[0.01] p-8 shadow-[0_0_0_1px_rgba(255,255,255,0.02)] transition-[border-color,box-shadow] duration-500 group-hover:border-[#FF1F1F]/50 group-hover:shadow-[0_25px_80px_-20px_rgba(255,31,31,0.35)] md:p-10"
+        className="relative flex h-full min-h-[22rem] flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-white/[0.01] p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.02)] transition-[border-color,box-shadow] duration-500 group-hover:border-[#FF1F1F]/50 group-hover:shadow-[0_25px_80px_-20px_rgba(255,31,31,0.35)] sm:min-h-[24rem] sm:p-8 md:p-10"
       >
         <motion.div
           aria-hidden
@@ -95,12 +95,12 @@ export function ServiceCard({ service, icon, delay }: ServiceCardProps) {
           </span>
         </div>
 
-        <div style={{ transform: "translateZ(60px)" }} className="relative mt-10">
-          <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-[#FF1F1F] transition-all duration-500 group-hover:scale-110 group-hover:border-[#FF1F1F]/40 group-hover:bg-[#FF1F1F]/10 group-hover:shadow-[0_0_30px_rgba(255,31,31,0.35)]">
+        <div style={{ transform: "translateZ(60px)" }} className="relative mt-8 sm:mt-10">
+          <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-[#FF1F1F] transition-all duration-500 group-hover:scale-110 group-hover:border-[#FF1F1F]/40 group-hover:bg-[#FF1F1F]/10 group-hover:shadow-[0_0_30px_rgba(255,31,31,0.35)] sm:mb-6 sm:h-16 sm:w-16">
             {icon}
           </div>
 
-          <h3 className="mb-4 text-3xl font-semibold tracking-tight text-white md:text-4xl">
+          <h3 className="mb-3 text-2xl font-semibold tracking-tight text-white sm:mb-4 sm:text-3xl md:text-4xl">
             {service.title}
           </h3>
           <p className="max-w-xs text-sm leading-relaxed text-white/50 md:text-base">
