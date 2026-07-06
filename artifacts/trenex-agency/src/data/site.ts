@@ -17,6 +17,27 @@ export const navLinks: { label: string; href: string }[] = [
   { label: "Contact", href: "#contact" },
 ];
 
+export const contactInfo = {
+  email: "trenexagency@gmail.com",
+  whatsapp: "https://wa.me/923323848135",
+};
+
+export interface SocialLink {
+  id: string;
+  label: string;
+  href: string | null;
+  disabled?: boolean;
+}
+
+export const socialLinks: SocialLink[] = [
+  { id: "facebook", label: "Facebook", href: "https://www.facebook.com/profile.php?id=61590931302050" },
+  { id: "instagram", label: "Instagram", href: "https://www.instagram.com/trenexagency/" },
+  { id: "youtube", label: "YouTube", href: "https://www.youtube.com/@TrenexAgency" },
+  { id: "linkedin", label: "LinkedIn", href: null, disabled: true },
+  { id: "whatsapp", label: "WhatsApp", href: "https://wa.me/923323848135" },
+  { id: "email", label: "Email", href: "mailto:trenexagency@gmail.com" },
+];
+
 export interface Service {
   title: string;
   tagline: string;

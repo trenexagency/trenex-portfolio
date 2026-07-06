@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Particles } from "@/components/Particles";
-import { siteConfig } from "@/data/site";
+import { siteConfig, contactInfo } from "@/data/site";
 
 export function Contact() {
   return (
@@ -53,8 +53,10 @@ export function Contact() {
       </motion.p>
 
       <motion.a
-        href="mailto:hello@trenex.agency"
-        data-testid="link-contact-email"
+        href={contactInfo.whatsapp}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-testid="link-contact-whatsapp"
         data-magnetic
         className="group relative mt-10 flex max-w-full flex-wrap items-center justify-center gap-3 break-all border border-[#FF1F1F]/50 px-6 py-3.5 text-xs font-medium uppercase tracking-[0.2em] text-white transition-all duration-300 hover:border-[#FF1F1F] hover:shadow-[0_0_30px_rgba(255,31,31,0.35)] sm:mt-12 sm:break-normal sm:px-9 sm:text-sm sm:tracking-[0.3em]"
         initial={{ opacity: 0, y: 16 }}
@@ -62,7 +64,7 @@ export function Contact() {
         viewport={{ once: true, amount: 0.6 }}
         transition={{ duration: 0.7, delay: 0.4, ease: "easeOut" }}
       >
-        <span>hello@trenex.agency</span>
+        <span>Message Us on WhatsApp</span>
         <span className="transition-transform duration-300 group-hover:translate-x-1">
           &rarr;
         </span>
