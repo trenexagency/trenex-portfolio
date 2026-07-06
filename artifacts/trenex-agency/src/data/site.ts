@@ -46,6 +46,49 @@ export interface Service {
   capabilities: string[];
 }
 
+export interface ExpertiseTool {
+  name: string;
+  description: string;
+  icon: string;
+}
+
+export interface ExpertiseCategory {
+  title: string;
+  tools: ExpertiseTool[];
+}
+
+export const expertise: ExpertiseCategory[] = [
+  {
+    title: "Design",
+    tools: [
+      { name: "Photoshop", description: "Pixel-perfect retouching & compositing", icon: "photoshop" },
+      { name: "Illustrator", description: "Vector art & scalable brand assets", icon: "illustrator" },
+      { name: "Figma", description: "Collaborative UI/UX design systems", icon: "figma" },
+      { name: "InDesign", description: "Layout & print-ready publications", icon: "indesign" },
+    ],
+  },
+  {
+    title: "Video & Motion",
+    tools: [
+      { name: "Premiere Pro", description: "Cinematic editing & storytelling", icon: "premiere" },
+      { name: "After Effects", description: "Motion graphics & visual effects", icon: "aftereffects" },
+      { name: "DaVinci Resolve", description: "Professional color grading", icon: "davinci" },
+      { name: "CapCut", description: "Fast-turnaround social edits", icon: "capcut" },
+    ],
+  },
+  {
+    title: "Development",
+    tools: [
+      { name: "HTML5", description: "Semantic, accessible foundations", icon: "html5" },
+      { name: "CSS3", description: "Modern, responsive styling", icon: "css3" },
+      { name: "JavaScript", description: "Dynamic, interactive experiences", icon: "javascript" },
+      { name: "React", description: "Scalable component architecture", icon: "react" },
+      { name: "Node.js", description: "High-performance backend systems", icon: "nodejs" },
+      { name: "GitHub", description: "Version control & collaboration", icon: "github" },
+    ],
+  },
+];
+
 export const services: Service[] = [
   {
     index: "01",

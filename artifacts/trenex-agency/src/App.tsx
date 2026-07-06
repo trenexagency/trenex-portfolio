@@ -11,6 +11,7 @@ import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { AmbientBackground } from "@/components/three/AmbientBackground";
 import { Hero } from "@/components/sections/Hero";
 import { Services } from "@/components/sections/Services";
+import { ExpertiseWall } from "@/components/sections/ExpertiseWall";
 import { Contact } from "@/components/sections/Contact";
 import NotFound from "@/pages/not-found";
 
@@ -29,6 +30,7 @@ function Home() {
           <Header />
           <Hero />
           <Services />
+          <ExpertiseWall />
           <Contact />
           <Footer />
           <WhatsAppButton />
