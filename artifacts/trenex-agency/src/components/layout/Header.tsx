@@ -3,12 +3,12 @@ import logoUrl from "@assets/Trenex_Logo_1783248099260.svg";
 
 export function Header() {
   return (
-    <header className="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-6 py-3 md:px-12 md:py-4">
+    <header className="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-6 py-2 md:px-12 md:py-3">
       <a href="#hero" className="group flex items-center gap-4" data-testid="link-logo">
         <img
           src={logoUrl}
           alt="Trenex Agency"
-          className="h-14 w-14 shrink-0 object-contain transition-transform duration-300 group-hover:scale-105 sm:h-16 sm:w-16 md:h-20 md:w-20"
+          className="h-20 w-20 shrink-0 object-contain transition-transform duration-300 group-hover:scale-105 sm:h-24 sm:w-24 md:h-28 md:w-28"
           style={{
             filter:
               "drop-shadow(0 0 10px rgba(255,31,31,0.55)) drop-shadow(0 0 26px rgba(255,31,31,0.3))",
