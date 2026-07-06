@@ -7,6 +7,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { CustomCursor } from "@/components/CustomCursor";
+import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { AmbientBackground } from "@/components/three/AmbientBackground";
 import { Hero } from "@/components/sections/Hero";
 import { Services } from "@/components/sections/Services";
@@ -30,6 +31,7 @@ function Home() {
           <Services />
           <Contact />
           <Footer />
+          <WhatsAppButton />
         </div>
       )}
     </div>
