@@ -12,6 +12,7 @@ import { AmbientBackground } from "@/components/three/AmbientBackground";
 import { GridBackground } from "@/components/GridBackground";
 import { Hero } from "@/components/sections/Hero";
 import { Services } from "@/components/sections/Services";
+import { Stats } from "@/components/sections/Stats";
 import { ExpertiseWall } from "@/components/sections/ExpertiseWall";
 import { Contact } from "@/components/sections/Contact";
 import NotFound from "@/pages/not-found";
@@ -32,6 +33,7 @@ function Home() {
           <Header />
           <Hero />
           <Services />
+          <Stats />
           <ExpertiseWall />
           <Contact />
           <Footer />
