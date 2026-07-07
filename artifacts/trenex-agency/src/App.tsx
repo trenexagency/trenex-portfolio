@@ -9,6 +9,7 @@ import { LoadingScreen } from "@/components/LoadingScreen";
 import { CustomCursor } from "@/components/CustomCursor";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { AmbientBackground } from "@/components/three/AmbientBackground";
+import { GridBackground } from "@/components/GridBackground";
 import { Hero } from "@/components/sections/Hero";
 import { Services } from "@/components/sections/Services";
 import { ExpertiseWall } from "@/components/sections/ExpertiseWall";
@@ -23,6 +24,7 @@ function Home() {
   return (
     <div className="relative min-h-screen w-full">
       <AmbientBackground />
+      <GridBackground />
       <CustomCursor />
       {!entered && <LoadingScreen onEnter={() => setEntered(true)} />}
       {entered && (

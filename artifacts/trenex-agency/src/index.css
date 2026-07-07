@@ -449,4 +449,12 @@ html.custom-cursor-active * {
   .border.hover-elevate:not(.no-hover-interaction-elevate)::after {
     inset: -1px;
   }
+
+  @keyframes grid-glow-pulse {
+    0%, 100% { opacity: 0.55; }
+    50%       { opacity: 1; }
+  }
+  .grid-glow-dots {
+    animation: grid-glow-pulse 4s ease-in-out infinite;
+  }
 }
