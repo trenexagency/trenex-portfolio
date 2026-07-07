@@ -339,6 +339,21 @@ html.custom-cursor-active * {
   animation: bit-fade 700ms ease-out forwards;
 }
 
+@keyframes load-atmo-fade {
+  0%   { opacity: 0.1; }
+  100% { opacity: 0.9; }
+}
+
+@keyframes load-dust-float {
+  0%   { transform: translateY(0px)   scale(1);    opacity: 0.5; }
+  100% { transform: translateY(-28px) scale(0.85); opacity: 0.08; }
+}
+
+@keyframes load-btn-scan {
+  0%   { transform: translateX(-110%); }
+  100% { transform: translateX(110%); }
+}
+
 /**
  * Using the elevate system.
  * Automatic contrast adjustment.
