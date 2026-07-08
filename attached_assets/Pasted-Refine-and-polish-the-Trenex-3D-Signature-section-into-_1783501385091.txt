@@ -1,0 +1,90 @@
+Refine and polish the Trenex 3D Signature section into a premium final brand-signature experience.
+
+CURRENT ISSUE:
+The original SVG logo uses red colors (#eb1b24 / #e91d23), but the 3D model appears white, silver, chrome, and pink because of lighting and material settings.
+
+COLOR & MATERIAL FIX:
+
+- Keep the exact original Trenex red color across all visible surfaces.
+- Remove all silver, chrome, white, pink, or metallic-looking surfaces.
+- Use a premium deep red material.
+- Greatly reduce environment reflections.
+- Lower metalness.
+- Improve color accuracy.
+- Add a very subtle red emissive glow.
+- The model must remain red from every viewing angle.
+- Preserve 3D depth and geometry.
+- Keep realistic shadows.
+- Avoid bright white highlights.
+
+Suggested material values:
+
+color: #eb1b24
+emissive: #eb1b24
+metalness: 0.15
+roughness: 0.45
+
+3D INTERACTION:
+
+- Keep drag-to-rotate functionality.
+- Disable zoom completely.
+- Disable excessive camera movement.
+- Smooth and premium rotation behavior.
+- Mobile touch rotation must work perfectly.
+- No lag on low-end devices.
+
+SIZE & LAYOUT:
+
+- Reduce trophy size by approximately 30–40%.
+- Keep it visually important but not dominant.
+- Position it as a final signature section before the footer.
+- Maintain balanced spacing above and below the section.
+
+PREMIUM BACKGROUND:
+
+The section currently feels empty.
+
+Add subtle premium visual depth without becoming distracting:
+
+- Soft animated red particles.
+- Very low-opacity floating geometric elements.
+- Faint red ambient glow behind the trophy.
+- Subtle grid or tech-inspired background details.
+- Gentle motion only.
+- No clutter.
+- No bright images.
+- Keep focus on the logo.
+
+RESPONSIVE DESIGN:
+
+The section must be fully responsive on:
+
+- Mobile phones
+- Tablets
+- Laptops
+- Large desktop screens
+- Ultra-wide displays
+
+Ensure:
+
+- Trophy scales correctly on every screen size.
+- Text remains readable.
+- No overflow.
+- No cropped model.
+- No overlapping elements.
+- Touch interactions work smoothly.
+
+PERFORMANCE:
+
+- Optimize rendering.
+- Avoid unnecessary particles.
+- Maintain smooth FPS.
+- Keep loading lightweight.
+
+FINAL GOAL:
+
+The section should feel like a premium brand seal and signature of Trenex.
+
+When users reach the end of the website, they should feel that they have reached the final identity mark of the agency.
+
+The result should look luxurious, modern, trustworthy, responsive, and professionally engineered.
