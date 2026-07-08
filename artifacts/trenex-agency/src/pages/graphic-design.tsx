@@ -474,7 +474,6 @@ function GDEntryScreen({ onDone }: { onDone: () => void }) {
           alt="Trenex"
           draggable={false}
           className="w-40 select-none sm:w-52"
-          style={{ filter: "brightness(0) invert(1)" }}
         />
       </motion.div>
 
