@@ -5,31 +5,31 @@ import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader.js";
 import * as THREE from "three";
 import trophySvgRaw from "@assets/T-01_1783417701849.svg?raw";
 
-const BRAND_RED = "#eb1b24";
-const BRAND_RED_DARK = "#8b0e14";
-const BRAND_RED_MID = "#c41620";
+/* ─── Brand colors ──────────────────────────────────────── */
+const R_BRIGHT = new THREE.Color("#ff2020");
+const R_MID    = new THREE.Color("#c41620");
+const R_DARK   = new THREE.Color("#6e080e");
+const R_DEEP   = new THREE.Color("#1a0002");
 
-/* ─── geometry builder (runs once) ─────────────────────── */
+/* ─── Geometry builder (once) ───────────────────────────── */
 function buildTrophyGeometries(): THREE.BufferGeometry[] {
   const loader = new SVGLoader();
-  const data = loader.parse(trophySvgRaw);
+  const data   = loader.parse(trophySvgRaw);
   const geos: THREE.BufferGeometry[] = [];
-
-  const EXTRUDE_DEPTH = 80;
+  const DEPTH = 90;
   const SCALE = 1 / 270;
 
   data.paths.forEach((path) => {
-    const shapes = SVGLoader.createShapes(path);
-    shapes.forEach((shape) => {
+    path.toShapes(true).forEach((shape) => {
       const geo = new THREE.ExtrudeGeometry(shape, {
-        depth: EXTRUDE_DEPTH,
+        depth: DEPTH,
         bevelEnabled: true,
-        bevelThickness: 5,
-        bevelSize: 3,
-        bevelSegments: 4,
-        curveSegments: 14,
+        bevelThickness: 7,
+        bevelSize: 5,
+        bevelSegments: 6,
+        curveSegments: 18,
       });
-      geo.translate(-540, -540, -(EXTRUDE_DEPTH / 2));
+      geo.translate(-540, -540, -(DEPTH / 2));
       geo.applyMatrix4(new THREE.Matrix4().makeScale(1, -1, 1));
       geo.applyMatrix4(new THREE.Matrix4().makeScale(SCALE, SCALE, SCALE));
       geos.push(geo);
@@ -39,17 +39,238 @@ function buildTrophyGeometries(): THREE.BufferGeometry[] {
   return geos;
 }
 
+/* ─── Premium Phong lighting — red depth without white ──── */
+function BrandLighting() {
+  return (
+    <>
+      {/* Very dark ambient — prevents pure-black but keeps drama */}
+      <ambientLight intensity={0.28} color={R_DEEP} />
+
+      {/* Strong key from top-left-front — creates face-shading depth */}
+      <directionalLight
+        position={[-3.5, 5, 4]}
+        intensity={5.5}
+        color={R_BRIGHT}
+      />
+
+      {/* Softer fill from right-bottom — keeps shadow side visible */}
+      <pointLight position={[4, -1, 3]} intensity={2.0} color={R_MID} distance={16} />
+
+      {/* Top rim — separates top edge from background */}
+      <pointLight position={[0, 7, -1]} intensity={2.8} color={R_BRIGHT} distance={14} />
+
+      {/* Rear-bottom rim — wraps red around back edges */}
+      <pointLight position={[0, -4, -4]} intensity={3.5} color={R_DARK} distance={13} />
+
+      {/* Inner volumetric glow source — makes center feel illuminated */}
+      <pointLight position={[0, 0, 1.5]} intensity={1.0} color={"#eb1b24"} distance={5} />
+    </>
+  );
+}
+
+/* ─── Trophy mesh — red Phong with red specular ─────────── */
+function TrophyMesh() {
+  const groupRef    = useRef<THREE.Group>(null);
+  const edgeMatRef  = useRef<THREE.MeshStandardMaterial | null>(null);
+  const geometries  = useMemo(() => buildTrophyGeometries(), []);
+
+  /* Phong material — specular is red, so highlights are red not white */
+  const bodyMat = useMemo(() => new THREE.MeshPhongMaterial({
+    color:     new THREE.Color("#eb1b24"),
+    emissive:  new THREE.Color("#3a0004"),
+    specular:  R_BRIGHT,
+    shininess: 28,
+  }), []);
+
+  /* Thin outer emissive hull — creates the glowing red edge */
+  const edgeMat = useMemo(() => new THREE.MeshStandardMaterial({
+    color:            new THREE.Color("#000000"),
+    emissive:         new THREE.Color("#eb1b24"),
+    emissiveIntensity: 0.75,
+    transparent:      true,
+    opacity:          0.55,
+    side:             THREE.BackSide,
+    depthWrite:       false,
+  }), []);
+
+  /* Second, wider halo hull */
+  const haloMat = useMemo(() => new THREE.MeshStandardMaterial({
+    color:            new THREE.Color("#000000"),
+    emissive:         new THREE.Color("#cc0f18"),
+    emissiveIntensity: 0.3,
+    transparent:      true,
+    opacity:          0.25,
+    side:             THREE.BackSide,
+    depthWrite:       false,
+  }), []);
+
+  useFrame(({ clock }) => {
+    const t = clock.elapsedTime;
+
+    if (groupRef.current) {
+      groupRef.current.position.y = Math.sin(t * 0.42) * 0.09;
+      groupRef.current.rotation.x = Math.sin(t * 0.21) * 0.028;
+    }
+
+    /* Breathing emissive edge glow */
+    if (edgeMatRef.current) {
+      edgeMatRef.current.emissiveIntensity = 0.65 + Math.sin(t * 1.1) * 0.25;
+    }
+
+    /* Sync body emissive with edge breathing (subtle) */
+    if (bodyMat) {
+      (bodyMat as THREE.MeshPhongMaterial).emissive.setScalar(
+        0.05 + Math.sin(t * 1.1) * 0.025,
+      );
+    }
+  });
+
+  return (
+    <group ref={groupRef} scale={[0.6, 0.6, 0.6]}>
+      {/* ── Main red body ── */}
+      {geometries.map((geo, i) => (
+        <mesh key={`b${i}`} geometry={geo} material={bodyMat} castShadow={false} />
+      ))}
+
+      {/* ── Thin glowing edge hull ── */}
+      <group scale={[1.055, 1.055, 1.055]}>
+        {geometries.map((geo, i) => (
+          <mesh
+            key={`e${i}`}
+            geometry={geo}
+            material={edgeMat}
+            ref={i === 0 ? (m) => { if (m) edgeMatRef.current = m.material as THREE.MeshStandardMaterial; } : undefined}
+          />
+        ))}
+      </group>
+
+      {/* ── Wider soft halo ── */}
+      <group scale={[1.12, 1.12, 1.12]}>
+        {geometries.map((geo, i) => (
+          <mesh key={`h${i}`} geometry={geo} material={haloMat} />
+        ))}
+      </group>
+    </group>
+  );
+}
+
+/* ─── Volumetric glow cloud (nested transparent spheres) ── */
+function VolumetricGlow() {
+  const innerRef  = useRef<THREE.Mesh>(null);
+  const midRef    = useRef<THREE.Mesh>(null);
+
+  useFrame(({ clock }) => {
+    const t = clock.elapsedTime;
+    const pulse = Math.sin(t * 0.8) * 0.012;
+    if (innerRef.current)  innerRef.current.scale.setScalar(1 + pulse);
+    if (midRef.current)    midRef.current.scale.setScalar(1 - pulse * 0.5);
+  });
+
+  return (
+    <>
+      {/* Inner warm core */}
+      <mesh ref={innerRef}>
+        <sphereGeometry args={[1.1, 16, 16]} />
+        <meshBasicMaterial
+          color="#eb1b24"
+          transparent
+          opacity={0.055}
+          side={THREE.BackSide}
+          depthWrite={false}
+        />
+      </mesh>
+
+      {/* Mid glow */}
+      <mesh ref={midRef}>
+        <sphereGeometry args={[2.0, 16, 16]} />
+        <meshBasicMaterial
+          color="#c00e14"
+          transparent
+          opacity={0.035}
+          side={THREE.BackSide}
+          depthWrite={false}
+        />
+      </mesh>
+
+      {/* Outer diffuse halo */}
+      <mesh>
+        <sphereGeometry args={[3.2, 12, 12]} />
+        <meshBasicMaterial
+          color="#7a0810"
+          transparent
+          opacity={0.018}
+          side={THREE.BackSide}
+          depthWrite={false}
+        />
+      </mesh>
+    </>
+  );
+}
+
+/* ─── Expanding pulse rings ──────────────────────────────── */
+function PulseRing({ period, delay, startRadius }: { period: number; delay: number; startRadius: number }) {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const matRef  = useRef<THREE.MeshBasicMaterial>(null);
+
+  useFrame(({ clock }) => {
+    const t     = ((clock.elapsedTime + delay) % period) / period;
+    const scale = 0.3 + t * 2.8;
+    const alpha = t < 0.5 ? t * 2 : (1 - t) * 2;
+
+    if (meshRef.current) meshRef.current.scale.setScalar(scale);
+    if (matRef.current)  matRef.current.opacity = alpha * 0.07;
+  });
+
+  return (
+    <mesh ref={meshRef} rotation={[Math.PI / 2, 0, 0]}>
+      <torusGeometry args={[startRadius, 0.014, 8, 80]} />
+      <meshBasicMaterial
+        ref={matRef}
+        color="#eb1b24"
+        transparent
+        opacity={0}
+        depthWrite={false}
+      />
+    </mesh>
+  );
+}
+
+/* ─── Slow-rotating accent rings ────────────────────────── */
+function AccentRings() {
+  const r1 = useRef<THREE.Mesh>(null);
+  const r2 = useRef<THREE.Mesh>(null);
+
+  useFrame(({ clock }) => {
+    const t = clock.elapsedTime;
+    if (r1.current) { r1.current.rotation.z = t * 0.06; r1.current.rotation.x = t * 0.04; }
+    if (r2.current) { r2.current.rotation.z = -t * 0.05; r2.current.rotation.y = t * 0.03; }
+  });
+
+  return (
+    <>
+      <mesh ref={r1} rotation={[Math.PI / 5, 0, 0]}>
+        <torusGeometry args={[3.0, 0.007, 6, 80]} />
+        <meshBasicMaterial color="#eb1b24" transparent opacity={0.08} depthWrite={false} />
+      </mesh>
+      <mesh ref={r2} rotation={[Math.PI / 3, Math.PI / 8, 0]}>
+        <torusGeometry args={[4.0, 0.005, 6, 80]} />
+        <meshBasicMaterial color="#8b0e14" transparent opacity={0.05} depthWrite={false} />
+      </mesh>
+    </>
+  );
+}
+
 /* ─── Floating particles ────────────────────────────────── */
 function AtmosphereParticles() {
-  const COUNT = 90;
+  const COUNT = 100;
 
   const { positions, velocities } = useMemo(() => {
-    const positions = new Float32Array(COUNT * 3);
+    const positions  = new Float32Array(COUNT * 3);
     const velocities = new Float32Array(COUNT * 3);
     for (let i = 0; i < COUNT; i++) {
-      const r = 3.0 + Math.random() * 2.8;
+      const r     = 2.8 + Math.random() * 3.2;
       const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos(2 * Math.random() - 1);
+      const phi   = Math.acos(2 * Math.random() - 1);
       positions[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
       positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
       positions[i * 3 + 2] = r * Math.cos(phi);
@@ -60,23 +281,20 @@ function AtmosphereParticles() {
     return { positions, velocities };
   }, []);
 
-  const pointsRef = useRef<THREE.Points>(null);
-  const posRef    = useRef(positions.slice());
+  const ptsRef = useRef<THREE.Points>(null);
+  const posRef = useRef(positions.slice());
 
   useFrame(() => {
-    const pts = pointsRef.current;
+    const pts = ptsRef.current;
     if (!pts) return;
     const arr = posRef.current;
     for (let i = 0; i < COUNT; i++) {
       arr[i * 3]     += velocities[i * 3];
       arr[i * 3 + 1] += velocities[i * 3 + 1];
       arr[i * 3 + 2] += velocities[i * 3 + 2];
-      const x = arr[i * 3], y = arr[i * 3 + 1], z = arr[i * 3 + 2];
-      const d = Math.sqrt(x * x + y * y + z * z);
-      if (d > 5.8 || d < 2.5) {
-        velocities[i * 3]     *= -1;
-        velocities[i * 3 + 1] *= -1;
-        velocities[i * 3 + 2] *= -1;
+      const d = Math.sqrt(arr[i*3]**2 + arr[i*3+1]**2 + arr[i*3+2]**2);
+      if (d > 6.0 || d < 2.4) {
+        velocities[i*3] *= -1; velocities[i*3+1] *= -1; velocities[i*3+2] *= -1;
       }
     }
     (pts.geometry.attributes.position as THREE.BufferAttribute).set(arr);
@@ -84,117 +302,19 @@ function AtmosphereParticles() {
   });
 
   return (
-    <points ref={pointsRef}>
+    <points ref={ptsRef}>
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
       <pointsMaterial
-        size={0.015}
-        color={BRAND_RED}
+        size={0.016}
+        color="#eb1b24"
         transparent
-        opacity={0.35}
+        opacity={0.4}
         sizeAttenuation
         depthWrite={false}
       />
     </points>
-  );
-}
-
-/* ─── Subtle floating grid rings ────────────────────────── */
-function GeometricAccents() {
-  const ring1Ref = useRef<THREE.Mesh>(null);
-  const ring2Ref = useRef<THREE.Mesh>(null);
-
-  useFrame(({ clock }) => {
-    const t = clock.elapsedTime;
-    if (ring1Ref.current) {
-      ring1Ref.current.rotation.z = t * 0.08;
-      ring1Ref.current.rotation.x = t * 0.05;
-    }
-    if (ring2Ref.current) {
-      ring2Ref.current.rotation.z = -t * 0.06;
-      ring2Ref.current.rotation.y = t * 0.04;
-    }
-  });
-
-  return (
-    <>
-      <mesh ref={ring1Ref} rotation={[Math.PI / 4, 0, 0]}>
-        <torusGeometry args={[3.2, 0.006, 6, 64]} />
-        <meshBasicMaterial color={BRAND_RED} transparent opacity={0.07} depthWrite={false} />
-      </mesh>
-      <mesh ref={ring2Ref} rotation={[Math.PI / 3, Math.PI / 6, 0]}>
-        <torusGeometry args={[4.0, 0.004, 6, 64]} />
-        <meshBasicMaterial color={BRAND_RED_DARK} transparent opacity={0.05} depthWrite={false} />
-      </mesh>
-    </>
-  );
-}
-
-/* ─── Red-only lighting — no white, no silver ───────────── */
-function BrandLighting() {
-  return (
-    <>
-      {/* Warm dark ambient base */}
-      <ambientLight intensity={0.6} color="#3d0608" />
-
-      {/* Soft front fill — red-tinted, not white */}
-      <directionalLight position={[0, 2, 5]} intensity={1.8} color="#ff4040" />
-
-      {/* Left side depth */}
-      <pointLight position={[-4, 2, 2]} intensity={2.5} color={BRAND_RED} distance={14} />
-
-      {/* Right side depth */}
-      <pointLight position={[4, 1, 1]} intensity={1.8} color={BRAND_RED_MID} distance={12} />
-
-      {/* Top accent */}
-      <pointLight position={[0, 5, 1]} intensity={1.4} color="#ff2020" distance={10} />
-
-      {/* Bottom bounce — keeps underside red not dark */}
-      <pointLight position={[0, -4, 0]} intensity={1.2} color={BRAND_RED_DARK} distance={9} />
-
-      {/* Rear rim */}
-      <pointLight position={[0, 0, -5]} intensity={1.0} color="#600810" distance={10} />
-    </>
-  );
-}
-
-/* ─── Trophy mesh — pure Trenex red ─────────────────────── */
-function TrophyMesh() {
-  const groupRef    = useRef<THREE.Group>(null);
-  const glowMatRef  = useRef<THREE.MeshStandardMaterial | null>(null);
-
-  const geometries = useMemo(() => buildTrophyGeometries(), []);
-
-  useFrame(({ clock }) => {
-    const t = clock.elapsedTime;
-    if (groupRef.current) {
-      groupRef.current.position.y = Math.sin(t * 0.38) * 0.07;
-      groupRef.current.rotation.x = Math.sin(t * 0.2) * 0.025;
-    }
-    // Soft breathing emissive glow
-    if (glowMatRef.current) {
-      glowMatRef.current.emissiveIntensity = 0.18 + Math.sin(t * 1.0) * 0.08;
-    }
-  });
-
-  return (
-    /* Scale group down ~35% from original */
-    <group ref={groupRef} scale={[0.65, 0.65, 0.65]}>
-      {geometries.map((geo, i) => (
-        <mesh key={`t-${i}`} geometry={geo} castShadow={false}>
-          <meshStandardMaterial
-            ref={i === 0 ? (m) => { if (m) glowMatRef.current = m; } : undefined}
-            color={BRAND_RED}
-            emissive={BRAND_RED}
-            emissiveIntensity={0.22}
-            metalness={0.15}
-            roughness={0.45}
-            envMapIntensity={0}
-          />
-        </mesh>
-      ))}
-    </group>
   );
 }
 
@@ -205,17 +325,13 @@ interface TrophySceneProps {
 
 export function TrophyScene({ className }: TrophySceneProps) {
   return (
-    <div
-      id="trophy-canvas"
-      className={className}
-      style={{ touchAction: "none" }}
-    >
+    <div id="trophy-canvas" className={className} style={{ touchAction: "none" }}>
       <Canvas
         dpr={[1, 1.5]}
-        camera={{ position: [0, 0.1, 6.0], fov: 38, near: 0.1, far: 100 }}
+        camera={{ position: [0, 0.4, 5.8], fov: 40, near: 0.1, far: 100 }}
         gl={{
-          antialias: true,
-          alpha: true,
+          antialias:   true,
+          alpha:       true,
           powerPreference: "high-performance",
           toneMapping: THREE.NoToneMapping,
         }}
@@ -223,15 +339,19 @@ export function TrophyScene({ className }: TrophySceneProps) {
       >
         <BrandLighting />
         <TrophyMesh />
+        <VolumetricGlow />
         <AtmosphereParticles />
-        <GeometricAccents />
+        <AccentRings />
+        <PulseRing period={5.5} delay={0.0} startRadius={1.4} />
+        <PulseRing period={5.5} delay={1.8} startRadius={1.6} />
+        <PulseRing period={5.5} delay={3.6} startRadius={1.5} />
 
         <OrbitControls
           makeDefault
           enableDamping
           dampingFactor={0.05}
           autoRotate
-          autoRotateSpeed={0.4}
+          autoRotateSpeed={0.38}
           enableZoom={false}
           enablePan={false}
           minPolarAngle={Math.PI / 5}
