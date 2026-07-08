@@ -16,6 +16,7 @@ import { Stats } from "@/components/sections/Stats";
 import { TrophySection } from "@/components/sections/TrophySection";
 import { ExpertiseWall } from "@/components/sections/ExpertiseWall";
 import { Contact } from "@/components/sections/Contact";
+import GraphicDesignPage from "@/pages/graphic-design";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
@@ -50,6 +51,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/graphic-design" component={GraphicDesignPage} />
       <Route component={NotFound} />
     </Switch>
   );

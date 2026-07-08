@@ -119,15 +119,30 @@ export function ServiceCard({ service, icon, delay }: ServiceCardProps) {
           ))}
         </div>
 
-        <div
-          style={{ transform: "translateZ(20px)" }}
-          className="relative mt-8 flex items-center gap-3 text-sm font-medium text-white/40 transition-colors duration-500 group-hover:text-[#FF1F1F]"
-        >
-          <span className="h-px w-8 bg-current transition-all duration-500 group-hover:w-14" />
-          <span className="uppercase tracking-[0.2em]">Explore Service</span>
-          <span aria-hidden className="transition-transform duration-500 group-hover:translate-x-1">
-            &rarr;
-          </span>
+        <div style={{ transform: "translateZ(20px)" }} className="relative mt-8">
+          {service.href ? (
+            <a
+              href={service.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center gap-3 text-sm font-medium text-white/40 transition-colors duration-500 group-hover:text-[#FF1F1F]"
+            >
+              <span className="h-px w-8 bg-current transition-all duration-500 group-hover:w-14" />
+              <span className="uppercase tracking-[0.2em]">Explore Service</span>
+              <span aria-hidden className="transition-transform duration-500 group-hover:translate-x-1">
+                &rarr;
+              </span>
+            </a>
+          ) : (
+            <div className="flex items-center gap-3 text-sm font-medium text-white/40 transition-colors duration-500 group-hover:text-[#FF1F1F]">
+              <span className="h-px w-8 bg-current transition-all duration-500 group-hover:w-14" />
+              <span className="uppercase tracking-[0.2em]">Explore Service</span>
+              <span aria-hidden className="transition-transform duration-500 group-hover:translate-x-1">
+                &rarr;
+              </span>
+            </div>
+          )}
         </div>
       </motion.div>
     </motion.div>

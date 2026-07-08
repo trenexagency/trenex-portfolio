@@ -44,6 +44,7 @@ export interface Service {
   description: string;
   index: string;
   capabilities: string[];
+  href?: string;
 }
 
 export interface ExpertiseTool {
@@ -97,6 +98,7 @@ export const services: Service[] = [
     description:
       "Strategic brand identities and visual systems designed to make your business instantly recognizable, memorable, and trusted.",
     capabilities: ["Brand Identity", "Logo Design", "Brand Guidelines"],
+    href: "/graphic-design",
   },
   {
     index: "02",
