@@ -46,13 +46,144 @@ const TOOLS = [
   { abbr: "XD", name: "Adobe XD",    role: "Prototyping & interactive design",         shade: "from-[#120001]" },
 ];
 
-/* ── Showcase ─────────────────────────────────────────── */
-const SHOWCASE = [
-  { label: "Brand Identity",    tag: "01", bg: "from-[#1a0002] to-[#050505]", accent: "TRX",    sub: "Wordmark System"   },
-  { label: "Logo Design",       tag: "02", bg: "from-[#0d0002] to-[#050505]", accent: "◈",      sub: "Symbol Mark"       },
-  { label: "Brand Guidelines",  tag: "03", bg: "from-[#120002] to-[#050505]", accent: "Aa",     sub: "Typography System" },
-  { label: "Visual System",     tag: "04", bg: "from-[#0a0001] to-[#050505]", accent: "■ ▲ ●", sub: "Design Language"   },
+/* ── Portfolio ────────────────────────────────────────── */
+const PORTFOLIO = [
+  {
+    id: "01",
+    category: "YouTube Thumbnails",
+    desc: "Bold, high-contrast thumbnails engineered for clicks and watch-time.",
+    img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=85",
+    fallback: "from-[#1a0002]",
+    span: "md:col-span-2",
+    height: "h-[360px]",
+  },
+  {
+    id: "02",
+    category: "Social Media Design",
+    desc: "Scroll-stopping visuals crafted to dominate every feed.",
+    img: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=800&q=85",
+    fallback: "from-[#0f0001]",
+    span: "md:col-span-1",
+    height: "h-[360px]",
+  },
+  {
+    id: "03",
+    category: "Brand Identity",
+    desc: "Full visual systems built for authority, recall, and trust.",
+    img: "https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=800&q=85",
+    fallback: "from-[#140001]",
+    span: "md:col-span-1",
+    height: "h-[280px]",
+  },
+  {
+    id: "04",
+    category: "Logo Design",
+    desc: "Marks that anchor identity — timeless, versatile, and ownable.",
+    img: "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=800&q=85",
+    fallback: "from-[#0a0001]",
+    span: "md:col-span-1",
+    height: "h-[280px]",
+  },
+  {
+    id: "05",
+    category: "Event Posters",
+    desc: "High-impact poster designs that command attention and drive attendance.",
+    img: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=85",
+    fallback: "from-[#180002]",
+    span: "md:col-span-1",
+    height: "h-[280px]",
+  },
+  {
+    id: "06",
+    category: "UI/UX Design",
+    desc: "Interfaces that convert — built on clarity, hierarchy, and delight.",
+    img: "https://images.unsplash.com/photo-1551650975-87deedd944c3?auto=format&fit=crop&w=1600&q=85",
+    fallback: "from-[#120001]",
+    span: "md:col-span-3",
+    height: "h-[300px]",
+  },
 ];
+
+/* ══════════════════════════════════════════════════════
+   PORTFOLIO CARD
+══════════════════════════════════════════════════════ */
+function PortfolioCard({ item, index }: { item: typeof PORTFOLIO[0]; index: number }) {
+  const [imgLoaded, setImgLoaded] = useState(false);
+  const [imgErr, setImgErr]       = useState(false);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 36 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.75, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
+      className={`group relative overflow-hidden rounded-2xl ${item.span} ${item.height} cursor-pointer`}
+    >
+      {/* Background image */}
+      {!imgErr ? (
+        <img
+          src={item.img}
+          alt={item.category}
+          onLoad={() => setImgLoaded(true)}
+          onError={() => setImgErr(true)}
+          className={`absolute inset-0 h-full w-full object-cover transition-all duration-700 ease-out group-hover:scale-[1.07] group-hover:brightness-110 ${imgLoaded ? "opacity-100" : "opacity-0"}`}
+        />
+      ) : null}
+
+      {/* Fallback gradient (shown while loading or on error) */}
+      <div className={`absolute inset-0 bg-gradient-to-b ${item.fallback} to-[#060606] transition-opacity duration-500 ${imgLoaded && !imgErr ? "opacity-0" : "opacity-100"}`} />
+
+      {/* Permanent dark vignette */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/95 via-[#050505]/30 to-[#050505]/10" />
+
+      {/* Red tint on hover */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#eb1b24]/12 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+      {/* Glow border */}
+      <div className="absolute inset-0 rounded-2xl border border-white/8 transition-colors duration-500 group-hover:border-[#eb1b24]/50 group-hover:shadow-[inset_0_0_0_1px_rgba(235,27,36,0.30)]" />
+
+      {/* Top shimmer */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#eb1b24]/0 to-transparent transition-all duration-500 group-hover:via-[#eb1b24]/60" />
+
+      {/* Corner red bloom */}
+      <div
+        className="pointer-events-none absolute -bottom-10 -right-10 h-44 w-44 rounded-full opacity-0 transition-opacity duration-700 group-hover:opacity-100"
+        style={{ background: "radial-gradient(circle, rgba(235,27,36,0.30), transparent 65%)", filter: "blur(28px)" }}
+      />
+
+      {/* Content layer */}
+      <div className="absolute inset-0 flex flex-col justify-between p-6 sm:p-7">
+        {/* Top row */}
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-2">
+            <div className="h-1.5 w-1.5 rounded-full bg-[#eb1b24] shadow-[0_0_6px_rgba(235,27,36,0.9)]" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-white/55 transition-colors duration-300 group-hover:text-white/80">
+              {item.category}
+            </span>
+          </div>
+          <span className="font-mono text-[10px] text-white/20 group-hover:text-[#eb1b24]/60 transition-colors duration-500">
+            {item.id}
+          </span>
+        </div>
+
+        {/* Bottom content — slides up on hover */}
+        <div>
+          <div className="mb-4 h-px w-0 bg-[#eb1b24] transition-all duration-500 group-hover:w-12" />
+          <h3 className="text-lg font-semibold uppercase leading-tight tracking-[0.04em] text-white transition-all duration-300 sm:text-xl">
+            {item.category}
+          </h3>
+          <p className="mt-2 max-w-xs translate-y-2 text-sm leading-relaxed text-white/0 transition-all duration-500 group-hover:translate-y-0 group-hover:text-white/60">
+            {item.desc}
+          </p>
+          <div className="mt-4 flex items-center gap-2 translate-y-3 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#eb1b24]">View Work</span>
+            <span className="text-[#eb1b24] text-xs transition-transform duration-300 group-hover:translate-x-1">→</span>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
 
 /* ══════════════════════════════════════════════════════
    ENTRY SPLASH SCREEN
@@ -564,59 +695,56 @@ export default function GraphicDesignPage() {
           </div>
         </section>
 
-        {/* ══ 5. SHOWCASE ═══════════════════════════════════════ */}
-        <section className="relative w-full overflow-hidden bg-[#050505]/75 px-5 py-20 sm:px-6 sm:py-28">
+        {/* ══ 5. PORTFOLIO ══════════════════════════════════════ */}
+        <section className="relative w-full overflow-hidden bg-[#050505]/75 px-5 py-20 sm:px-6 sm:py-28 md:py-32">
           <SectionAmbience variant="expertise" />
-          <AmbientDots count={10} />
+          <AmbientDots count={12} />
+
+          {/* Deep ambient glow behind grid */}
+          <div
+            className="pointer-events-none absolute left-1/2 top-1/2 h-[600px] w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full"
+            style={{ background: "radial-gradient(ellipse 65% 55% at 50% 50%, rgba(235,27,36,0.06), transparent 70%)", filter: "blur(80px)" }}
+          />
 
           <div className="relative z-10 mx-auto max-w-6xl">
+            {/* Section header */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.4 }}
               transition={{ duration: 0.7 }}
-              className="mb-16 flex flex-col items-start gap-4"
+              className="mb-14 flex flex-col items-start gap-4 sm:mb-16"
             >
-              <span className="font-mono text-xs uppercase tracking-[0.4em] text-[#eb1b24]">Our Work</span>
-              <h2 className="text-3xl font-semibold uppercase tracking-tight text-white sm:text-4xl md:text-5xl">Design That Speaks</h2>
-              <p className="max-w-lg text-sm leading-relaxed text-white/45 md:text-base">
-                A glimpse into the visual worlds we create. Every project is a new opportunity to push the creative boundary.
+              <span className="font-mono text-xs uppercase tracking-[0.4em] text-[#eb1b24]">Featured Work</span>
+              <h2 className="text-3xl font-semibold uppercase tracking-tight text-white sm:text-4xl md:text-5xl">
+                Featured Design Work
+              </h2>
+              <p className="max-w-xl text-sm leading-relaxed text-white/45 md:text-base">
+                Selected projects crafted to help brands stand out, engage audiences, and leave a lasting impression.
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {SHOWCASE.map((item, i) => (
-                <motion.div
-                  key={item.tag}
-                  initial={{ opacity: 0, y: 32 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 0.7, delay: i * 0.1 }}
-                  className={`group relative overflow-hidden rounded-2xl border border-white/8 bg-gradient-to-b ${item.bg} p-6 transition-all duration-500 hover:border-[#eb1b24]/45 hover:shadow-[0_20px_60px_-16px_rgba(235,27,36,0.30)] sm:p-8`}
-                  style={{ minHeight: "220px" }}
-                >
-                  <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100"
-                    style={{ background: "radial-gradient(ellipse 80% 80% at 50% 50%, rgba(235,27,36,0.10), transparent 70%)" }}
-                  />
-                  <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#eb1b24]/0 to-transparent transition-all duration-500 group-hover:via-[#eb1b24]/45" />
-
-                  <div className="relative flex h-full flex-col justify-between">
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono text-[10px] uppercase tracking-[0.35em] text-white/25 transition-colors duration-500 group-hover:text-[#eb1b24]/60">{item.tag}</span>
-                      <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#eb1b24]/30">Trenex</span>
-                    </div>
-                    <div className="mt-8">
-                      <div className="mb-3 font-mono text-3xl font-semibold text-white/20 transition-colors duration-500 group-hover:text-[#eb1b24]/50 sm:text-4xl">{item.accent}</div>
-                      <div className="h-px w-8 bg-[#eb1b24]/30 transition-all duration-500 group-hover:w-14 group-hover:bg-[#eb1b24]/65" />
-                    </div>
-                    <div className="mt-6">
-                      <h3 className="text-sm font-semibold uppercase tracking-[0.08em] text-white">{item.label}</h3>
-                      <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.3em] text-white/30">{item.sub}</p>
-                    </div>
-                  </div>
-                </motion.div>
+            {/* Bento grid — 3 cols on desktop */}
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3 sm:gap-5">
+              {PORTFOLIO.map((item, i) => (
+                <PortfolioCard key={item.id} item={item} index={i} />
               ))}
             </div>
+
+            {/* Bottom CTA nudge */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.8 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="mt-10 flex items-center justify-center gap-3 sm:mt-12"
+            >
+              <div className="h-px w-12 bg-white/10" />
+              <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-white/25">
+                More work available on request
+              </span>
+              <div className="h-px w-12 bg-white/10" />
+            </motion.div>
           </div>
         </section>
 
