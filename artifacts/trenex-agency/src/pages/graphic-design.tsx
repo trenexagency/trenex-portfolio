@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 import { AmbientBackground } from "@/components/three/AmbientBackground";
 import { GridBackground } from "@/components/GridBackground";
@@ -309,80 +309,223 @@ function FilteredPortfolio() {
 }
 
 /* ══════════════════════════════════════════════════════
-   ENTRY SPLASH SCREEN
+   CINEMATIC ENTRY SPLASH SCREEN
+   Timeline:
+     0.0s  — screen fades from black
+     0.3s  — particles emerge
+     0.5s  — energy ring traces itself
+     1.0s  — logo rises from darkness
+     1.5s  — logo scales 80%→100%
+     2.0s  — outer glow blooms
+     2.2s  — "GRAPHIC DESIGN / DESIGNS THAT BUILD BRANDS"
+     2.8s  — red line sweeps in
+     3.4s  — exit (onDone fires)
 ══════════════════════════════════════════════════════ */
 function GDEntryScreen({ onDone }: { onDone: () => void }) {
   useEffect(() => {
-    const t = setTimeout(onDone, 1700);
+    const t = setTimeout(onDone, 3400);
     return () => clearTimeout(t);
   }, [onDone]);
 
-  /* Mini particle dots */
-  const dots = Array.from({ length: 28 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    dur: 2.5 + Math.random() * 3,
-    delay: Math.random() * 2,
-    size: 1 + Math.random() * 2,
-  }));
+  const particles = useMemo(() =>
+    Array.from({ length: 48 }, (_, i) => ({
+      id: i,
+      x: (i * 41.3 + 7) % 100,
+      y: (i * 67.7 + 19) % 100,
+      size: 1 + (i % 3) * 0.8,
+      dur:  2.6 + (i % 7) * 0.3,
+      delay: 0.3 + (i / 48) * 1.5,
+      opacity: 0.4 + (i % 4) * 0.15,
+    })), []
+  );
+
+  const ringR1 = 148;
+  const ringR2 = 136;
+  const ringC1 = Math.PI * 2 * ringR1;
+  const ringC2 = Math.PI * 2 * ringR2;
 
   return (
     <motion.div
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#050505]"
-      initial={{ opacity: 1 }}
-      exit={{ opacity: 0, scale: 1.03 }}
-      transition={{ duration: 0.65, ease: "easeInOut" }}
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-hidden bg-[#050505]"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0, scale: 1.04, filter: "brightness(1.6)" }}
+      transition={{
+        opacity:  { duration: 0.3, ease: "easeOut" },
+        scale:    { duration: 0.6, ease: [0.4, 0, 0.2, 1] },
+        filter:   { duration: 0.6 },
+      }}
     >
-      {/* Ambient radial glow */}
-      <div
+
+      {/* ── Ambient centre glow (appears at 2.0s) ── */}
+      <motion.div
         className="pointer-events-none absolute inset-0"
-        style={{ background: "radial-gradient(ellipse 60% 55% at 50% 50%, rgba(235,27,36,0.18), transparent 65%)" }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2.0, duration: 1.1 }}
+        style={{ background: "radial-gradient(ellipse 58% 52% at 50% 48%, rgba(235,27,36,0.20), transparent 62%)" }}
       />
 
-      {/* Particles */}
-      {dots.map((d) => (
+      {/* ── Logo outer halo bloom (2.0s) ── */}
+      <motion.div
+        className="pointer-events-none absolute"
+        style={{
+          width: 520, height: 520,
+          background: "radial-gradient(circle, rgba(235,27,36,0.26), transparent 62%)",
+          filter: "blur(72px)",
+          left: "50%", top: "50%",
+          x: "-50%", y: "-50%",
+        }}
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: [0, 0.7, 1], scale: [0.55, 1.12, 1] }}
+        transition={{ delay: 2.0, duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+      />
+
+      {/* ── Particles (0.3s) ── */}
+      {particles.map((p) => (
         <motion.div
-          key={d.id}
+          key={p.id}
           className="absolute rounded-full bg-[#eb1b24]"
-          style={{ left: `${d.x}%`, top: `${d.y}%`, width: d.size, height: d.size }}
-          animate={{ opacity: [0, 0.6, 0], y: [0, -18, 0] }}
-          transition={{ duration: d.dur, delay: d.delay, repeat: Infinity, ease: "easeInOut" }}
+          style={{ left: `${p.x}%`, top: `${p.y}%`, width: p.size, height: p.size }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0, p.opacity, p.opacity * 0.5, p.opacity, 0], y: [0, -22, -10, -28, 0] }}
+          transition={{ delay: p.delay, duration: p.dur, repeat: Infinity, ease: "easeInOut" }}
         />
       ))}
 
-      {/* Content */}
+      {/* ── Energy rings (SVG, 0.5s) ── */}
       <motion.div
-        className="relative flex flex-col items-center gap-5 text-center"
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.55, delay: 0.15 }}
+        className="pointer-events-none absolute"
+        style={{ width: 320, height: 320, left: "50%", top: "50%", x: "-50%", y: "-50%" }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: [0, 0.9, 0.6] }}
+        transition={{ delay: 0.5, duration: 0.7 }}
       >
-        {/* Trenex "T" mark */}
-        <div className="relative mb-2 flex h-14 w-14 items-center justify-center">
-          <div
-            className="absolute inset-0 rounded-full"
-            style={{ background: "radial-gradient(circle, rgba(235,27,36,0.35), transparent 70%)", filter: "blur(12px)" }}
+        <svg viewBox="0 0 320 320" className="h-full w-full" style={{ transform: "rotate(-90deg)" }}>
+          {/* Main trace ring */}
+          <motion.circle
+            cx="160" cy="160" r={ringR1}
+            fill="none" stroke="rgba(235,27,36,0.45)" strokeWidth="1.2"
+            strokeDasharray={ringC1}
+            initial={{ strokeDashoffset: ringC1 }}
+            animate={{ strokeDashoffset: 0 }}
+            transition={{ delay: 0.5, duration: 1.5, ease: [0.4, 0, 0.15, 1] }}
           />
-          <span className="relative font-mono text-4xl font-bold text-[#eb1b24]">T</span>
-        </div>
+          {/* Inner ghost ring */}
+          <motion.circle
+            cx="160" cy="160" r={ringR2}
+            fill="none" stroke="rgba(235,27,36,0.18)" strokeWidth="0.6"
+            strokeDasharray={ringC2}
+            initial={{ strokeDashoffset: ringC2 }}
+            animate={{ strokeDashoffset: 0 }}
+            transition={{ delay: 0.8, duration: 1.8, ease: [0.4, 0, 0.15, 1] }}
+          />
+          {/* Four cardinal tick marks */}
+          {[0, 90, 180, 270].map((a) => {
+            const rad = (a * Math.PI) / 180;
+            return (
+              <motion.line
+                key={a}
+                x1={160 + (ringR2 - 4) * Math.cos(rad)}
+                y1={160 + (ringR2 - 4) * Math.sin(rad)}
+                x2={160 + (ringR1 + 8) * Math.cos(rad)}
+                y2={160 + (ringR1 + 8) * Math.sin(rad)}
+                stroke="rgba(235,27,36,0.80)"
+                strokeWidth="1.5"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.7 + a / 900, duration: 0.25 }}
+              />
+            );
+          })}
+          {/* Spinning dashed outer orbit */}
+          <motion.circle
+            cx="160" cy="160" r="155"
+            fill="none" stroke="rgba(235,27,36,0.10)" strokeWidth="0.75"
+            strokeDasharray="10 7"
+            style={{ transformOrigin: "160px 160px" }}
+            animate={{ rotate: 360 }}
+            transition={{ delay: 0.9, duration: 14, repeat: Infinity, ease: "linear" }}
+          />
+        </svg>
+      </motion.div>
 
-        <span className="font-mono text-[10px] uppercase tracking-[0.6em] text-[#eb1b24]">
-          Graphic Design
-        </span>
-
-        <p className="font-mono text-sm uppercase tracking-[0.3em] text-white/35">
-          Designs That Build Brands
-        </p>
-
-        {/* Animated red line */}
+      {/* ── Trenex logo (1.0s → 1.5s scale) ── */}
+      <motion.div
+        className="relative z-10"
+        initial={{ opacity: 0, scale: 0.8, y: 6 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{
+          opacity: { delay: 1.0, duration: 0.6, ease: "easeOut" },
+          scale:   { delay: 1.5, duration: 0.55, ease: [0.16, 1, 0.3, 1] },
+          y:       { delay: 1.0, duration: 0.6, ease: "easeOut" },
+        }}
+      >
+        {/* Logo glow layer */}
         <motion.div
-          className="h-px bg-[#eb1b24]/60"
-          initial={{ width: 0 }}
-          animate={{ width: "80px" }}
-          transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+          className="pointer-events-none absolute inset-0 -z-10"
+          style={{ filter: "blur(28px)", background: "rgba(235,27,36,0.25)", borderRadius: "50%" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0, 0.6, 0.4] }}
+          transition={{ delay: 2.0, duration: 0.9 }}
+        />
+        <img
+          src="/trenex-logo.svg"
+          alt="Trenex"
+          draggable={false}
+          className="w-40 select-none sm:w-52"
+          style={{ filter: "brightness(0) invert(1)" }}
         />
       </motion.div>
+
+      {/* ── Text block (2.2s) ── */}
+      <motion.div
+        className="relative z-10 mt-9 flex flex-col items-center gap-2.5 text-center"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 2.2, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <span
+          className="font-mono text-xs uppercase text-[#eb1b24]"
+          style={{ letterSpacing: "0.55em" }}
+        >
+          Graphic Design
+        </span>
+        <p
+          className="font-mono text-[10px] uppercase text-white/38"
+          style={{ letterSpacing: "0.38em" }}
+        >
+          Designs That Build Brands
+        </p>
+      </motion.div>
+
+      {/* ── Red sweep line (2.8s) ── */}
+      <motion.div
+        className="relative z-10 mt-6"
+        style={{
+          height: 1,
+          background: "linear-gradient(to right, transparent, #eb1b24 40%, #eb1b24 60%, transparent)",
+        }}
+        initial={{ width: 0, opacity: 0 }}
+        animate={{ width: 180, opacity: 1 }}
+        transition={{ delay: 2.8, duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+      />
+
+      {/* ── Corner accent lines ── */}
+      {[
+        "top-8 left-8 border-t border-l",
+        "top-8 right-8 border-t border-r",
+        "bottom-8 left-8 border-b border-l",
+        "bottom-8 right-8 border-b border-r",
+      ].map((cls, i) => (
+        <motion.div
+          key={i}
+          className={`pointer-events-none absolute h-10 w-10 border-[#eb1b24]/30 ${cls}`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 + i * 0.08, duration: 0.4 }}
+        />
+      ))}
     </motion.div>
   );
 }
