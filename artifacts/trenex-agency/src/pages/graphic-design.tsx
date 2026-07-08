@@ -36,14 +36,14 @@ const PROCESS = [
   { num: "04", title: "Delivery",    desc: "Final production files, brand guidelines, and a complete asset library — everything you need to launch with confidence." },
 ];
 
-/* ── Tools (6 tools as requested) ────────────────────── */
+/* ── Tools ────────────────────────────────────────────── */
 const TOOLS = [
-  { abbr: "Ps", name: "Photoshop",    role: "Compositing & pixel-perfect retouching",  shade: "from-[#1a0002]" },
-  { abbr: "Ai", name: "Illustrator",  role: "Vector art & scalable identity design",    shade: "from-[#120001]" },
-  { abbr: "Fg", name: "Figma",        role: "Collaborative UI/UX & design systems",     shade: "from-[#160002]" },
-  { abbr: "Lr", name: "Lightroom",    role: "Photo editing & color treatment",          shade: "from-[#0e0001]" },
-  { abbr: "Ae", name: "After Effects", role: "Motion graphics & visual effects",        shade: "from-[#1a0002]" },
-  { abbr: "Pr", name: "Premiere Pro", role: "Video editing & cinematic storytelling",   shade: "from-[#120001]" },
+  { abbr: "Ps", name: "Photoshop",   role: "Pixel-perfect compositing & retouching",  shade: "from-[#1a0002]" },
+  { abbr: "Ai", name: "Illustrator", role: "Vector art & scalable identity systems",   shade: "from-[#120001]" },
+  { abbr: "Fg", name: "Figma",       role: "Collaborative UI/UX & design systems",     shade: "from-[#160002]" },
+  { abbr: "Lr", name: "Lightroom",   role: "Photo editing & cinematic color grading",  shade: "from-[#0e0001]" },
+  { abbr: "Id", name: "InDesign",    role: "Layout design & print production",         shade: "from-[#1a0002]" },
+  { abbr: "XD", name: "Adobe XD",    role: "Prototyping & interactive design",         shade: "from-[#120001]" },
 ];
 
 /* ── Showcase ─────────────────────────────────────────── */
@@ -201,8 +201,8 @@ function ToolCard({ tool, delay }: { tool: typeof TOOLS[0]; delay: number }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const mouseX  = useMotionValue(0.5);
   const mouseY  = useMotionValue(0.5);
-  const gX = useSpring(mouseX, { stiffness: 120, damping: 20 });
-  const gY = useSpring(mouseY, { stiffness: 120, damping: 20 });
+  const gX = useSpring(mouseX, { stiffness: 100, damping: 18 });
+  const gY = useSpring(mouseY, { stiffness: 100, damping: 18 });
 
   function onMove(e: React.PointerEvent<HTMLDivElement>) {
     const r = cardRef.current?.getBoundingClientRect();
@@ -214,54 +214,65 @@ function ToolCard({ tool, delay }: { tool: typeof TOOLS[0]; delay: number }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 28, scale: 0.97 }}
+      initial={{ opacity: 0, y: 32, scale: 0.97 }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, amount: 0.25 }}
-      transition={{ duration: 0.65, delay, ease: [0.16, 1, 0.3, 1] }}
-      style={{ perspective: 1000 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
       className="group relative"
     >
       <motion.div
         ref={cardRef}
         onPointerMove={onMove}
         onPointerLeave={onLeave}
-        whileHover={{ scale: 1.03 }}
-        transition={{ duration: 0.3 }}
-        className={`relative flex min-h-[180px] flex-col justify-between overflow-hidden rounded-2xl border border-white/8 bg-gradient-to-b ${tool.shade} to-[#050505] p-6 transition-[border-color,box-shadow] duration-500 group-hover:border-[#eb1b24]/45 group-hover:shadow-[0_20px_60px_-12px_rgba(235,27,36,0.30)] sm:p-7`}
+        whileHover={{ scale: 1.025, y: -4 }}
+        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        className={`relative flex min-h-[220px] flex-col justify-between overflow-hidden rounded-2xl border border-white/[0.07] bg-gradient-to-b ${tool.shade} to-[#080808] p-7 backdrop-blur-sm transition-[border-color,box-shadow] duration-500 group-hover:border-[#eb1b24]/50 group-hover:shadow-[0_24px_70px_-14px_rgba(235,27,36,0.35)] sm:p-8`}
       >
-        {/* Mouse-tracking glow */}
+        {/* Glassmorphism overlay */}
+        <div className="pointer-events-none absolute inset-0 rounded-2xl bg-white/[0.018]" />
+
+        {/* Mouse-tracking spotlight glow */}
         <motion.div
           aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-400 group-hover:opacity-100"
           style={{
-            background: `radial-gradient(260px circle at ${gX.get() * 100}% ${gY.get() * 100}%, rgba(235,27,36,0.18), transparent 65%)`,
+            background: `radial-gradient(280px circle at ${gX.get() * 100}% ${gY.get() * 100}%, rgba(235,27,36,0.17), transparent 60%)`,
           }}
         />
 
-        {/* Corner glow blob */}
-        <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full opacity-0 blur-3xl transition-opacity duration-700 group-hover:opacity-100"
-          style={{ background: "radial-gradient(circle, rgba(235,27,36,0.30), transparent 70%)" }}
+        {/* Bloom behind the monogram */}
+        <div
+          className="pointer-events-none absolute -left-6 -top-6 h-40 w-40 rounded-full opacity-0 transition-opacity duration-700 group-hover:opacity-100"
+          style={{ background: "radial-gradient(circle, rgba(235,27,36,0.22), transparent 70%)", filter: "blur(28px)" }}
         />
 
-        {/* Top bar accent */}
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#eb1b24]/0 to-transparent transition-all duration-500 group-hover:via-[#eb1b24]/50" />
+        {/* Top shimmer line */}
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#eb1b24]/0 to-transparent transition-all duration-600 group-hover:via-[#eb1b24]/55" />
+        {/* Bottom shimmer line */}
+        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/0 to-transparent transition-all duration-600 group-hover:via-white/[0.04]" />
 
-        {/* Abbr monogram */}
+        {/* Header row */}
         <div className="relative flex items-start justify-between">
-          <motion.span
-            className="font-mono text-4xl font-bold leading-none text-[#eb1b24]/20 transition-colors duration-500 group-hover:text-[#eb1b24]/55"
-            whileHover={{ scale: 1.05 }}
-          >
+          {/* Large monogram */}
+          <span className="font-mono text-[3.25rem] font-bold leading-none tracking-tight text-[#eb1b24]/15 transition-colors duration-500 group-hover:text-[#eb1b24]/55 sm:text-[3.75rem]">
             {tool.abbr}
-          </motion.span>
-          <div className="mt-1 h-1.5 w-1.5 rounded-full bg-[#eb1b24]/20 transition-colors duration-500 group-hover:bg-[#eb1b24]/60" />
+          </span>
+
+          {/* Status dot */}
+          <div className="mt-1.5 flex items-center gap-1.5">
+            <div className="h-1.5 w-1.5 rounded-full bg-[#eb1b24]/25 transition-all duration-500 group-hover:bg-[#eb1b24] group-hover:shadow-[0_0_8px_rgba(235,27,36,0.8)]" />
+          </div>
         </div>
 
-        {/* Info */}
-        <div className="relative mt-auto">
-          <div className="mb-3 h-px w-8 bg-[#eb1b24]/30 transition-all duration-500 group-hover:w-14 group-hover:bg-[#eb1b24]" />
-          <h3 className="text-base font-semibold text-white">{tool.name}</h3>
-          <p className="mt-1 text-xs leading-relaxed text-white/35 transition-colors duration-300 group-hover:text-white/60">{tool.role}</p>
+        {/* Info block */}
+        <div className="relative mt-auto space-y-3">
+          {/* Animated accent line */}
+          <div className="h-px w-8 bg-[#eb1b24]/30 transition-all duration-500 group-hover:w-16 group-hover:bg-[#eb1b24]" />
+
+          <div>
+            <h3 className="text-lg font-semibold leading-tight tracking-tight text-white">{tool.name}</h3>
+            <p className="mt-1.5 text-[13px] leading-relaxed text-white/38 transition-colors duration-300 group-hover:text-white/65">{tool.role}</p>
+          </div>
         </div>
       </motion.div>
     </motion.div>
