@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { TrophyScene } from "@/components/three/TrophyScene";
+import { SectionAmbience } from "@/components/SectionAmbience";
 
 export function TrophySection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -26,15 +27,16 @@ export function TrophySection() {
     <motion.section
       ref={sectionRef}
       id="signature"
-      className="relative w-full overflow-hidden bg-[#050505]/90 px-5 py-12 sm:px-6 sm:py-16"
+      className="relative w-full overflow-hidden bg-[#050505]/75 px-5 py-12 sm:px-6 sm:py-16"
       initial={{ opacity: 0, filter: "blur(8px)" }}
       whileInView={{ opacity: 1, filter: "blur(0px)" }}
       viewport={{ once: true, amount: 0.08 }}
       transition={{ duration: 1.1, ease: "easeOut" }}
     >
+      <SectionAmbience variant="signature" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#FF1F1F]/20 to-transparent" />
 
-      <div className="mx-auto max-w-5xl">
+      <div className="relative z-10 mx-auto max-w-5xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

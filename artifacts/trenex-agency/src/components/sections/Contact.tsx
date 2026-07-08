@@ -1,24 +1,35 @@
 import { motion } from "framer-motion";
 import { Particles } from "@/components/Particles";
 import { siteConfig, contactInfo } from "@/data/site";
+import { SectionAmbience } from "@/components/SectionAmbience";
 
 export function Contact() {
   return (
     <motion.section
       id="contact"
-      className="relative flex min-h-[70svh] w-full flex-col items-center justify-center overflow-hidden bg-[#050505]/90 px-5 py-20 text-center sm:px-6 sm:py-28"
+      className="relative flex min-h-[70svh] w-full flex-col items-center justify-center overflow-hidden bg-[#050505]/75 px-5 py-20 text-center sm:px-6 sm:py-28"
       initial={{ opacity: 0, filter: "blur(8px)" }}
       whileInView={{ opacity: 1, filter: "blur(0px)" }}
       viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 1.1, ease: "easeOut" }}
     >
+      <SectionAmbience variant="contact" />
+
+      {/* Enhanced multi-layer center glow */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
-          background: "radial-gradient(circle at 50% 50%, rgba(255,31,31,0.12), transparent 60%)",
+          background: "radial-gradient(ellipse 70% 60% at 50% 50%, rgba(235,27,36,0.14), transparent 62%)",
         }}
       />
-      <Particles count={20} />
+      {/* Secondary deeper glow */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background: "radial-gradient(ellipse 40% 40% at 50% 45%, rgba(235,27,36,0.08), transparent 55%)",
+        }}
+      />
+      <Particles count={28} />
 
       <motion.span
         className="relative font-mono text-xs uppercase tracking-[0.4em] text-[#FF1F1F]"

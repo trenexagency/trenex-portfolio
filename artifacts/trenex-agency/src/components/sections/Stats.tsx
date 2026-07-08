@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { SectionAmbience } from "@/components/SectionAmbience";
 
 interface StatDef {
   end: number;
@@ -104,21 +105,16 @@ function StatCard({ stat, delay, counterRef }: StatCardProps) {
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
         className="relative flex h-full min-h-[18rem] flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-white/[0.01] p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.02)] transition-[border-color,box-shadow] duration-500 group-hover:border-[#FF1F1F]/50 group-hover:shadow-[0_25px_80px_-20px_rgba(255,31,31,0.35)] sm:p-8"
       >
-        {/* Mouse-tracking glow */}
         <motion.div
           aria-hidden
           className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
           style={{ background: glowBg }}
         />
-
-        {/* Corner glow orb */}
         <span
           aria-hidden
           className="pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full opacity-0 blur-3xl transition-opacity duration-700 group-hover:opacity-100"
           style={{ background: "radial-gradient(circle, rgba(255,31,31,0.3), transparent 70%)" }}
         />
-
-        {/* Decorative index number */}
         <div style={{ transform: "translateZ(20px)" }} className="relative flex items-center justify-between">
           <span className="font-mono text-xs uppercase tracking-[0.35em] text-white/25 transition-colors duration-500 group-hover:text-[#FF1F1F]/70">
             {stat.index}
@@ -127,12 +123,8 @@ function StatCard({ stat, delay, counterRef }: StatCardProps) {
             {stat.index}
           </span>
         </div>
-
-        {/* Counter block */}
         <div style={{ transform: "translateZ(50px)" }} className="relative mt-6">
-          {/* Red accent line above number */}
           <div className="mb-4 h-px w-10 bg-[#FF1F1F]/60 transition-all duration-500 group-hover:w-16 group-hover:bg-[#FF1F1F]" />
-
           <div className="flex items-baseline gap-0.5 leading-none">
             <span className="text-5xl font-bold tracking-tight text-white sm:text-6xl">
               <span ref={counterRef}>0</span>
@@ -142,8 +134,6 @@ function StatCard({ stat, delay, counterRef }: StatCardProps) {
             </span>
           </div>
         </div>
-
-        {/* Label block */}
         <div style={{ transform: "translateZ(35px)" }} className="relative mt-6">
           <h3 className="text-base font-semibold uppercase tracking-[0.08em] text-white sm:text-lg">
             {stat.label}
@@ -166,9 +156,7 @@ export function Stats() {
       STATS.forEach((stat, i) => {
         const el = counterRefs.current[i];
         if (!el) return;
-
         const obj = { val: 0 };
-
         gsap.to(obj, {
           val: stat.end,
           duration: 2.2,
@@ -197,17 +185,15 @@ export function Stats() {
     <motion.section
       ref={sectionRef}
       id="stats"
-      className="relative w-full bg-[#050505]/90 px-5 py-20 sm:px-6 sm:py-28 md:py-32"
+      className="relative w-full overflow-hidden bg-[#050505]/75 px-5 py-20 sm:px-6 sm:py-28 md:py-32"
       initial={{ opacity: 0, filter: "blur(8px)" }}
       whileInView={{ opacity: 1, filter: "blur(0px)" }}
       viewport={{ once: true, amount: 0.1 }}
       transition={{ duration: 1.1, ease: "easeOut" }}
     >
-      {/* Subtle horizontal separator at the top */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
+      <SectionAmbience variant="stats" />
 
-      <div className="mx-auto max-w-6xl">
-        {/* Section header */}
+      <div className="relative z-10 mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -226,23 +212,17 @@ export function Stats() {
           </p>
         </motion.div>
 
-        {/* Stat cards */}
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
           {STATS.map((stat, i) => (
             <StatCard
               key={stat.label}
               stat={stat}
               delay={i * 0.12}
-              counterRef={(el) => {
-                counterRefs.current[i] = el;
-              }}
+              counterRef={(el) => { counterRefs.current[i] = el; }}
             />
           ))}
         </div>
       </div>
-
-      {/* Subtle horizontal separator at the bottom */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
     </motion.section>
   );
 }

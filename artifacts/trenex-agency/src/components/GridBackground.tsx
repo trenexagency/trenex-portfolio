@@ -1,27 +1,23 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Full-page futuristic background grid.
- * – Pure CSS SVG patterns (no canvas, zero JS per frame beyond one RAF translateY)
- * – Two layers: subtle white grid lines + red glowing intersection dots
- * – Slow parallax: grid scrolls at ~12 % of page scroll speed
+ * Full-page premium background grid.
+ * – Three CSS layers: fine micro-grid + main grid lines + glowing intersection dots
+ * – Slow parallax at ~12% scroll speed
  * – Breathing animation on glow dots via CSS keyframe
- * – Fixed, pointer-events-none, z-[2] (above Three.js canvas at z-0, below content at z-10)
+ * – Fixed, pointer-events-none, z-[2]
  */
 export function GridBackground() {
   const innerRef = useRef<HTMLDivElement>(null);
-  const rafRef = useRef<number>(0);
+  const rafRef   = useRef<number>(0);
   const scrollRef = useRef(0);
-  const currentY = useRef(0);
+  const currentY  = useRef(0);
 
   useEffect(() => {
-    const onScroll = () => {
-      scrollRef.current = window.scrollY;
-    };
+    const onScroll = () => { scrollRef.current = window.scrollY; };
     window.addEventListener("scroll", onScroll, { passive: true });
 
     const tick = () => {
-      // Lerp toward target for a buttery-smooth parallax feel
       currentY.current += (scrollRef.current * 0.12 - currentY.current) * 0.08;
       if (innerRef.current) {
         innerRef.current.style.transform = `translateY(${currentY.current}px)`;
@@ -41,20 +37,25 @@ export function GridBackground() {
       className="pointer-events-none fixed inset-0 z-[2] overflow-hidden"
       aria-hidden="true"
     >
-      {/* Inner div extends beyond viewport so parallax movement doesn't clip edges */}
       <div
         ref={innerRef}
         className="absolute"
-        style={{
-          inset: "-15% 0",
-          willChange: "transform",
-        }}
+        style={{ inset: "-15% 0", willChange: "transform" }}
       >
-        {/* Layer 1: grid lines — white, ~6 % opacity */}
+        {/* Layer 0: micro fine grid — very subtle texture at 30px */}
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M 60 0 L 0 0 0 60' fill='none' stroke='rgba(255%2C255%2C255%2C0.07)' stroke-width='0.6'/%3E%3C/svg%3E")`,
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='30' height='30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M 30 0 L 0 0 0 30' fill='none' stroke='rgba(255%2C255%2C255%2C0.025)' stroke-width='0.4'/%3E%3C/svg%3E")`,
+            backgroundSize: "30px 30px",
+          }}
+        />
+
+        {/* Layer 1: main grid lines — white, ~8% opacity */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M 60 0 L 0 0 0 60' fill='none' stroke='rgba(255%2C255%2C255%2C0.08)' stroke-width='0.6'/%3E%3C/svg%3E")`,
             backgroundSize: "60px 60px",
           }}
         />
@@ -63,8 +64,17 @@ export function GridBackground() {
         <div
           className="grid-glow-dots absolute inset-0"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='0' cy='0' r='6' fill='rgba(220%2C38%2C38%2C0.06)'/%3E%3Ccircle cx='0' cy='0' r='3.5' fill='rgba(220%2C38%2C38%2C0.15)'/%3E%3Ccircle cx='0' cy='0' r='1.4' fill='rgba(220%2C38%2C38%2C0.75)'/%3E%3C/svg%3E")`,
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='0' cy='0' r='7' fill='rgba(235%2C27%2C36%2C0.07)'/%3E%3Ccircle cx='0' cy='0' r='4' fill='rgba(235%2C27%2C36%2C0.18)'/%3E%3Ccircle cx='0' cy='0' r='1.5' fill='rgba(235%2C27%2C36%2C0.80)'/%3E%3C/svg%3E")`,
             backgroundSize: "60px 60px",
+          }}
+        />
+
+        {/* Layer 3: accent dots on secondary 120px grid — larger rare glows */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='120' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='0' cy='0' r='14' fill='rgba(235%2C27%2C36%2C0.04)'/%3E%3Ccircle cx='0' cy='0' r='7' fill='rgba(235%2C27%2C36%2C0.09)'/%3E%3C/svg%3E")`,
+            backgroundSize: "120px 120px",
           }}
         />
       </div>

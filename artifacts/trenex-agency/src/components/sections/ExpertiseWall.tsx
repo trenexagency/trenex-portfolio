@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from "framer-motion";
+import { SectionAmbience } from "@/components/SectionAmbience";
 import { SiFigma, SiDavinciresolve, SiHtml5, SiCss, SiJavascript, SiReact, SiNodedotjs, SiGithub } from "react-icons/si";
 import {
   PhotoshopIcon,
@@ -147,18 +148,21 @@ export function ExpertiseWall() {
   return (
     <motion.section
       id="expertise"
-      className="relative w-full overflow-hidden bg-[#050505] px-5 py-20 sm:px-6 sm:py-28 md:py-32"
+      className="relative w-full overflow-hidden bg-[#050505]/75 px-5 py-20 sm:px-6 sm:py-28 md:py-32"
       initial={{ opacity: 0, filter: "blur(8px)" }}
       whileInView={{ opacity: 1, filter: "blur(0px)" }}
       viewport={{ once: true, amount: 0.1 }}
       transition={{ duration: 1.1, ease: "easeOut" }}
     >
+      <SectionAmbience variant="expertise" />
+
+      {/* Enhanced top glow orb */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-0 h-96 w-[36rem] -translate-x-1/2 rounded-full bg-[#FF1F1F]/[0.05] blur-[120px]"
+        className="pointer-events-none absolute left-1/2 top-0 h-[28rem] w-[44rem] -translate-x-1/2 rounded-full bg-[#eb1b24]/[0.07] blur-[140px]"
       />
 
-      <div className="relative mx-auto max-w-6xl">
+      <div className="relative z-10 mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

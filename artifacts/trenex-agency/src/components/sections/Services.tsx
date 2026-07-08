@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Palette, Clapperboard, Code2 } from "lucide-react";
 import { services } from "@/data/site";
 import { ServiceCard } from "./ServiceCard";
+import { SectionAmbience } from "@/components/SectionAmbience";
 
 const icons = [
   <Palette key="palette" className="h-8 w-8" strokeWidth={1.5} />,
@@ -13,13 +14,15 @@ export function Services() {
   return (
     <motion.section
       id="services"
-      className="relative w-full bg-[#050505]/90 px-5 py-20 sm:px-6 sm:py-28 md:py-36"
+      className="relative w-full overflow-hidden bg-[#050505]/75 px-5 py-20 sm:px-6 sm:py-28 md:py-36"
       initial={{ opacity: 0, filter: "blur(8px)" }}
       whileInView={{ opacity: 1, filter: "blur(0px)" }}
       viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 1.1, ease: "easeOut" }}
     >
-      <div className="mx-auto max-w-6xl">
+      <SectionAmbience variant="services" />
+
+      <div className="relative z-10 mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
