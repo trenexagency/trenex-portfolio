@@ -1,0 +1,90 @@
+Refine and reposition the "THE TRENEX SIGNATURE" section.
+
+CURRENT ISSUES TO FIX:
+
+1. The section is too large and takes excessive vertical space.
+2. The 3D Trenex T logo appears white/pink instead of matching the brand identity.
+3. The section feels disconnected from the website flow.
+4. Zoom functionality is unnecessary and should be removed.
+5. The orbital ring is too dominant and distracts from the logo.
+
+NEW PLACEMENT:
+
+Move this section to the very end of the website.
+
+New page flow:
+
+Hero
+Services
+Stats
+Expertise Wall
+Contact Section
+The Trenex Signature
+Footer
+
+The Trenex Signature should act as the final brand statement before the footer.
+
+SECTION SIZE:
+
+- Reduce section height significantly.
+- Target height: 500–650px maximum.
+- Make it a compact premium showcase.
+- Eliminate excessive empty space.
+
+3D LOGO IMPROVEMENTS:
+
+- Keep the logo interactive.
+- User can drag to rotate.
+- Mobile users can rotate with finger drag.
+- Remove zoom functionality completely.
+- Remove mouse wheel zoom.
+- Remove pinch zoom.
+- Keep smooth inertia after drag.
+
+VISUAL STYLE:
+
+- Use Trenex brand colors only.
+- No white material.
+- No pink material.
+
+Material should be:
+
+- Black chrome base
+- Deep red metallic accents
+- Red emissive glow
+- Premium reflections
+- Luxury futuristic finish
+
+ANIMATION:
+
+- Very slow automatic rotation.
+- Gentle floating motion.
+- Soft breathing red glow.
+- Smooth and elegant movement.
+
+TEXT CONTENT:
+
+Small Label:
+TRENEX SYMBOL
+
+Main Heading:
+THE TRENEX SIGNATURE
+
+Description:
+The symbol behind every project, every strategy, and every digital experience we create. A mark of precision, creativity, and trust.
+
+Small helper text:
+Drag to Rotate
+
+BACKGROUND:
+
+- Keep subtle particles.
+- Keep faint grid lines.
+- Keep ambient red glow.
+- Reduce visual clutter.
+- Make the logo the focal point.
+
+GOAL:
+
+Create a compact, premium, luxury brand-signature section that serves as the final memorable experience before the footer.
+It should feel like a high-end brand artifact, not a large content section.

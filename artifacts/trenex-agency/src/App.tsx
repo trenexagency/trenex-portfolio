@@ -35,9 +35,9 @@ function Home() {
           <Hero />
           <Services />
           <Stats />
-          <TrophySection />
           <ExpertiseWall />
           <Contact />
+          <TrophySection />
           <Footer />
           <WhatsAppButton />
         </div>
