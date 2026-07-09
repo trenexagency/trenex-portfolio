@@ -20,7 +20,7 @@ function buildTrophyGeometries(): THREE.BufferGeometry[] {
   const SCALE = 1 / 270;
 
   data.paths.forEach((path) => {
-    path.toShapes(true).forEach((shape) => {
+    path.toShapes().forEach((shape) => {
       const geo = new THREE.ExtrudeGeometry(shape, {
         depth: DEPTH,
         bevelEnabled: true,

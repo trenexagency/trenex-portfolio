@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
-import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring, type Variants } from "framer-motion";
 import { AmbientBackground } from "@/components/three/AmbientBackground";
 import { GridBackground } from "@/components/GridBackground";
 import { Header } from "@/components/layout/Header";
@@ -13,11 +13,11 @@ import { PORTFOLIO_PROJECTS, PORTFOLIO_CATEGORIES, type PortfolioProject } from 
 import { Palette, Layers, BookOpen, Monitor, Printer, Package, ChevronDown, X } from "lucide-react";
 
 /* ── Animation presets ────────────────────────────────── */
-const FADE_UP = {
+const FADE_UP: Variants = {
   hidden: { opacity: 0, y: 28 },
-  show:   { opacity: 1, y: 0, transition: { duration: 0.78, ease: [0.16, 1, 0.3, 1] } },
+  show:   { opacity: 1, y: 0, transition: { duration: 0.78, ease: "easeOut" } },
 };
-const STAGGER = { show: { transition: { staggerChildren: 0.13 } } };
+const STAGGER: Variants = { show: { transition: { staggerChildren: 0.13 } } };
 
 /* ── Capabilities ──────────────────────────────────────── */
 const CAPABILITIES = [
