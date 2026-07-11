@@ -472,4 +472,16 @@ html.custom-cursor-active * {
   .grid-glow-dots {
     animation: grid-glow-pulse 4s ease-in-out infinite;
   }
+
+  /* Slow, gentle vertical drift for the hero software badges.
+     Translate-only: no scale/rotate bounce, no opacity flashing. */
+  @keyframes sf-float {
+    0%   { transform: translateY(0px); }
+    100% { transform: translateY(-14px); }
+  }
+  .sf-float-a { animation: sf-float 9s ease-in-out infinite alternate; }
+  .sf-float-b { animation: sf-float 11s ease-in-out infinite alternate; animation-delay: -3s; }
+  .sf-float-c { animation: sf-float 10s ease-in-out infinite alternate; animation-delay: -6s; }
+  .sf-float-d { animation: sf-float 12.5s ease-in-out infinite alternate; animation-delay: -1.5s; }
+  .sf-float-e { animation: sf-float 8.5s ease-in-out infinite alternate; animation-delay: -4.5s; }
 }

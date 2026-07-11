@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { CustomCursor } from "@/components/CustomCursor";
 import { SectionAmbience } from "@/components/SectionAmbience";
+import { FloatingSoftwareBadges } from "@/components/FloatingSoftwareBadges";
 import { contactInfo } from "@/data/site";
 import { PORTFOLIO_PROJECTS, PORTFOLIO_CATEGORIES, type PortfolioProject } from "@/data/portfolio";
 import { X } from "lucide-react";
@@ -327,6 +328,8 @@ export default function GraphicDesignPage() {
             className="pointer-events-none absolute inset-0"
             style={{ background: "radial-gradient(ellipse 60% 55% at 50% 45%, rgba(235,27,36,0.16), transparent 68%)" }}
           />
+
+          <FloatingSoftwareBadges />
 
           <motion.div
             variants={STAGGER}
