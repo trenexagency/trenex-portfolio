@@ -10,7 +10,7 @@ import { SectionAmbience } from "@/components/SectionAmbience";
 import { Particles } from "@/components/Particles";
 import { contactInfo } from "@/data/site";
 import { PORTFOLIO_PROJECTS, PORTFOLIO_CATEGORIES, type PortfolioProject } from "@/data/portfolio";
-import { Palette, Layers, BookOpen, Monitor, Printer, Package, ChevronDown, X } from "lucide-react";
+import { Palette, Layers, BookOpen, Monitor, Printer, Package, X } from "lucide-react";
 
 /* ── Animation presets ────────────────────────────────── */
 const FADE_UP: Variants = {
@@ -760,83 +760,59 @@ export default function GraphicDesignPage() {
         <Header />
 
         {/* ══ 1. HERO ═════════════════════════════════════════ */}
-        <section className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-[#050505]/65 px-5 pb-20 pt-32 text-center sm:px-6">
-          <HeroParallaxGlow />
-          <FloatingGeometry />
-          <AmbientDots count={14} />
+        <section className="relative flex h-[72vh] min-h-[560px] w-full flex-col items-center justify-center overflow-hidden bg-[#050505]/65 px-5 text-center sm:px-6">
+          {/* Soft red gradient glow (static, no motion) */}
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{ background: "radial-gradient(ellipse 60% 55% at 50% 45%, rgba(235,27,36,0.16), transparent 68%)" }}
+          />
 
-          {/* Glassmorphism backdrop behind text */}
           <motion.div
             variants={STAGGER}
             initial="hidden"
             animate={entered ? "show" : "hidden"}
-            className="relative mx-auto max-w-4xl"
+            className="relative z-10 mx-auto flex max-w-2xl flex-col items-center"
           >
-            {/* Glass card */}
-            <div className="relative mx-auto max-w-3xl overflow-hidden rounded-3xl border border-white/[0.06] bg-white/[0.015] px-8 py-14 backdrop-blur-sm sm:px-12">
-              {/* Inner glow */}
-              <div
-                className="pointer-events-none absolute inset-0 rounded-3xl"
-                style={{ background: "radial-gradient(ellipse 80% 70% at 50% 50%, rgba(235,27,36,0.07), transparent 65%)" }}
-              />
+            <motion.h1
+              variants={FADE_UP}
+              className="text-6xl font-semibold uppercase leading-none tracking-tight text-white sm:text-7xl md:text-8xl"
+            >
+              TRENEX
+            </motion.h1>
 
-              {/* Breadcrumb */}
-              <motion.div variants={FADE_UP} className="mb-8 flex items-center justify-center gap-2 font-mono text-[10px] uppercase tracking-[0.4em] text-white/30">
-                <a href="/" className="transition-colors hover:text-[#eb1b24]">Home</a>
-                <span>/</span>
-                <a href="/#services" className="transition-colors hover:text-[#eb1b24]">Services</a>
-                <span>/</span>
-                <span className="text-[#eb1b24]">Graphic Design</span>
-              </motion.div>
+            <motion.p
+              variants={FADE_UP}
+              className="mt-4 text-xl font-medium uppercase tracking-[0.15em] text-[#eb1b24] sm:text-2xl"
+            >
+              Graphic Design
+            </motion.p>
 
-              <motion.span variants={FADE_UP} className="mb-5 inline-block font-mono text-xs uppercase tracking-[0.45em] text-[#eb1b24]">
-                Service — 01
-              </motion.span>
+            <motion.p
+              variants={FADE_UP}
+              className="mt-5 font-mono text-[11px] uppercase tracking-[0.32em] text-white/40 sm:text-xs"
+            >
+              Brand Identity • Social Media • Thumbnails • Posters
+            </motion.p>
 
-              <motion.h1
-                variants={FADE_UP}
-                className="text-5xl font-semibold uppercase leading-[1.05] tracking-tight text-white sm:text-6xl md:text-7xl lg:text-8xl"
+            <motion.p
+              variants={FADE_UP}
+              className="mx-auto mt-6 max-w-md text-sm leading-relaxed text-white/50 md:text-base"
+            >
+              Professional graphic design solutions crafted to help brands create memorable visual identities.
+            </motion.p>
+
+            <motion.div variants={FADE_UP} className="mt-9">
+              <a
+                href="#featured-work"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById("featured-work")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}
+                className="inline-flex items-center gap-3 border border-[#eb1b24]/60 px-8 py-3.5 font-mono text-xs uppercase tracking-[0.2em] text-white transition-all duration-300 hover:border-[#eb1b24] hover:shadow-[0_0_32px_rgba(235,27,36,0.38)]"
               >
-                Design That
-                <br />
-                <span className="text-[#eb1b24]">Defines.</span>
-              </motion.h1>
-
-              <motion.p
-                variants={FADE_UP}
-                className="mx-auto mt-8 max-w-lg text-base leading-relaxed text-white/50 md:text-lg"
-              >
-                We build visual identities that position brands as category leaders.
-                Strategic, premium, and built to be remembered.
-              </motion.p>
-
-              <motion.div variants={FADE_UP} className="mt-10 flex flex-wrap items-center justify-center gap-4">
-                <a
-                  href={contactInfo.whatsapp}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center gap-3 border border-[#eb1b24]/60 px-8 py-3.5 font-mono text-xs uppercase tracking-[0.2em] text-white transition-all duration-300 hover:border-[#eb1b24] hover:shadow-[0_0_32px_rgba(235,27,36,0.38)]"
-                >
-                  Start Your Project
-                  <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
-                </a>
-                <a
-                  href="#process"
-                  className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-white/40 transition-colors hover:text-white/70"
-                >
-                  Our Process
-                </a>
-              </motion.div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: entered ? 1 : 0 }}
-            transition={{ delay: 1.6, duration: 0.8 }}
-            className="absolute bottom-10 left-1/2 -translate-x-1/2"
-          >
-            <ChevronDown className="h-5 w-5 animate-bounce text-white/20" />
+                Explore Work
+              </a>
+            </motion.div>
           </motion.div>
         </section>
 
@@ -961,7 +937,7 @@ export default function GraphicDesignPage() {
         </section>
 
         {/* ══ 5. PORTFOLIO SHOWCASE ════════════════════════════ */}
-        <section className="relative w-full overflow-hidden bg-[#050505]/75 px-5 py-20 sm:px-6 sm:py-28 md:py-32">
+        <section id="featured-work" className="relative w-full overflow-hidden bg-[#050505]/75 px-5 py-20 sm:px-6 sm:py-28 md:py-32">
           <SectionAmbience variant="expertise" />
           <AmbientDots count={14} />
 
