@@ -484,4 +484,36 @@ html.custom-cursor-active * {
   .sf-float-c { animation: sf-float 10s ease-in-out infinite alternate; animation-delay: -6s; }
   .sf-float-d { animation: sf-float 12.5s ease-in-out infinite alternate; animation-delay: -1.5s; }
   .sf-float-e { animation: sf-float 8.5s ease-in-out infinite alternate; animation-delay: -4.5s; }
+
+  /* Hero background: binary rain, light particles, timeline scan beam.
+     All translate/opacity only — slow, professional motion, no bounce/spin. */
+  @keyframes hero-binary-fade {
+    0%   { opacity: 0; transform: translateY(6px); }
+    50%  { opacity: var(--hero-binary-alpha, 0.2); transform: translateY(0px); }
+    100% { opacity: 0; transform: translateY(-6px); }
+  }
+  .hero-binary-fade {
+    animation-name: hero-binary-fade;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes hero-particle-drift {
+    0%   { opacity: 0; transform: translateY(0px); }
+    50%  { opacity: 0.5; transform: translateY(-16px); }
+    100% { opacity: 0; transform: translateY(-32px); }
+  }
+  .hero-particle-drift {
+    animation-name: hero-particle-drift;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes hero-timeline-beam {
+    0%   { transform: translateX(-120%); }
+    100% { transform: translateX(320%); }
+  }
+  .hero-timeline-beam {
+    animation: hero-timeline-beam 7s ease-in-out infinite;
+  }
 }

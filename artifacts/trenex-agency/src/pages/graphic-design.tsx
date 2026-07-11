@@ -8,6 +8,7 @@ import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { CustomCursor } from "@/components/CustomCursor";
 import { SectionAmbience } from "@/components/SectionAmbience";
 import { FloatingSoftwareBadges } from "@/components/FloatingSoftwareBadges";
+import { HeroBackground } from "@/components/HeroBackground";
 import { contactInfo } from "@/data/site";
 import { PORTFOLIO_PROJECTS, PORTFOLIO_CATEGORIES, type PortfolioProject } from "@/data/portfolio";
 import { X } from "lucide-react";
@@ -322,12 +323,8 @@ export default function GraphicDesignPage() {
         <Header />
 
         {/* ══ 1. HERO ═════════════════════════════════════════ */}
-        <section className="relative flex h-[72vh] min-h-[560px] w-full flex-col items-center justify-center overflow-hidden bg-[#050505]/65 px-5 text-center sm:px-6">
-          {/* Soft red gradient glow (static, no motion) */}
-          <div
-            className="pointer-events-none absolute inset-0"
-            style={{ background: "radial-gradient(ellipse 60% 55% at 50% 45%, rgba(235,27,36,0.16), transparent 68%)" }}
-          />
+        <section className="relative flex h-[45vh] min-h-[380px] w-full flex-col items-center justify-center overflow-hidden bg-[#050505] px-5 text-center sm:px-6">
+          <HeroBackground />
 
           <FloatingSoftwareBadges />
 
@@ -348,35 +345,15 @@ export default function GraphicDesignPage() {
               variants={FADE_UP}
               className="mt-4 text-xl font-medium uppercase tracking-[0.15em] text-[#eb1b24] sm:text-2xl"
             >
-              Graphic Design
+              Graphic Design Portfolio
             </motion.p>
 
             <motion.p
               variants={FADE_UP}
               className="mt-5 font-mono text-[11px] uppercase tracking-[0.32em] text-white/40 sm:text-xs"
             >
-              Brand Identity • Social Media • Thumbnails • Posters
+              Thumbnails • Social Media • Logos
             </motion.p>
-
-            <motion.p
-              variants={FADE_UP}
-              className="mx-auto mt-6 max-w-md text-sm leading-relaxed text-white/50 md:text-base"
-            >
-              Professional graphic design solutions crafted to help brands create memorable visual identities.
-            </motion.p>
-
-            <motion.div variants={FADE_UP} className="mt-9">
-              <a
-                href="#featured-work"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById("featured-work")?.scrollIntoView({ behavior: "smooth", block: "start" });
-                }}
-                className="inline-flex items-center gap-3 border border-[#eb1b24]/60 px-8 py-3.5 font-mono text-xs uppercase tracking-[0.2em] text-white transition-all duration-300 hover:border-[#eb1b24] hover:shadow-[0_0_32px_rgba(235,27,36,0.38)]"
-              >
-                Explore Work
-              </a>
-            </motion.div>
           </motion.div>
         </section>
 

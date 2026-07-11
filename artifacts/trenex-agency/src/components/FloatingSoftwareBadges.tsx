@@ -9,11 +9,11 @@ import { SiFigma, SiCoreldraw } from "react-icons/si";
  * there isn't enough side margin to avoid overlap.
  */
 const BADGES = [
-  { name: "Photoshop", Icon: PhotoshopIcon, className: "left-[4%] top-[16%] sf-float-a" },
-  { name: "Illustrator", Icon: IllustratorIcon, className: "right-[5%] top-[12%] sf-float-b" },
-  { name: "Figma", Icon: SiFigma, className: "left-[8%] top-[68%] sf-float-c" },
-  { name: "Canva", Icon: CanvaIcon, className: "right-[7%] top-[64%] sf-float-d" },
-  { name: "CorelDRAW", Icon: SiCoreldraw, className: "left-[50%] top-[6%] sf-float-e" },
+  { name: "Photoshop", Icon: PhotoshopIcon, className: "left-[3%] top-[18%] sf-float-a" },
+  { name: "Illustrator", Icon: IllustratorIcon, className: "right-[4%] top-[14%] sf-float-b" },
+  { name: "Figma", Icon: SiFigma, className: "left-[6%] top-[74%] sf-float-c" },
+  { name: "Canva", Icon: CanvaIcon, className: "right-[5%] top-[72%] sf-float-d" },
+  { name: "CorelDRAW", Icon: SiCoreldraw, className: "left-[50%] top-[8%] sf-float-e" },
 ];
 
 export function FloatingSoftwareBadges() {
