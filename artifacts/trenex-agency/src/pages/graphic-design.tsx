@@ -116,7 +116,54 @@ export default function GraphicDesignPage() {
             {PORTFOLIO_CATEGORIES.map((category) => (
               <CategoryGallery key={category.id} title={category.title} images={category.images} />
             ))}
+
+            {/* View More Work */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.6 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="mt-4 flex justify-center"
+            >
+              <a
+                href="https://www.behance.net/trenex"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-3 bg-[#eb1b24] px-9 py-3.5 text-sm font-semibold uppercase tracking-[0.25em] text-white transition-all duration-300 hover:shadow-[0_0_35px_rgba(235,27,36,0.55)]"
+              >
+                <span>View More Work</span>
+                <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+              </a>
+            </motion.div>
           </div>
+        </section>
+
+        {/* ══ 3. CONTACT CTA ═══════════════════════════════════ */}
+        <section className="relative w-full overflow-hidden bg-[#050505] px-5 py-20 text-center sm:px-6 sm:py-24">
+          <div
+            className="pointer-events-none absolute left-1/2 top-1/2 h-[420px] w-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full"
+            style={{ background: "radial-gradient(ellipse 60% 55% at 50% 50%, rgba(235,27,36,0.14), transparent 70%)", filter: "blur(70px)" }}
+          />
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.7 }}
+            className="relative z-10 mx-auto flex max-w-xl flex-col items-center"
+          >
+            <h2 className="text-3xl font-semibold uppercase tracking-tight text-white sm:text-4xl md:text-5xl">
+              Need Professional Graphic Design?
+            </h2>
+
+            <a
+              href="/#contact"
+              className="group mt-9 inline-flex items-center gap-3 bg-[#eb1b24] px-9 py-3.5 text-sm font-semibold uppercase tracking-[0.25em] text-white transition-all duration-300 hover:shadow-[0_0_35px_rgba(235,27,36,0.55)]"
+            >
+              <span>Start a Project</span>
+              <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+            </a>
+          </motion.div>
         </section>
 
         <Footer />
