@@ -20,7 +20,7 @@ export const PORTFOLIO_CATEGORIES: PortfolioCategory[] = [
       "https://imgv3.fotor.com/images/side/use-transparent-png-as-the-Youtube-thumbnail-design-material.jpg",
       "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/141814761/original/591ba1d802560cb6fefcd96cf24389b88ce9f860.png",
       "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/389359686/original/35c55a9b8856d3442badd6b76db05ab4139eb813.png",
-      "https://cms-assets.tutsplus.com/cdn-cgi/image/width=850/uploads/users/1631/posts/35981/image/YouTubeThumbnailDesign02.jpg",
+      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/379041746/original/1d71ef148a24ed79f830bd961e0c2d647905c8b2.jpg",
       "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/new-phone-review-youtube-channel-thumbnail-design-template-ec409103e096dcca72fb571a47b99e3d.webp?ts=1737322218",
     ],
   },

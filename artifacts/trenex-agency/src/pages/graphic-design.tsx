@@ -1,3 +1,4 @@
+import { useCallback, useMemo, useState } from "react";
 import { motion, type Variants } from "framer-motion";
 import { AmbientBackground } from "@/components/three/AmbientBackground";
 import { GridBackground } from "@/components/GridBackground";
@@ -7,6 +8,7 @@ import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { CustomCursor } from "@/components/CustomCursor";
 import { FloatingSoftwareBadges } from "@/components/FloatingSoftwareBadges";
 import { HeroBackground } from "@/components/HeroBackground";
+import { PortfolioLightbox } from "@/components/PortfolioLightbox";
 import { PORTFOLIO_CATEGORIES } from "@/data/portfolio";
 
 /* ── Animation presets ────────────────────────────────── */
@@ -21,7 +23,17 @@ const STAGGER: Variants = { show: { transition: { staggerChildren: 0.13 } } };
    Four fixed categories, each a pure image gallery.
    To add work: edit src/data/portfolio.ts only.
 ══════════════════════════════════════════════════════ */
-function CategoryGallery({ title, images }: { title: string; images: string[] }) {
+function CategoryGallery({
+  title,
+  images,
+  offset,
+  onImageClick,
+}: {
+  title: string;
+  images: string[];
+  offset: number;
+  onImageClick: (globalIndex: number) => void;
+}) {
   return (
     <div className="mb-14 last:mb-0 sm:mb-16">
       {/* Category title + divider */}
@@ -35,22 +47,31 @@ function CategoryGallery({ title, images }: { title: string; images: string[] })
       {/* Image gallery */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
         {images.map((src, i) => (
-          <motion.div
+          <motion.button
             key={src}
+            type="button"
+            onClick={() => onImageClick(offset + i)}
             initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.5, delay: i * 0.04, ease: "easeOut" }}
-            className="group relative aspect-square overflow-hidden rounded-xl border border-white/8 bg-[#0a0a0a] transition-all duration-500 hover:border-[#eb1b24]/45 hover:shadow-[0_18px_48px_-16px_rgba(235,27,36,0.35)]"
+            className="group relative aspect-square cursor-pointer overflow-hidden rounded-xl border border-white/8 bg-[#0a0a0a] text-left transition-all duration-500 hover:border-[#eb1b24]/50 hover:shadow-[0_18px_48px_-16px_rgba(235,27,36,0.45)] focus:outline-none focus-visible:border-[#eb1b24]/60"
           >
             <img
               src={src}
               alt=""
               loading="lazy"
-              className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.07]"
+              className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/25 via-transparent to-transparent" />
-          </motion.div>
+
+            {/* Hover overlay */}
+            <div className="absolute inset-0 flex items-center justify-center bg-black/55 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100">
+              <span className="rounded-full border border-[#eb1b24]/60 bg-black/40 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-white">
+                View Design
+              </span>
+            </div>
+          </motion.button>
         ))}
       </div>
     </div>
@@ -61,6 +82,21 @@ function CategoryGallery({ title, images }: { title: string; images: string[] })
    PAGE
 ══════════════════════════════════════════════════════ */
 export default function GraphicDesignPage() {
+  const allImages = useMemo(() => PORTFOLIO_CATEGORIES.flatMap((c) => c.images), []);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  const closeLightbox = useCallback(() => setLightboxIndex(null), []);
+  const showPrev = useCallback(
+    () => setLightboxIndex((i) => (i === null ? null : (i - 1 + allImages.length) % allImages.length)),
+    [allImages.length],
+  );
+  const showNext = useCallback(
+    () => setLightboxIndex((i) => (i === null ? null : (i + 1) % allImages.length)),
+    [allImages.length],
+  );
+
+  let offset = 0;
+
   return (
     <div className="relative min-h-screen w-full">
       <AmbientBackground />
@@ -113,9 +149,19 @@ export default function GraphicDesignPage() {
           />
 
           <div className="relative z-10 mx-auto max-w-6xl">
-            {PORTFOLIO_CATEGORIES.map((category) => (
-              <CategoryGallery key={category.id} title={category.title} images={category.images} />
-            ))}
+            {PORTFOLIO_CATEGORIES.map((category) => {
+              const categoryOffset = offset;
+              offset += category.images.length;
+              return (
+                <CategoryGallery
+                  key={category.id}
+                  title={category.title}
+                  images={category.images}
+                  offset={categoryOffset}
+                  onImageClick={setLightboxIndex}
+                />
+              );
+            })}
 
             {/* View More Work */}
             <motion.div
@@ -169,6 +215,16 @@ export default function GraphicDesignPage() {
         <Footer />
         <WhatsAppButton />
       </div>
+
+      {lightboxIndex !== null && (
+        <PortfolioLightbox
+          images={allImages}
+          index={lightboxIndex}
+          onClose={closeLightbox}
+          onPrev={showPrev}
+          onNext={showNext}
+        />
+      )}
     </div>
   );
 }
