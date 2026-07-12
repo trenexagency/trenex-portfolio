@@ -1,4 +1,6 @@
+import { useCallback, useState } from "react";
 import { motion } from "framer-motion";
+import { ProjectLightbox } from "@/components/ProjectLightbox";
 
 /* ══════════════════════════════════════════════════════
    WEB DEVELOPMENT — PORTFOLIO CATEGORIES
@@ -6,12 +8,14 @@ import { motion } from "framer-motion";
    categories, each a large premium card with an abstract
    browser-mockup preview (no stock imagery) so the layout
    language itself signals the category. Focus stays on the
-   project preview, not on copy.
+   project preview, not on copy. Clicking a card opens the
+   shared fullscreen ProjectLightbox (same pattern as the
+   Graphic Design / Video Editing lightboxes).
 ══════════════════════════════════════════════════════ */
 
-type CategoryType = "business" | "landing" | "portfolio" | "webapp";
+export type CategoryType = "business" | "landing" | "portfolio" | "webapp";
 
-interface Category {
+export interface Category {
   title: CategoryType;
   label: string;
   tagline: string;
@@ -24,7 +28,7 @@ const CATEGORIES: Category[] = [
   { title: "webapp", label: "Web Applications", tagline: "Custom dashboards and product interfaces" },
 ];
 
-function BrowserChrome({ url }: { url: string }) {
+export function BrowserChrome({ url }: { url: string }) {
   return (
     <div className="flex items-center gap-2 border-b border-white/8 bg-white/[0.02] px-4 py-2.5">
       <span className="h-2.5 w-2.5 rounded-full bg-[#eb1b24]/70" />
@@ -38,7 +42,7 @@ function BrowserChrome({ url }: { url: string }) {
 }
 
 /* Abstract layout preview, unique per category — pure divs, no images. */
-function PreviewMock({ type }: { type: CategoryType }) {
+export function PreviewMock({ type }: { type: CategoryType }) {
   if (type === "business") {
     return (
       <div className="flex h-full flex-col gap-3 p-5 sm:p-6">
@@ -122,14 +126,16 @@ function PreviewMock({ type }: { type: CategoryType }) {
   );
 }
 
-function CategoryCard({ category, delay }: { category: Category; delay: number }) {
+function CategoryCard({ category, delay, onOpen }: { category: Category; delay: number; onOpen: () => void }) {
   return (
-    <motion.div
+    <motion.button
+      type="button"
+      onClick={onOpen}
       initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.25 }}
       transition={{ duration: 0.65, delay, ease: "easeOut" }}
-      className="group overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-white/[0.01] transition-colors duration-500 hover:border-[#eb1b24]/40 hover:shadow-[0_25px_80px_-20px_rgba(235,27,36,0.3)]"
+      className="group overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-white/[0.01] text-left transition-colors duration-500 hover:border-[#eb1b24]/40 hover:shadow-[0_25px_80px_-20px_rgba(235,27,36,0.3)]"
     >
       {/* large preview */}
       <div className="aspect-video w-full overflow-hidden bg-[#0a0a0a]">
@@ -152,11 +158,23 @@ function CategoryCard({ category, delay }: { category: Category; delay: number }
           →
         </span>
       </div>
-    </motion.div>
+    </motion.button>
   );
 }
 
 export function WebDevPortfolio() {
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  const closeLightbox = useCallback(() => setLightboxIndex(null), []);
+  const prevItem = useCallback(
+    () => setLightboxIndex((i) => (i === null ? null : (i - 1 + CATEGORIES.length) % CATEGORIES.length)),
+    [],
+  );
+  const nextItem = useCallback(
+    () => setLightboxIndex((i) => (i === null ? null : (i + 1) % CATEGORIES.length)),
+    [],
+  );
+
   return (
     <section id="portfolio" className="relative w-full overflow-hidden bg-[#050505]/75 px-5 py-16 sm:px-6 sm:py-20">
       <div
@@ -180,10 +198,25 @@ export function WebDevPortfolio() {
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
           {CATEGORIES.map((category, i) => (
-            <CategoryCard key={category.title} category={category} delay={i * 0.1} />
+            <CategoryCard
+              key={category.title}
+              category={category}
+              delay={i * 0.1}
+              onOpen={() => setLightboxIndex(i)}
+            />
           ))}
         </div>
       </div>
+
+      {lightboxIndex !== null && (
+        <ProjectLightbox
+          items={CATEGORIES}
+          index={lightboxIndex}
+          onClose={closeLightbox}
+          onPrev={prevItem}
+          onNext={nextItem}
+        />
+      )}
     </section>
   );
 }
