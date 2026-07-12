@@ -16,7 +16,9 @@ import { Stats } from "@/components/sections/Stats";
 import { TrophySection } from "@/components/sections/TrophySection";
 import { ExpertiseWall } from "@/components/sections/ExpertiseWall";
 import { Contact } from "@/components/sections/Contact";
+import { TransitionProvider } from "@/components/PageTransition";
 import GraphicDesignPage from "@/pages/graphic-design";
+import VideoEditingPage from "@/pages/video-editing";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
@@ -52,6 +54,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/graphic-design" component={GraphicDesignPage} />
+      <Route path="/video-editing" component={VideoEditingPage} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -62,7 +65,9 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-          <Router />
+          <TransitionProvider>
+            <Router />
+          </TransitionProvider>
         </WouterRouter>
         <Toaster />
       </TooltipProvider>

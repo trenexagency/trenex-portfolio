@@ -2,6 +2,7 @@ import { useRef } from "react";
 import type { ReactNode } from "react";
 import { motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from "framer-motion";
 import type { Service } from "@/data/site";
+import { useTransitionNavigate } from "@/components/PageTransition";
 
 interface ServiceCardProps {
   service: Service;
@@ -13,6 +14,12 @@ const ROTATE_RANGE = 10;
 
 export function ServiceCard({ service, icon, delay }: ServiceCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const navigateWithTransition = useTransitionNavigate();
+  const internalPath = service.internalPath;
+
+  const handleCardClick = () => {
+    if (internalPath) navigateWithTransition(internalPath);
+  };
 
   const mouseX = useMotionValue(0.5);
   const mouseY = useMotionValue(0.5);
@@ -60,9 +67,22 @@ export function ServiceCard({ service, icon, delay }: ServiceCardProps) {
         ref={cardRef}
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
+        onClick={handleCardClick}
+        role={internalPath ? "button" : undefined}
+        tabIndex={internalPath ? 0 : undefined}
+        onKeyDown={
+          internalPath
+            ? (e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  handleCardClick();
+                }
+              }
+            : undefined
+        }
         data-testid={`card-service-${service.index}`}
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        className="relative flex h-full min-h-[22rem] flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-white/[0.01] p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.02)] transition-[border-color,box-shadow] duration-500 group-hover:border-[#FF1F1F]/50 group-hover:shadow-[0_25px_80px_-20px_rgba(255,31,31,0.35)] sm:min-h-[24rem] sm:p-8 md:p-10"
+        className={`relative flex h-full min-h-[22rem] flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-white/[0.01] p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.02)] transition-[border-color,box-shadow] duration-500 group-hover:border-[#FF1F1F]/50 group-hover:shadow-[0_25px_80px_-20px_rgba(255,31,31,0.35)] sm:min-h-[24rem] sm:p-8 md:p-10 ${internalPath ? "cursor-pointer" : ""}`}
       >
         <motion.div
           aria-hidden
@@ -120,7 +140,23 @@ export function ServiceCard({ service, icon, delay }: ServiceCardProps) {
         </div>
 
         <div style={{ transform: "translateZ(20px)" }} className="relative mt-8">
-          {service.href ? (
+          {internalPath ? (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleCardClick();
+              }}
+              data-testid={`link-service-${service.index}`}
+              className="flex items-center gap-3 text-sm font-medium text-white/40 transition-colors duration-500 group-hover:text-[#FF1F1F]"
+            >
+              <span className="h-px w-8 bg-current transition-all duration-500 group-hover:w-14" />
+              <span className="uppercase tracking-[0.2em]">Explore Service</span>
+              <span aria-hidden className="transition-transform duration-500 group-hover:translate-x-1">
+                &rarr;
+              </span>
+            </button>
+          ) : service.href ? (
             <a
               href={service.href}
               target="_blank"
