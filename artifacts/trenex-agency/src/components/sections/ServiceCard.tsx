@@ -13,22 +13,25 @@ interface ServiceCardProps {
 const ROTATE_RANGE = 10;
 
 export function ServiceCard({ service, icon, delay }: ServiceCardProps) {
-  const cardRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement & HTMLAnchorElement>(null);
   const navigateWithTransition = useTransitionNavigate();
   const internalPath = service.internalPath;
 
+  // Cards without an internalPath (e.g. Graphic Design, Web Development) are
+  // real anchor elements pointing at service.href, opened in a new tab so the
+  // homepage stays put — this makes the ENTIRE card a native link container
+  // (works with click, middle-click, ctrl/cmd-click, "open in new tab", etc.)
+  // instead of relying on a synthetic window.open() call.
   const isNewTabLink = !internalPath && !!service.href;
 
   const handleCardClick = () => {
     if (internalPath) {
       navigateWithTransition(internalPath, service.transitionVariant);
-    } else if (isNewTabLink && service.href) {
-      // Opens in a new tab; the homepage stays open in the original tab.
-      window.open(service.href, "_blank", "noopener,noreferrer");
     }
   };
 
   const isInteractive = !!internalPath || isNewTabLink;
+  const CardTag = isNewTabLink ? motion.a : motion.div;
 
   const mouseX = useMotionValue(0.5);
   const mouseY = useMotionValue(0.5);
@@ -43,7 +46,7 @@ export function ServiceCard({ service, icon, delay }: ServiceCardProps) {
 
   const glowBackground = useMotionTemplate`radial-gradient(280px circle at ${glowXPercent} ${glowYPercent}, rgba(255,31,31,0.22), transparent 65%)`;
 
-  function handlePointerMove(event: React.PointerEvent<HTMLDivElement>) {
+  function handlePointerMove(event: React.PointerEvent<HTMLDivElement & HTMLAnchorElement>) {
     const card = cardRef.current;
     if (!card) return;
     const rect = card.getBoundingClientRect();
@@ -72,16 +75,19 @@ export function ServiceCard({ service, icon, delay }: ServiceCardProps) {
       style={{ perspective: 1200 }}
       className="group relative"
     >
-      <motion.div
-        ref={cardRef}
+      <CardTag
+        ref={cardRef as never}
+        href={isNewTabLink ? service.href : undefined}
+        target={isNewTabLink ? "_blank" : undefined}
+        rel={isNewTabLink ? "noopener noreferrer" : undefined}
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
-        onClick={handleCardClick}
-        role={isInteractive ? "button" : undefined}
-        tabIndex={isInteractive ? 0 : undefined}
+        onClick={internalPath ? handleCardClick : undefined}
+        role={!isNewTabLink && isInteractive ? "button" : undefined}
+        tabIndex={!isNewTabLink && isInteractive ? 0 : undefined}
         onKeyDown={
-          isInteractive
-            ? (e) => {
+          !isNewTabLink && isInteractive
+            ? (e: React.KeyboardEvent) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
                   handleCardClick();
@@ -165,12 +171,13 @@ export function ServiceCard({ service, icon, delay }: ServiceCardProps) {
                 &rarr;
               </span>
             </button>
-          ) : service.href ? (
-            <a
-              href={service.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
+          ) : isNewTabLink ? (
+            // The whole card is already the <a> element (see CardTag above),
+            // so this is a plain visual affordance, not a nested link —
+            // nesting an <a> inside an <a> is invalid HTML and would break
+            // the card-wide click target.
+            <span
+              data-testid={`link-service-${service.index}`}
               className="flex items-center gap-3 text-sm font-medium text-white/40 transition-colors duration-500 group-hover:text-[#FF1F1F]"
             >
               <span className="h-px w-8 bg-current transition-all duration-500 group-hover:w-14" />
@@ -178,7 +185,7 @@ export function ServiceCard({ service, icon, delay }: ServiceCardProps) {
               <span aria-hidden className="transition-transform duration-500 group-hover:translate-x-1">
                 &rarr;
               </span>
-            </a>
+            </span>
           ) : (
             <div className="flex items-center gap-3 text-sm font-medium text-white/40 transition-colors duration-500 group-hover:text-[#FF1F1F]">
               <span className="h-px w-8 bg-current transition-all duration-500 group-hover:w-14" />
@@ -189,7 +196,7 @@ export function ServiceCard({ service, icon, delay }: ServiceCardProps) {
             </div>
           )}
         </div>
-      </motion.div>
+      </CardTag>
     </motion.div>
   );
 }
