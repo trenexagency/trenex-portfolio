@@ -2,7 +2,6 @@ import { useRef } from "react";
 import type { ReactNode } from "react";
 import { motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from "framer-motion";
 import type { Service } from "@/data/site";
-import { useTransitionNavigate } from "@/components/PageTransition";
 
 interface ServiceCardProps {
   service: Service;
@@ -14,23 +13,15 @@ const ROTATE_RANGE = 10;
 
 export function ServiceCard({ service, icon, delay }: ServiceCardProps) {
   const cardRef = useRef<HTMLDivElement & HTMLAnchorElement>(null);
-  const navigateWithTransition = useTransitionNavigate();
-  const internalPath = service.internalPath;
 
-  // Cards without an internalPath (e.g. Graphic Design, Web Development) are
-  // real anchor elements pointing at service.href, opened in a new tab so the
-  // homepage stays put — this makes the ENTIRE card a native link container
-  // (works with click, middle-click, ctrl/cmd-click, "open in new tab", etc.)
-  // instead of relying on a synthetic window.open() call.
-  const isNewTabLink = !internalPath && !!service.href;
+  // Every service card is a real anchor element pointing at service.href,
+  // opened in a new tab so the homepage stays put — this makes the ENTIRE
+  // card a native link container (works with click, middle-click,
+  // ctrl/cmd-click, "open in new tab", etc.) instead of relying on a
+  // synthetic window.open() call or in-app route change.
+  const isNewTabLink = !!service.href;
 
-  const handleCardClick = () => {
-    if (internalPath) {
-      navigateWithTransition(internalPath, service.transitionVariant);
-    }
-  };
-
-  const isInteractive = !!internalPath || isNewTabLink;
+  const isInteractive = isNewTabLink;
   const CardTag = isNewTabLink ? motion.a : motion.div;
 
   const mouseX = useMotionValue(0.5);
@@ -82,19 +73,6 @@ export function ServiceCard({ service, icon, delay }: ServiceCardProps) {
         rel={isNewTabLink ? "noopener noreferrer" : undefined}
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
-        onClick={internalPath ? handleCardClick : undefined}
-        role={!isNewTabLink && isInteractive ? "button" : undefined}
-        tabIndex={!isNewTabLink && isInteractive ? 0 : undefined}
-        onKeyDown={
-          !isNewTabLink && isInteractive
-            ? (e: React.KeyboardEvent) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  handleCardClick();
-                }
-              }
-            : undefined
-        }
         data-testid={`card-service-${service.index}`}
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
         className={`relative flex h-full min-h-[22rem] flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-white/[0.01] p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.02)] transition-[border-color,box-shadow] duration-500 group-hover:border-[#FF1F1F]/50 group-hover:shadow-[0_25px_80px_-20px_rgba(255,31,31,0.35)] sm:min-h-[24rem] sm:p-8 md:p-10 ${isInteractive ? "cursor-pointer" : ""}`}
@@ -155,46 +133,20 @@ export function ServiceCard({ service, icon, delay }: ServiceCardProps) {
         </div>
 
         <div style={{ transform: "translateZ(20px)" }} className="relative mt-8">
-          {internalPath ? (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleCardClick();
-              }}
-              data-testid={`link-service-${service.index}`}
-              className="flex items-center gap-3 text-sm font-medium text-white/40 transition-colors duration-500 group-hover:text-[#FF1F1F]"
-            >
-              <span className="h-px w-8 bg-current transition-all duration-500 group-hover:w-14" />
-              <span className="uppercase tracking-[0.2em]">Explore Service</span>
-              <span aria-hidden className="transition-transform duration-500 group-hover:translate-x-1">
-                &rarr;
-              </span>
-            </button>
-          ) : isNewTabLink ? (
-            // The whole card is already the <a> element (see CardTag above),
-            // so this is a plain visual affordance, not a nested link —
-            // nesting an <a> inside an <a> is invalid HTML and would break
-            // the card-wide click target.
-            <span
-              data-testid={`link-service-${service.index}`}
-              className="flex items-center gap-3 text-sm font-medium text-white/40 transition-colors duration-500 group-hover:text-[#FF1F1F]"
-            >
-              <span className="h-px w-8 bg-current transition-all duration-500 group-hover:w-14" />
-              <span className="uppercase tracking-[0.2em]">Explore Service</span>
-              <span aria-hidden className="transition-transform duration-500 group-hover:translate-x-1">
-                &rarr;
-              </span>
+          {/* The whole card is already the <a> element (see CardTag above)
+             when isNewTabLink is true, so this is a plain visual affordance,
+             not a nested link — nesting an <a> inside an <a> is invalid HTML
+             and would break the card-wide click target. */}
+          <span
+            data-testid={`link-service-${service.index}`}
+            className="flex items-center gap-3 text-sm font-medium text-white/40 transition-colors duration-500 group-hover:text-[#FF1F1F]"
+          >
+            <span className="h-px w-8 bg-current transition-all duration-500 group-hover:w-14" />
+            <span className="uppercase tracking-[0.2em]">Explore Service</span>
+            <span aria-hidden className="transition-transform duration-500 group-hover:translate-x-1">
+              &rarr;
             </span>
-          ) : (
-            <div className="flex items-center gap-3 text-sm font-medium text-white/40 transition-colors duration-500 group-hover:text-[#FF1F1F]">
-              <span className="h-px w-8 bg-current transition-all duration-500 group-hover:w-14" />
-              <span className="uppercase tracking-[0.2em]">Explore Service</span>
-              <span aria-hidden className="transition-transform duration-500 group-hover:translate-x-1">
-                &rarr;
-              </span>
-            </div>
-          )}
+          </span>
         </div>
       </CardTag>
     </motion.div>
