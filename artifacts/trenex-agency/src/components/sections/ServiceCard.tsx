@@ -17,9 +17,18 @@ export function ServiceCard({ service, icon, delay }: ServiceCardProps) {
   const navigateWithTransition = useTransitionNavigate();
   const internalPath = service.internalPath;
 
+  const isNewTabLink = !internalPath && !!service.href;
+
   const handleCardClick = () => {
-    if (internalPath) navigateWithTransition(internalPath, service.transitionVariant);
+    if (internalPath) {
+      navigateWithTransition(internalPath, service.transitionVariant);
+    } else if (isNewTabLink && service.href) {
+      // Opens in a new tab; the homepage stays open in the original tab.
+      window.open(service.href, "_blank", "noopener,noreferrer");
+    }
   };
+
+  const isInteractive = !!internalPath || isNewTabLink;
 
   const mouseX = useMotionValue(0.5);
   const mouseY = useMotionValue(0.5);
@@ -68,10 +77,10 @@ export function ServiceCard({ service, icon, delay }: ServiceCardProps) {
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
         onClick={handleCardClick}
-        role={internalPath ? "button" : undefined}
-        tabIndex={internalPath ? 0 : undefined}
+        role={isInteractive ? "button" : undefined}
+        tabIndex={isInteractive ? 0 : undefined}
         onKeyDown={
-          internalPath
+          isInteractive
             ? (e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
@@ -82,7 +91,7 @@ export function ServiceCard({ service, icon, delay }: ServiceCardProps) {
         }
         data-testid={`card-service-${service.index}`}
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        className={`relative flex h-full min-h-[22rem] flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-white/[0.01] p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.02)] transition-[border-color,box-shadow] duration-500 group-hover:border-[#FF1F1F]/50 group-hover:shadow-[0_25px_80px_-20px_rgba(255,31,31,0.35)] sm:min-h-[24rem] sm:p-8 md:p-10 ${internalPath ? "cursor-pointer" : ""}`}
+        className={`relative flex h-full min-h-[22rem] flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-white/[0.01] p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.02)] transition-[border-color,box-shadow] duration-500 group-hover:border-[#FF1F1F]/50 group-hover:shadow-[0_25px_80px_-20px_rgba(255,31,31,0.35)] sm:min-h-[24rem] sm:p-8 md:p-10 ${isInteractive ? "cursor-pointer" : ""}`}
       >
         <motion.div
           aria-hidden

@@ -121,5 +121,7 @@ export const services: Service[] = [
     description:
       "Modern high-performance websites engineered for speed, user experience, lead generation, and business growth.",
     capabilities: ["Web Design", "Performance", "3D Experiences"],
+    /** Opens in a new tab (see ServiceCard.tsx) — the homepage stays open in the original tab. */
+    href: "/web-development",
   },
 ];

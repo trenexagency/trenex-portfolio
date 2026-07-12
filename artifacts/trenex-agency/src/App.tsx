@@ -19,6 +19,7 @@ import { Contact } from "@/components/sections/Contact";
 import { TransitionProvider } from "@/components/PageTransition";
 import GraphicDesignPage from "@/pages/graphic-design";
 import VideoEditingPage from "@/pages/video-editing";
+import WebDevelopmentPage from "@/pages/web-development";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
@@ -55,6 +56,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/graphic-design" component={GraphicDesignPage} />
       <Route path="/video-editing" component={VideoEditingPage} />
+      <Route path="/web-development" component={WebDevelopmentPage} />
       <Route component={NotFound} />
     </Switch>
   );
