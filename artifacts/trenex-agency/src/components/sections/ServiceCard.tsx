@@ -18,7 +18,7 @@ export function ServiceCard({ service, icon, delay }: ServiceCardProps) {
   const internalPath = service.internalPath;
 
   const handleCardClick = () => {
-    if (internalPath) navigateWithTransition(internalPath);
+    if (internalPath) navigateWithTransition(internalPath, service.transitionVariant);
   };
 
   const mouseX = useMotionValue(0.5);

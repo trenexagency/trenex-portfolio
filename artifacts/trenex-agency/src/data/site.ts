@@ -47,6 +47,8 @@ export interface Service {
   href?: string;
   /** In-app route to navigate to (via the cinematic transition) instead of an external link. */
   internalPath?: string;
+  /** Opt into a named transition preset (see PageTransition.tsx) instead of the default cinematic overlay. */
+  transitionVariant?: "video-editing";
 }
 
 export interface ExpertiseTool {
@@ -110,6 +112,7 @@ export const services: Service[] = [
       "High-impact video content crafted to capture attention, increase engagement, and tell your story with cinematic precision.",
     capabilities: ["Commercial Editing", "Motion Graphics", "Color Grading"],
     internalPath: "/video-editing",
+    transitionVariant: "video-editing",
   },
   {
     index: "03",
