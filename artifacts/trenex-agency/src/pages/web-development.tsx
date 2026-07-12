@@ -6,7 +6,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { CustomCursor } from "@/components/CustomCursor";
-import { FloatingSoftwareBadges } from "@/components/FloatingSoftwareBadges";
+import { FloatingTechBadges } from "@/components/FloatingTechBadges";
 import { HeroBackground } from "@/components/HeroBackground";
 import { WebDevelopmentIntro } from "@/components/WebDevelopmentIntro";
 
@@ -61,7 +61,7 @@ export default function WebDevelopmentPage() {
         {/* ══ 1. HERO ═════════════════════════════════════════ */}
         <section className="relative flex h-[45vh] min-h-[380px] w-full flex-col items-center justify-center overflow-hidden bg-[#050505] px-5 text-center sm:px-6">
           <HeroBackground />
-          <FloatingSoftwareBadges />
+          <FloatingTechBadges />
 
           <motion.div
             variants={STAGGER}
@@ -87,7 +87,7 @@ export default function WebDevelopmentPage() {
               variants={FADE_UP}
               className="mt-5 font-mono text-[11px] uppercase tracking-[0.32em] text-white/40 sm:text-xs"
             >
-              Web Development • Modern UI • Responsive Experiences
+              Modern Websites • Web Apps • UI/UX • Responsive Development
             </motion.p>
           </motion.div>
         </section>
