@@ -11,6 +11,14 @@ import { HeroBackground } from "@/components/HeroBackground";
 import { PortfolioLightbox } from "@/components/PortfolioLightbox";
 import { PORTFOLIO_CATEGORIES } from "@/data/portfolio";
 
+/* Singular, human-readable labels shown in the lightbox for each category */
+const CATEGORY_LABELS: Record<string, string> = {
+  "youtube-thumbnails": "Thumbnail Design",
+  "social-media-posts": "Social Media Post",
+  logos: "Logo Design",
+  "event-posters": "Event Poster",
+};
+
 /* ── Animation presets ────────────────────────────────── */
 const FADE_UP: Variants = {
   hidden: { opacity: 0, y: 28 },
@@ -82,17 +90,23 @@ function CategoryGallery({
    PAGE
 ══════════════════════════════════════════════════════ */
 export default function GraphicDesignPage() {
-  const allImages = useMemo(() => PORTFOLIO_CATEGORIES.flatMap((c) => c.images), []);
+  const allItems = useMemo(
+    () =>
+      PORTFOLIO_CATEGORIES.flatMap((c) =>
+        c.images.map((src) => ({ src, title: CATEGORY_LABELS[c.id] ?? c.title })),
+      ),
+    [],
+  );
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const closeLightbox = useCallback(() => setLightboxIndex(null), []);
   const showPrev = useCallback(
-    () => setLightboxIndex((i) => (i === null ? null : (i - 1 + allImages.length) % allImages.length)),
-    [allImages.length],
+    () => setLightboxIndex((i) => (i === null ? null : (i - 1 + allItems.length) % allItems.length)),
+    [allItems.length],
   );
   const showNext = useCallback(
-    () => setLightboxIndex((i) => (i === null ? null : (i + 1) % allImages.length)),
-    [allImages.length],
+    () => setLightboxIndex((i) => (i === null ? null : (i + 1) % allItems.length)),
+    [allItems.length],
   );
 
   let offset = 0;
@@ -218,7 +232,7 @@ export default function GraphicDesignPage() {
 
       {lightboxIndex !== null && (
         <PortfolioLightbox
-          images={allImages}
+          items={allItems}
           index={lightboxIndex}
           onClose={closeLightbox}
           onPrev={showPrev}

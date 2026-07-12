@@ -4,11 +4,17 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
 /* ══════════════════════════════════════════════════════
    PREMIUM PORTFOLIO LIGHTBOX
-   Full-screen modal viewer for gallery images — fade+scale
-   entrance, blurred overlay, keyboard + swipe navigation.
+   Full-screen modal viewer for gallery images — the artwork
+   fills nearly the entire viewport, zoom-in entrance, dark
+   overlay, keyboard + swipe navigation.
 ══════════════════════════════════════════════════════ */
+export interface LightboxItem {
+  src: string;
+  title: string;
+}
+
 interface PortfolioLightboxProps {
-  images: string[];
+  items: LightboxItem[];
   index: number;
   onClose: () => void;
   onPrev: () => void;
@@ -17,8 +23,9 @@ interface PortfolioLightboxProps {
 
 const SWIPE_THRESHOLD = 50;
 
-export function PortfolioLightbox({ images, index, onClose, onPrev, onNext }: PortfolioLightboxProps) {
+export function PortfolioLightbox({ items, index, onClose, onPrev, onNext }: PortfolioLightboxProps) {
   const touchStartX = useRef<number | null>(null);
+  const current = items[index];
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -54,6 +61,8 @@ export function PortfolioLightbox({ images, index, onClose, onPrev, onNext }: Po
     [onPrev, onNext],
   );
 
+  if (!current) return null;
+
   return (
     <AnimatePresence>
       <motion.div
@@ -62,7 +71,7 @@ export function PortfolioLightbox({ images, index, onClose, onPrev, onNext }: Po
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
-        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-xl"
+        className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[rgba(0,0,0,0.92)] backdrop-blur-xl"
         onClick={onClose}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
@@ -77,13 +86,13 @@ export function PortfolioLightbox({ images, index, onClose, onPrev, onNext }: Po
             onClose();
           }}
           aria-label="Close"
-          className="absolute right-4 top-4 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/80 transition-all duration-300 hover:border-[#eb1b24]/60 hover:bg-[#eb1b24]/15 hover:text-white sm:right-6 sm:top-6"
+          className="absolute right-3 top-3 z-30 flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-black/40 text-white/80 transition-all duration-300 hover:border-[#eb1b24]/60 hover:bg-[#eb1b24]/15 hover:text-white sm:right-6 sm:top-6"
         >
           <X className="h-5 w-5" />
         </button>
 
         {/* Previous arrow */}
-        {images.length > 1 && (
+        {items.length > 1 && (
           <button
             type="button"
             onClick={(e) => {
@@ -91,14 +100,14 @@ export function PortfolioLightbox({ images, index, onClose, onPrev, onNext }: Po
               onPrev();
             }}
             aria-label="Previous image"
-            className="absolute left-2 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/80 transition-all duration-300 hover:border-[#eb1b24]/60 hover:bg-[#eb1b24]/15 hover:text-white sm:left-6 sm:h-12 sm:w-12"
+            className="absolute left-1 top-1/2 z-30 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-black/40 text-white/80 transition-all duration-300 hover:border-[#eb1b24]/60 hover:bg-[#eb1b24]/15 hover:text-white sm:left-4 sm:h-12 sm:w-12 lg:left-8"
           >
-            <ChevronLeft className="h-6 w-6" />
+            <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
           </button>
         )}
 
         {/* Next arrow */}
-        {images.length > 1 && (
+        {items.length > 1 && (
           <button
             type="button"
             onClick={(e) => {
@@ -106,31 +115,49 @@ export function PortfolioLightbox({ images, index, onClose, onPrev, onNext }: Po
               onNext();
             }}
             aria-label="Next image"
-            className="absolute right-2 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/80 transition-all duration-300 hover:border-[#eb1b24]/60 hover:bg-[#eb1b24]/15 hover:text-white sm:right-6 sm:h-12 sm:w-12"
+            className="absolute right-1 top-1/2 z-30 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-black/40 text-white/80 transition-all duration-300 hover:border-[#eb1b24]/60 hover:bg-[#eb1b24]/15 hover:text-white sm:right-4 sm:h-12 sm:w-12 lg:right-8"
           >
-            <ChevronRight className="h-6 w-6" />
+            <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
           </button>
         )}
 
-        {/* Centered image */}
+        {/* Category / title label */}
         <AnimatePresence mode="wait">
-          <motion.img
-            key={images[index]}
-            src={images[index]}
-            alt=""
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.96 }}
-            transition={{ duration: 0.35, ease: "easeOut" }}
+          <motion.p
+            key={`title-${current.title}-${index}`}
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
             onClick={(e) => e.stopPropagation()}
-            className="max-h-[88vh] max-w-[92vw] rounded-lg object-contain shadow-[0_25px_80px_-20px_rgba(235,27,36,0.35)] sm:max-h-[85vh] sm:max-w-[85vw]"
-          />
+            className="relative z-20 mb-3 px-16 text-center text-xs font-semibold uppercase tracking-[0.3em] text-[#eb1b24] sm:mb-4 sm:text-sm"
+          >
+            {current.title}
+          </motion.p>
         </AnimatePresence>
 
+        {/* Centered image — fills almost the entire viewport */}
+        <div className="flex w-full flex-1 items-center justify-center overflow-hidden">
+          <AnimatePresence mode="wait">
+            <motion.img
+              key={current.src}
+              src={current.src}
+              alt={current.title}
+              initial={{ opacity: 0, scale: 0.82 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              onClick={(e) => e.stopPropagation()}
+              style={{ maxHeight: "90vh", maxWidth: "95vw" }}
+              className="rounded-md object-contain shadow-[0_40px_120px_-24px_rgba(235,27,36,0.45),0_0_0_1px_rgba(255,255,255,0.06)]"
+            />
+          </AnimatePresence>
+        </div>
+
         {/* Counter */}
-        {images.length > 1 && (
-          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 font-mono text-xs uppercase tracking-[0.25em] text-white/40 sm:bottom-7">
-            {index + 1} / {images.length}
+        {items.length > 1 && (
+          <div className="relative z-20 mt-3 font-mono text-xs uppercase tracking-[0.25em] text-white/40 sm:mt-4">
+            {index + 1} / {items.length}
           </div>
         )}
       </motion.div>
