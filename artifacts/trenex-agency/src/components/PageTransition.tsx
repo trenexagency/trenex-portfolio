@@ -1,14 +1,9 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { useLocation } from "wouter";
 import logoUrl from "@assets/Trenex_Logo_1783845866953.svg";
-import {
-  VideoEditingIntro,
-  VIDEO_INTRO_SWITCH_ROUTE_AT_MS,
-  VIDEO_INTRO_TOTAL_MS,
-} from "@/components/VideoEditingIntro";
 
 /** Named transition presets a service card can opt into. Omit for the default. */
-export type TransitionVariant = "video-editing";
+export type TransitionVariant = never;
 
 /* ══════════════════════════════════════════════════════
    CINEMATIC PAGE TRANSITION
@@ -36,18 +31,14 @@ const OVERLAY_TOTAL_MS = 1050; // overlay stays mounted this long, then unmounts
 
 export function TransitionProvider({ children }: { children: ReactNode }) {
   const [, setLocation] = useLocation();
-  const [active, setActive] = useState<TransitionVariant | "default" | null>(null);
+  const [active, setActive] = useState<"default" | null>(null);
   const timers = useRef<number[]>([]);
 
   const navigateWithTransition = useCallback(
-    (path: string, variant?: TransitionVariant) => {
-      const isVideoIntro = variant === "video-editing";
-      const switchAt = isVideoIntro ? VIDEO_INTRO_SWITCH_ROUTE_AT_MS : SWITCH_ROUTE_AT_MS;
-      const totalMs = isVideoIntro ? VIDEO_INTRO_TOTAL_MS : OVERLAY_TOTAL_MS;
-
-      setActive(variant ?? "default");
-      const switchTimer = window.setTimeout(() => setLocation(path), switchAt);
-      const endTimer = window.setTimeout(() => setActive(null), totalMs);
+    (path: string, _variant?: TransitionVariant) => {
+      setActive("default");
+      const switchTimer = window.setTimeout(() => setLocation(path), SWITCH_ROUTE_AT_MS);
+      const endTimer = window.setTimeout(() => setActive(null), OVERLAY_TOTAL_MS);
       timers.current.push(switchTimer, endTimer);
     },
     [setLocation],
@@ -62,7 +53,6 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
   return (
     <TransitionContext.Provider value={{ navigateWithTransition }}>
       {children}
-      {active === "video-editing" && <VideoEditingIntro />}
       {active === "default" && <CinematicOverlay />}
     </TransitionContext.Provider>
   );

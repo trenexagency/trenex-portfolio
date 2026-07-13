@@ -1,91 +1,101 @@
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import logoUrl from "@assets/Trenex_Logo_1783849513196.svg";
 
 /* ══════════════════════════════════════════════════════
    VIDEO EDITING — CINEMATIC ENTRANCE
-   A premium, one-shot intro that plays ONLY when entering
-   the Video Editing page from its homepage service card.
-   Distinct from the generic transition in PageTransition.tsx:
-   longer, holds on a centered logo + subtitle before
-   revealing the destination hero. Pure opacity/scale/transform
-   — no shake, no flash, no sound. Total on-screen time ~2.9s,
-   inside the 2.5–3s budget.
+   Since the Video Editing card opens this page in a NEW
+   TAB (a real page load, not a client-side route swap), the
+   intro is self-contained here: it auto-plays once on mount,
+   holds on a large centered logo + two lines of copy, then
+   crossfades away to reveal the Hero section underneath —
+   no user interaction, no loading spinner, no sound.
+
+   Step 1 — logo fades in (large, ~220–280px wide)
+   Step 2 — soft red glow blooms in behind the logo
+   Step 3 — "VIDEO EDITING" subtitle fades up
+   Step 4 — "Commercial Editing • Motion Graphics • Color Grading" fades up
+   Step 5 — after ~2.7s the whole overlay smoothly crossfades
+            into the hero section (no hard cut)
 ══════════════════════════════════════════════════════ */
 
-export const VIDEO_INTRO_DURATION_S = 2.9;
-export const VIDEO_INTRO_TOTAL_MS = VIDEO_INTRO_DURATION_S * 1000;
-/* Swap the route while the overlay is fully opaque and the logo/text
-   haven't appeared yet, so the destination page is ready underneath
-   by the time the overlay fades away at the end. */
-export const VIDEO_INTRO_SWITCH_ROUTE_AT_MS = 380;
-
-/* Keyframe timing (fractions of the total duration) shared across layers
-   so the dark overlay, logo and subtitle stay perfectly in sync. */
-const OVERLAY_TIMES = [0, 0.121, 0.914, 1];
-const OVERLAY_OPACITY = [0, 1, 1, 0];
-
-const LOGO_TIMES = [0, 0.103, 0.31, 0.776, 0.879, 1];
-const LOGO_OPACITY = [0, 0, 1, 1, 0, 0];
-const LOGO_SCALE = [0.9, 0.9, 1, 1, 1.015, 1.015];
-const GLOW_OPACITY = [0, 0, 0.75, 0.75, 0, 0];
-
-const TEXT_TIMES = [0, 0.19, 0.362, 0.776, 0.879, 1];
-const TEXT_OPACITY = [0, 0, 1, 1, 0, 0];
-const TEXT_Y = [14, 14, 0, 0, 0, 0];
+const HOLD_DURATION_S = 2.7;
+const HOLD_DURATION_MS = HOLD_DURATION_S * 1000;
+const EXIT_DURATION_S = 0.5;
 
 export function VideoEditingIntro() {
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setVisible(false), HOLD_DURATION_MS);
+    return () => window.clearTimeout(timer);
+  }, []);
+
   return (
-    <motion.div
-      aria-hidden
-      className="pointer-events-none fixed inset-0 z-[300] flex items-center justify-center overflow-hidden bg-[#050505]"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: OVERLAY_OPACITY }}
-      transition={{ duration: VIDEO_INTRO_DURATION_S, times: OVERLAY_TIMES, ease: "easeInOut" }}
-    >
-      {/* faint static vignette behind everything — soft, not pulsing */}
-      <div
-        className="absolute h-[28rem] w-[28rem] rounded-full"
-        style={{
-          background: "radial-gradient(circle, rgba(235,27,36,0.14), transparent 70%)",
-          filter: "blur(60px)",
-        }}
-      />
-
-      <div className="relative flex flex-col items-center px-6 text-center">
-        {/* soft red glow behind the logo mark */}
+    <AnimatePresence>
+      {visible && (
         <motion.div
-          className="absolute left-1/2 top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full sm:h-48 sm:w-48"
-          style={{
-            background: "radial-gradient(circle, rgba(235,27,36,0.55), transparent 70%)",
-            filter: "blur(30px)",
-          }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: GLOW_OPACITY }}
-          transition={{ duration: VIDEO_INTRO_DURATION_S, times: LOGO_TIMES, ease: "easeInOut" }}
-        />
-
-        {/* Trenex logo — fades in, scales 90% → 100%, soft glow via drop-shadow */}
-        <motion.img
-          src={logoUrl}
-          alt=""
-          className="relative h-16 w-16 object-contain sm:h-20 sm:w-20"
-          style={{ filter: "drop-shadow(0 0 20px rgba(235,27,36,0.5))" }}
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: LOGO_OPACITY, scale: LOGO_SCALE }}
-          transition={{ duration: VIDEO_INTRO_DURATION_S, times: LOGO_TIMES, ease: "easeInOut" }}
-        />
-
-        {/* Service tagline — fade-up, wide letter-spacing, white with red accents */}
-        <motion.p
-          className="relative mt-7 max-w-xl text-sm font-semibold uppercase tracking-[0.35em] text-white sm:mt-8 sm:text-lg md:text-xl"
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: TEXT_OPACITY, y: TEXT_Y }}
-          transition={{ duration: VIDEO_INTRO_DURATION_S, times: TEXT_TIMES, ease: "easeInOut" }}
+          aria-hidden
+          className="pointer-events-none fixed inset-0 z-[300] flex items-center justify-center overflow-hidden bg-[#050505]"
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0, transition: { duration: EXIT_DURATION_S, ease: "easeInOut" } }}
         >
-          Commercial Editing <span className="text-[#eb1b24]">•</span> Motion Graphics{" "}
-          <span className="text-[#eb1b24]">•</span> Color Grading
-        </motion.p>
-      </div>
-    </motion.div>
+          {/* faint static vignette behind everything — soft, not pulsing */}
+          <div
+            className="absolute h-[32rem] w-[32rem] rounded-full"
+            style={{
+              background: "radial-gradient(circle, rgba(235,27,36,0.14), transparent 70%)",
+              filter: "blur(70px)",
+            }}
+          />
+
+          <div className="relative flex flex-col items-center px-6 text-center">
+            {/* Step 2 — soft red glow blooms in behind the logo */}
+            <motion.div
+              className="absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full sm:h-72 sm:w-72 md:h-80 md:w-80"
+              style={{
+                background: "radial-gradient(circle, rgba(235,27,36,0.55), transparent 70%)",
+                filter: "blur(40px)",
+              }}
+              initial={{ opacity: 0, scale: 0.85 }}
+              animate={{ opacity: 0.85, scale: 1 }}
+              transition={{ duration: 0.9, delay: 0.25, ease: "easeOut" }}
+            />
+
+            {/* Step 1 — large Trenex logo fades in and settles */}
+            <motion.img
+              src={logoUrl}
+              alt="Trenex"
+              className="relative w-[220px] object-contain sm:w-[250px] md:w-[280px]"
+              style={{ filter: "drop-shadow(0 0 30px rgba(235,27,36,0.55))" }}
+              initial={{ opacity: 0, scale: 0.88, y: 8 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.75, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            />
+
+            {/* Step 3 — "VIDEO EDITING" subtitle */}
+            <motion.p
+              className="relative mt-8 text-xl font-semibold uppercase tracking-[0.3em] text-white sm:mt-9 sm:text-2xl md:text-3xl"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1.0, ease: "easeOut" }}
+            >
+              Video Editing
+            </motion.p>
+
+            {/* Step 4 — supporting line */}
+            <motion.p
+              className="relative mt-4 max-w-md text-xs font-medium uppercase tracking-[0.25em] text-white/50 sm:text-sm"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1.55, ease: "easeOut" }}
+            >
+              Commercial Editing <span className="text-[#eb1b24]">•</span> Motion Graphics{" "}
+              <span className="text-[#eb1b24]">•</span> Color Grading
+            </motion.p>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

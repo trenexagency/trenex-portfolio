@@ -8,6 +8,7 @@ import { Footer } from "@/components/layout/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { CustomCursor } from "@/components/CustomCursor";
 import { HeroBackground } from "@/components/HeroBackground";
+import { VideoEditingIntro } from "@/components/VideoEditingIntro";
 import { VideoLightbox } from "@/components/VideoLightbox";
 import { VIDEO_WORK_CATEGORIES, type VideoWorkItem } from "@/data/video-work";
 
@@ -108,6 +109,8 @@ export default function VideoEditingPage() {
 
   return (
     <div className="relative min-h-screen w-full">
+      <VideoEditingIntro />
+
       <AmbientBackground />
       <GridBackground />
       <CustomCursor />
