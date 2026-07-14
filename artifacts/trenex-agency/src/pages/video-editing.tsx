@@ -8,6 +8,7 @@ import { Footer } from "@/components/layout/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { CustomCursor } from "@/components/CustomCursor";
 import { HeroBackground } from "@/components/HeroBackground";
+import { FloatingVideoSoftwareBadges } from "@/components/FloatingVideoSoftwareBadges";
 import { VideoEditingIntro } from "@/components/VideoEditingIntro";
 import { VideoLightbox } from "@/components/VideoLightbox";
 import { VIDEO_WORK_CATEGORIES, type VideoWorkItem } from "@/data/video-work";
@@ -121,6 +122,7 @@ export default function VideoEditingPage() {
         {/* ══ 1. HERO ═════════════════════════════════════════ */}
         <section id="hero" className="relative flex h-[45vh] min-h-[380px] w-full scroll-mt-24 flex-col items-center justify-center overflow-hidden bg-[#050505] px-5 text-center sm:scroll-mt-28 sm:px-6">
           <HeroBackground />
+          <FloatingVideoSoftwareBadges />
 
           <motion.div
             variants={STAGGER}
