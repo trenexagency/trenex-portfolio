@@ -8,6 +8,7 @@ import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { CustomCursor } from "@/components/CustomCursor";
 import { FloatingSoftwareBadges } from "@/components/FloatingSoftwareBadges";
 import { HeroBackground } from "@/components/HeroBackground";
+import { GraphicDesignIntro } from "@/components/GraphicDesignIntro";
 import { PortfolioLightbox } from "@/components/PortfolioLightbox";
 import { FeaturedThumbnailsSection } from "@/components/sections/FeaturedThumbnailsSection";
 import { FiverrGigsSection } from "@/components/sections/FiverrGigsSection";
@@ -168,6 +169,8 @@ export default function GraphicDesignPage() {
 
   return (
     <div className="relative min-h-screen w-full">
+      <GraphicDesignIntro />
+
       <AmbientBackground />
       <GridBackground />
       <CustomCursor />
