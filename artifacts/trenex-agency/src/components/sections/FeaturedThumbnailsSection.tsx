@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { memo, useCallback, useMemo, useState, type MouseEvent } from "react";
 import { motion } from "framer-motion";
 import { thumbnailFiles } from "virtual:portfolio-thumbnails";
 import { PortfolioLightbox } from "@/components/PortfolioLightbox";
@@ -10,26 +10,50 @@ import { PortfolioLightbox } from "@/components/PortfolioLightbox";
    images in that folder and they appear here automatically,
    no code changes needed. Large premium cards, native aspect
    ratio preserved, light hover scale only, fullscreen lightbox.
+   Images carry their intrinsic width/height so the browser
+   reserves the right amount of space before they load
+   (prevents layout shift) while still lazy-loading below the fold.
 ══════════════════════════════════════════════════════ */
 
-const THUMBNAIL_IMAGES = thumbnailFiles.map((file) => `${import.meta.env.BASE_URL}portfolio/thumbnails/${file}`);
+const THUMBNAIL_IMAGES = thumbnailFiles.map(({ file, width, height }) => ({
+  src: `${import.meta.env.BASE_URL}portfolio/thumbnails/${file}`,
+  width,
+  height,
+}));
 
-function ThumbnailCard({ src, index, onOpen }: { src: string; index: number; onOpen: () => void }) {
+/* Memoized card + delegated click handling: index travels via a data
+   attribute, so the click handler prop stays referentially stable and
+   unrelated re-renders (e.g. opening the lightbox) don't re-render
+   every card in the grid. */
+const ThumbnailCard = memo(function ThumbnailCard({
+  src,
+  width,
+  height,
+  index,
+}: {
+  src: string;
+  width: number;
+  height: number;
+  index: number;
+}) {
   return (
     <motion.button
       type="button"
-      onClick={onOpen}
+      data-index={index}
       initial={{ opacity: 0, y: 26 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.25 }}
       transition={{ duration: 0.6, delay: (index % 6) * 0.06, ease: "easeOut" }}
-      className="group relative block w-full cursor-pointer overflow-hidden rounded-2xl border border-white/8 bg-[#0a0a0a] text-left transition-colors duration-500 hover:border-[#eb1b24]/50 hover:shadow-[0_25px_70px_-18px_rgba(235,27,36,0.5)] focus:outline-none focus-visible:border-[#eb1b24]/60"
+      className="group relative block w-full transform-gpu cursor-pointer overflow-hidden rounded-2xl border border-white/8 bg-[#0a0a0a] text-left transition-colors duration-500 will-change-transform hover:border-[#eb1b24]/50 hover:shadow-[0_25px_70px_-18px_rgba(235,27,36,0.5)] focus:outline-none focus-visible:border-[#eb1b24]/60"
     >
       <img
         src={src}
+        width={width || undefined}
+        height={height || undefined}
         alt=""
         loading="lazy"
-        className="block w-full transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+        decoding="async"
+        className="block w-full transform-gpu transition-transform duration-500 ease-out will-change-transform group-hover:scale-[1.04]"
       />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050505]/25 via-transparent to-transparent" />
 
@@ -41,14 +65,15 @@ function ThumbnailCard({ src, index, onOpen }: { src: string; index: number; onO
       </div>
     </motion.button>
   );
-}
+});
 
 export function FeaturedThumbnailsSection() {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
+  const images = useMemo(() => THUMBNAIL_IMAGES, []);
   const items = useMemo(
-    () => THUMBNAIL_IMAGES.map((src) => ({ src, title: "Thumbnail Design" })),
-    [],
+    () => images.map(({ src }) => ({ src, title: "Thumbnail Design" })),
+    [images],
   );
 
   const closeLightbox = useCallback(() => setLightboxIndex(null), []);
@@ -60,6 +85,12 @@ export function FeaturedThumbnailsSection() {
     () => setLightboxIndex((i) => (i === null ? null : (i + 1) % items.length)),
     [items.length],
   );
+  const handleGridClick = useCallback((e: MouseEvent<HTMLDivElement>) => {
+    const target = (e.target as HTMLElement).closest<HTMLElement>("[data-index]");
+    if (!target) return;
+    const idx = Number(target.dataset.index);
+    if (Number.isFinite(idx)) setLightboxIndex(idx);
+  }, []);
 
   if (items.length === 0) return null;
 
@@ -84,9 +115,12 @@ export function FeaturedThumbnailsSection() {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-          {items.map((item, i) => (
-            <ThumbnailCard key={item.src} src={item.src} index={i} onOpen={() => setLightboxIndex(i)} />
+        <div
+          className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3"
+          onClick={handleGridClick}
+        >
+          {images.map((image, i) => (
+            <ThumbnailCard key={image.src} src={image.src} width={image.width} height={image.height} index={i} />
           ))}
         </div>
       </div>

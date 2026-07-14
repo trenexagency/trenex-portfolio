@@ -8,19 +8,29 @@
 import { socialMediaFiles } from "virtual:portfolio-social-media-posts";
 import { logoFiles } from "virtual:portfolio-logos";
 
+export interface PortfolioImage {
+  src: string;
+  width: number;
+  height: number;
+}
+
 export interface PortfolioCategory {
   id: string;
   title: string;
-  images: string[];
+  images: PortfolioImage[];
 }
 
-const SOCIAL_MEDIA_IMAGES = socialMediaFiles.map(
-  (file) => `${import.meta.env.BASE_URL}portfolio/social-media-posts/${file}`,
-);
+const SOCIAL_MEDIA_IMAGES: PortfolioImage[] = socialMediaFiles.map(({ file, width, height }) => ({
+  src: `${import.meta.env.BASE_URL}portfolio/social-media-posts/${file}`,
+  width,
+  height,
+}));
 
-const LOGO_IMAGES = logoFiles.map(
-  (file) => `${import.meta.env.BASE_URL}portfolio/logos/${file}`,
-);
+const LOGO_IMAGES: PortfolioImage[] = logoFiles.map(({ file, width, height }) => ({
+  src: `${import.meta.env.BASE_URL}portfolio/logos/${file}`,
+  width,
+  height,
+}));
 
 export const PORTFOLIO_CATEGORIES: PortfolioCategory[] = [
   {

@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 import fs from "fs";
+import { execFileSync } from "child_process";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 
 const rawPort = process.env.PORT || "3000";
@@ -11,25 +12,65 @@ const basePath = process.env.BASE_PATH || "/";
 
 /* ══════════════════════════════════════════════════════
    PORTFOLIO FOLDER MANIFESTS
-   Exposes the list of image filenames in a
-   public/portfolio/<folder>/ directory as a virtual module,
-   so galleries load whatever is dropped in that folder
-   without any code changes. Hot-reloads in dev when files
-   in the watched folder change.
+   Exposes the list of images in a public/portfolio/<folder>/
+   directory as a virtual module, so galleries load whatever
+   is dropped in that folder without any code changes.
+   Each entry carries its intrinsic pixel dimensions (read via
+   ImageMagick `identify`, cached by mtime) so <img> tags can
+   ship width/height up front and avoid layout shift while the
+   file itself lazy-loads. Hot-reloads in dev when files in the
+   watched folder change.
 ══════════════════════════════════════════════════════ */
 const IMAGE_EXTENSIONS = new Set([".png", ".jpg", ".jpeg", ".webp", ".avif", ".gif"]);
+
+export interface PortfolioImageMeta {
+  file: string;
+  width: number;
+  height: number;
+}
+
+const dimensionCache = new Map<string, { mtimeMs: number; width: number; height: number }>();
+
+function readDimensions(fullPath: string, mtimeMs: number): { width: number; height: number } {
+  const cached = dimensionCache.get(fullPath);
+  if (cached && cached.mtimeMs === mtimeMs) return cached;
+  let width = 0;
+  let height = 0;
+  try {
+    const out = execFileSync("identify", ["-format", "%w %h", fullPath], {
+      encoding: "utf8",
+    }).trim();
+    const [w, h] = out.split(/\s+/).map(Number);
+    if (Number.isFinite(w) && Number.isFinite(h)) {
+      width = w;
+      height = h;
+    }
+  } catch {
+    // ImageMagick unavailable or unreadable file — fall back to 0x0
+    // (consumers treat 0 as "no intrinsic size available").
+  }
+  const result = { mtimeMs, width, height };
+  dimensionCache.set(fullPath, result);
+  return result;
+}
 
 function portfolioFolderManifest(folder: string, exportName: string): Plugin {
   const virtualModuleId = `virtual:portfolio-${folder}`;
   const resolvedVirtualModuleId = "\0" + virtualModuleId;
   const dir = path.resolve(import.meta.dirname, "public/portfolio", folder);
 
-  function listFiles(): string[] {
+  function listFiles(): PortfolioImageMeta[] {
     if (!fs.existsSync(dir)) return [];
     return fs
       .readdirSync(dir)
       .filter((f) => IMAGE_EXTENSIONS.has(path.extname(f).toLowerCase()))
-      .sort((a, b) => a.localeCompare(b));
+      .sort((a, b) => a.localeCompare(b))
+      .map((file) => {
+        const fullPath = path.join(dir, file);
+        const { mtimeMs } = fs.statSync(fullPath);
+        const { width, height } = readDimensions(fullPath, mtimeMs);
+        return { file, width, height };
+      });
   }
 
   return {

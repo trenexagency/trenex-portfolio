@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { memo, useCallback, useMemo, useState, type MouseEvent } from "react";
 import { motion, type Variants } from "framer-motion";
 import { AmbientBackground } from "@/components/three/AmbientBackground";
 import { GridBackground } from "@/components/GridBackground";
@@ -11,7 +11,8 @@ import { HeroBackground } from "@/components/HeroBackground";
 import { PortfolioLightbox } from "@/components/PortfolioLightbox";
 import { FeaturedThumbnailsSection } from "@/components/sections/FeaturedThumbnailsSection";
 import { FiverrGigsSection } from "@/components/sections/FiverrGigsSection";
-import { PORTFOLIO_CATEGORIES } from "@/data/portfolio";
+import { PORTFOLIO_CATEGORIES, type PortfolioImage } from "@/data/portfolio";
+import { contactInfo } from "@/data/site";
 
 /* Singular, human-readable labels shown in the lightbox for each category */
 const CATEGORY_LABELS: Record<string, string> = {
@@ -31,6 +32,62 @@ const STAGGER: Variants = { show: { transition: { staggerChildren: 0.13 } } };
    Four fixed categories, each a pure image gallery.
    To add work: edit src/data/portfolio.ts only.
 ══════════════════════════════════════════════════════ */
+/* Memoized card — keeps re-renders scoped to the item that actually
+   changed instead of the whole grid when unrelated page state (e.g.
+   lightbox index) updates. Click index travels via a data attribute
+   read by a single stable handler, so props stay referentially equal
+   across renders. */
+const GalleryCard = memo(function GalleryCard({
+  image,
+  index,
+  delay,
+  premiumGlow,
+}: {
+  image: PortfolioImage;
+  index: number;
+  delay: number;
+  premiumGlow: boolean;
+}) {
+  return (
+    <motion.button
+      type="button"
+      data-index={index}
+      initial={{ opacity: 0, y: 18 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.5, delay, ease: "easeOut" }}
+      className={`group relative aspect-square transform-gpu cursor-pointer overflow-hidden rounded-xl border border-white/8 bg-[#0a0a0a] text-left transition-all duration-500 will-change-transform hover:border-[#eb1b24]/50 focus:outline-none focus-visible:border-[#eb1b24]/60 ${
+        premiumGlow
+          ? "hover:scale-[1.04] hover:shadow-[0_0_38px_-6px_rgba(235,27,36,0.55)]"
+          : "hover:shadow-[0_18px_48px_-16px_rgba(235,27,36,0.45)]"
+      }`}
+    >
+      <img
+        src={image.src}
+        width={image.width || undefined}
+        height={image.height || undefined}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        className={`h-full w-full transform-gpu object-cover transition-transform duration-700 ease-out will-change-transform ${
+          premiumGlow ? "group-hover:scale-110" : "group-hover:scale-105"
+        }`}
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/25 via-transparent to-transparent" />
+      {premiumGlow && (
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#eb1b24]/0 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-hover:from-[#eb1b24]/20" />
+      )}
+
+      {/* Hover overlay */}
+      <div className="absolute inset-0 flex items-center justify-center bg-black/55 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100">
+        <span className="rounded-full border border-[#eb1b24]/60 bg-black/40 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-white">
+          View Design
+        </span>
+      </div>
+    </motion.button>
+  );
+});
+
 function CategoryGallery({
   title,
   images,
@@ -39,12 +96,22 @@ function CategoryGallery({
   premiumGlow = false,
 }: {
   title: string;
-  images: string[];
+  images: PortfolioImage[];
   offset: number;
   onImageClick: (globalIndex: number) => void;
   /* Subtle premium hover (scale + soft red glow) for logo-style cards */
   premiumGlow?: boolean;
 }) {
+  const handleClick = useCallback(
+    (e: MouseEvent<HTMLDivElement>) => {
+      const target = (e.target as HTMLElement).closest<HTMLElement>("[data-index]");
+      if (!target) return;
+      const idx = Number(target.dataset.index);
+      if (Number.isFinite(idx)) onImageClick(idx);
+    },
+    [onImageClick],
+  );
+
   return (
     <div className="mb-14 last:mb-0 sm:mb-16">
       {/* Category title + divider */}
@@ -56,42 +123,18 @@ function CategoryGallery({
       </div>
 
       {/* Image gallery */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
-        {images.map((src, i) => (
-          <motion.button
-            key={src}
-            type="button"
-            onClick={() => onImageClick(offset + i)}
-            initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.5, delay: i * 0.04, ease: "easeOut" }}
-            className={`group relative aspect-square cursor-pointer overflow-hidden rounded-xl border border-white/8 bg-[#0a0a0a] text-left transition-all duration-500 hover:border-[#eb1b24]/50 focus:outline-none focus-visible:border-[#eb1b24]/60 ${
-              premiumGlow
-                ? "hover:scale-[1.04] hover:shadow-[0_0_38px_-6px_rgba(235,27,36,0.55)]"
-                : "hover:shadow-[0_18px_48px_-16px_rgba(235,27,36,0.45)]"
-            }`}
-          >
-            <img
-              src={src}
-              alt=""
-              loading="lazy"
-              className={`h-full w-full object-cover transition-transform duration-700 ease-out ${
-                premiumGlow ? "group-hover:scale-110" : "group-hover:scale-105"
-              }`}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/25 via-transparent to-transparent" />
-            {premiumGlow && (
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#eb1b24]/0 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-hover:from-[#eb1b24]/20" />
-            )}
-
-            {/* Hover overlay */}
-            <div className="absolute inset-0 flex items-center justify-center bg-black/55 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100">
-              <span className="rounded-full border border-[#eb1b24]/60 bg-black/40 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-white">
-                View Design
-              </span>
-            </div>
-          </motion.button>
+      <div
+        className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4"
+        onClick={handleClick}
+      >
+        {images.map((image, i) => (
+          <GalleryCard
+            key={image.src}
+            image={image}
+            index={offset + i}
+            delay={i * 0.04}
+            premiumGlow={premiumGlow}
+          />
         ))}
       </div>
     </div>
@@ -105,7 +148,7 @@ export default function GraphicDesignPage() {
   const allItems = useMemo(
     () =>
       PORTFOLIO_CATEGORIES.flatMap((c) =>
-        c.images.map((src) => ({ src, title: CATEGORY_LABELS[c.id] ?? c.title })),
+        c.images.map((image) => ({ src: image.src, title: CATEGORY_LABELS[c.id] ?? c.title })),
       ),
     [],
   );
@@ -133,7 +176,7 @@ export default function GraphicDesignPage() {
         <Header />
 
         {/* ══ 1. HERO ═════════════════════════════════════════ */}
-        <section className="relative flex h-[45vh] min-h-[380px] w-full flex-col items-center justify-center overflow-hidden bg-[#050505] px-5 text-center sm:px-6">
+        <section id="hero" className="relative flex h-[45vh] min-h-[380px] w-full scroll-mt-24 flex-col items-center justify-center overflow-hidden bg-[#050505] px-5 text-center sm:scroll-mt-28 sm:px-6">
           <HeroBackground />
 
           <FloatingSoftwareBadges />
@@ -171,7 +214,7 @@ export default function GraphicDesignPage() {
         <FeaturedThumbnailsSection />
 
         {/* ══ 3. PORTFOLIO SHOWCASE ════════════════════════════ */}
-        <section id="featured-work" className="relative w-full overflow-hidden bg-[#050505]/75 px-5 py-16 sm:px-6 sm:py-20">
+        <section id="services" className="relative w-full scroll-mt-24 overflow-hidden bg-[#050505]/75 px-5 py-16 sm:scroll-mt-28 sm:px-6 sm:py-20">
           <div
             className="pointer-events-none absolute left-1/2 top-0 h-[600px] w-[900px] -translate-x-1/2 rounded-full"
             style={{ background: "radial-gradient(ellipse 65% 50% at 50% 0%, rgba(235,27,36,0.065), transparent 70%)", filter: "blur(90px)" }}
@@ -218,7 +261,7 @@ export default function GraphicDesignPage() {
         <FiverrGigsSection />
 
         {/* ══ 5. CONTACT CTA ═══════════════════════════════════ */}
-        <section className="relative w-full overflow-hidden bg-[#050505] px-5 py-20 text-center sm:px-6 sm:py-24">
+        <section id="contact" className="relative w-full scroll-mt-24 overflow-hidden bg-[#050505] px-5 py-20 text-center sm:scroll-mt-28 sm:px-6 sm:py-24">
           <div
             className="pointer-events-none absolute left-1/2 top-1/2 h-[420px] w-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full"
             style={{ background: "radial-gradient(ellipse 60% 55% at 50% 50%, rgba(235,27,36,0.14), transparent 70%)", filter: "blur(70px)" }}
@@ -236,7 +279,10 @@ export default function GraphicDesignPage() {
             </h2>
 
             <a
-              href="/#contact"
+              href={contactInfo.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-testid="link-cta-whatsapp"
               className="group mt-9 inline-flex items-center gap-3 bg-[#eb1b24] px-9 py-3.5 text-sm font-semibold uppercase tracking-[0.25em] text-white transition-all duration-300 hover:shadow-[0_0_35px_rgba(235,27,36,0.55)]"
             >
               <span>Start a Project</span>

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState, type MouseEvent } from "react";
+import { memo, useCallback, useMemo, useRef, useState, type MouseEvent } from "react";
 import { motion } from "framer-motion";
 import { fiverrGigFiles } from "virtual:portfolio-fiverr-gigs";
 import { PortfolioLightbox } from "@/components/PortfolioLightbox";
@@ -11,7 +11,11 @@ import { PortfolioLightbox } from "@/components/PortfolioLightbox";
    here automatically, no code changes needed.
 ══════════════════════════════════════════════════════ */
 
-const FIVERR_GIG_IMAGES = fiverrGigFiles.map((file) => `${import.meta.env.BASE_URL}portfolio/fiverr-gigs/${file}`);
+const FIVERR_GIG_IMAGES = fiverrGigFiles.map(({ file, width, height }) => ({
+  src: `${import.meta.env.BASE_URL}portfolio/fiverr-gigs/${file}`,
+  width,
+  height,
+}));
 
 /* Deterministic pseudo-random span so the masonry grid feels
    organic instead of uniform, without layout shift on reload. */
@@ -20,14 +24,16 @@ function spanForIndex(i: number): string {
   return pattern[i % pattern.length];
 }
 
-function TiltCard({
+/* Memoized card + delegated click handling: index travels via a data
+   attribute so the click handler prop stays referentially stable and
+   unrelated re-renders don't cascade through every card. Mouse-tracked
+   tilt still updates local state only inside the hovered card. */
+const TiltCard = memo(function TiltCard({
   src,
   index,
-  onOpen,
 }: {
   src: string;
   index: number;
-  onOpen: () => void;
 }) {
   const cardRef = useRef<HTMLButtonElement>(null);
   const [tilt, setTilt] = useState({ rx: 0, ry: 0 });
@@ -47,7 +53,7 @@ function TiltCard({
     <motion.button
       ref={cardRef}
       type="button"
-      onClick={onOpen}
+      data-index={index}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       initial={{ opacity: 0, y: 32 }}
@@ -55,16 +61,17 @@ function TiltCard({
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.6, delay: (index % 6) * 0.06, ease: "easeOut" }}
       style={{
-        transform: `perspective(900px) rotateX(${tilt.rx}deg) rotateY(${tilt.ry}deg)`,
+        transform: `perspective(900px) rotateX(${tilt.rx}deg) rotateY(${tilt.ry}deg) translateZ(0)`,
         transition: "transform 0.25s ease-out",
       }}
-      className={`${spanForIndex(index)} group relative block h-full w-full cursor-pointer overflow-hidden rounded-2xl border border-white/8 bg-[#0a0a0a] text-left transition-colors duration-500 will-change-transform hover:border-[#eb1b24]/50 hover:shadow-[0_25px_70px_-18px_rgba(235,27,36,0.5)] focus:outline-none focus-visible:border-[#eb1b24]/60`}
+      className={`${spanForIndex(index)} group relative block h-full w-full transform-gpu cursor-pointer overflow-hidden rounded-2xl border border-white/8 bg-[#0a0a0a] text-left transition-colors duration-500 will-change-transform hover:border-[#eb1b24]/50 hover:shadow-[0_25px_70px_-18px_rgba(235,27,36,0.5)] focus:outline-none focus-visible:border-[#eb1b24]/60`}
     >
       <img
         src={src}
         alt=""
         loading="lazy"
-        className="h-full min-h-[220px] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+        decoding="async"
+        className="h-full min-h-[220px] w-full transform-gpu object-cover transition-transform duration-700 ease-out will-change-transform group-hover:scale-110"
       />
 
       {/* Red glow wash on hover */}
@@ -79,14 +86,15 @@ function TiltCard({
       </div>
     </motion.button>
   );
-}
+});
 
 export function FiverrGigsSection() {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
+  const images = useMemo(() => FIVERR_GIG_IMAGES, []);
   const items = useMemo(
-    () => FIVERR_GIG_IMAGES.map((src) => ({ src, title: "Fiverr Gig Design" })),
-    [],
+    () => images.map(({ src }) => ({ src, title: "Fiverr Gig Design" })),
+    [images],
   );
 
   const closeLightbox = useCallback(() => setLightboxIndex(null), []);
@@ -98,6 +106,12 @@ export function FiverrGigsSection() {
     () => setLightboxIndex((i) => (i === null ? null : (i + 1) % items.length)),
     [items.length],
   );
+  const handleGridClick = useCallback((e: MouseEvent<HTMLDivElement>) => {
+    const target = (e.target as HTMLElement).closest<HTMLElement>("[data-index]");
+    if (!target) return;
+    const idx = Number(target.dataset.index);
+    if (Number.isFinite(idx)) setLightboxIndex(idx);
+  }, []);
 
   if (items.length === 0) return null;
 
@@ -125,9 +139,12 @@ export function FiverrGigsSection() {
           </p>
         </motion.div>
 
-        <div className="grid auto-rows-[160px] grid-cols-2 gap-3 sm:auto-rows-[190px] sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
-          {items.map((item, i) => (
-            <TiltCard key={item.src} src={item.src} index={i} onOpen={() => setLightboxIndex(i)} />
+        <div
+          className="grid auto-rows-[160px] grid-cols-2 gap-3 sm:auto-rows-[190px] sm:grid-cols-3 sm:gap-4 lg:grid-cols-4"
+          onClick={handleGridClick}
+        >
+          {images.map((image, i) => (
+            <TiltCard key={image.src} src={image.src} index={i} />
           ))}
         </div>
       </div>
