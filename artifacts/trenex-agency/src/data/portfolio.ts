@@ -48,16 +48,4 @@ export const PORTFOLIO_CATEGORIES: PortfolioCategory[] = [
       "https://cdn.dribbble.com/userupload/43435598/file/original-c8e3a81411c875f8f095b147a3eacc5b.jpg?format=webp&resize=600x450&vertical=center",
     ],
   },
-  {
-    id: "event-posters",
-    title: "Event Posters",
-    images: [
-      "https://cdn.dribbble.com/userupload/43180877/file/original-f2c4d2a0bf37f4937815699799778388.png?format=webp&resize=600x450&vertical=center",
-      "https://dcassetcdn.com/design_img/3825439/644908/23739863/zwxp25mbb4mcpm6e5m16kw7xxk_thumbnail.png",
-      "https://cdn.dribbble.com/userupload/11147243/file/original-5a776b3d1104c2dccb78dc53019b923b.jpg?format=webp&resize=600x450&vertical=center",
-      "https://fiverr-res.cloudinary.com/t_gig_cards_web,q_auto,f_auto/gigs/428119850/original/c3ecf48933996986c65cd04b0bf71519fb2b701e.jpg",
-      "https://cdn.dribbble.com/userupload/17122709/file/original-47f04e1bb45984b256f793848ae10e6b.jpg?format=webp&resize=600x450&vertical=center",
-      "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/blue-neon-this-is-a-striking-poster-design-te-template-66d21f5867f99f30cd724b168eedd75a.webp?ts=1749506543",
-    ],
-  },
 ];
