@@ -11,7 +11,6 @@ import { HeroBackground } from "@/components/HeroBackground";
 import { WebDevelopmentIntro } from "@/components/WebDevelopmentIntro";
 import { TechShowcase } from "@/components/sections/TechShowcase";
 import { WebDevPortfolio } from "@/components/sections/WebDevPortfolio";
-import { contactInfo } from "@/data/site";
 
 /* ── Animation presets ────────────────────────────────── */
 const FADE_UP: Variants = {
@@ -162,7 +161,7 @@ export default function WebDevelopmentPage() {
             </h2>
 
             <a
-              href={contactInfo.whatsapp}
+              href="https://wa.me/923323848135?text=Hi%20Trenex%20Agency,%20I%20visited%20your%20Web%20Development%20portfolio%20and%20would%20like%20to%20discuss%20a%20project."
               target="_blank"
               rel="noopener noreferrer"
               data-testid="link-cta-whatsapp"
