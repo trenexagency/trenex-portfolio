@@ -10,18 +10,19 @@ const port = Number(rawPort);
 const basePath = process.env.BASE_PATH || "/";
 
 /* ══════════════════════════════════════════════════════
-   FIVERR GIGS MANIFEST
-   Exposes the list of image filenames in
-   public/portfolio/fiverr-gigs/ as a virtual module, so the
-   gallery loads whatever is dropped in that folder without
-   any code changes. Hot-reloads in dev when files change.
+   PORTFOLIO FOLDER MANIFESTS
+   Exposes the list of image filenames in a
+   public/portfolio/<folder>/ directory as a virtual module,
+   so galleries load whatever is dropped in that folder
+   without any code changes. Hot-reloads in dev when files
+   in the watched folder change.
 ══════════════════════════════════════════════════════ */
 const IMAGE_EXTENSIONS = new Set([".png", ".jpg", ".jpeg", ".webp", ".avif", ".gif"]);
 
-function fiverrGigsManifest(): Plugin {
-  const virtualModuleId = "virtual:fiverr-gigs";
+function portfolioFolderManifest(folder: string, exportName: string): Plugin {
+  const virtualModuleId = `virtual:portfolio-${folder}`;
   const resolvedVirtualModuleId = "\0" + virtualModuleId;
-  const dir = path.resolve(import.meta.dirname, "public/portfolio/fiverr-gigs");
+  const dir = path.resolve(import.meta.dirname, "public/portfolio", folder);
 
   function listFiles(): string[] {
     if (!fs.existsSync(dir)) return [];
@@ -32,13 +33,13 @@ function fiverrGigsManifest(): Plugin {
   }
 
   return {
-    name: "fiverr-gigs-manifest",
+    name: `portfolio-${folder}-manifest`,
     resolveId(id) {
       if (id === virtualModuleId) return resolvedVirtualModuleId;
     },
     load(id) {
       if (id === resolvedVirtualModuleId) {
-        return `export const fiverrGigFiles = ${JSON.stringify(listFiles())};`;
+        return `export const ${exportName} = ${JSON.stringify(listFiles())};`;
       }
     },
     configureServer(server) {
@@ -62,7 +63,8 @@ export default defineConfig({
     react(),
     tailwindcss(),
     runtimeErrorOverlay(),
-    fiverrGigsManifest(),
+    portfolioFolderManifest("fiverr-gigs", "fiverrGigFiles"),
+    portfolioFolderManifest("thumbnails", "thumbnailFiles"),
     ...(process.env.NODE_ENV !== "production" &&
     process.env.REPL_ID !== undefined
       ? [

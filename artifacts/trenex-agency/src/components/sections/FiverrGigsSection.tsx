@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef, useState, type MouseEvent } from "react";
 import { motion } from "framer-motion";
-import { fiverrGigFiles } from "virtual:fiverr-gigs";
+import { fiverrGigFiles } from "virtual:portfolio-fiverr-gigs";
 import { PortfolioLightbox } from "@/components/PortfolioLightbox";
 
 /* ══════════════════════════════════════════════════════

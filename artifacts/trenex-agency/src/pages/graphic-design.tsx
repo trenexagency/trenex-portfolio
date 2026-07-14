@@ -9,12 +9,12 @@ import { CustomCursor } from "@/components/CustomCursor";
 import { FloatingSoftwareBadges } from "@/components/FloatingSoftwareBadges";
 import { HeroBackground } from "@/components/HeroBackground";
 import { PortfolioLightbox } from "@/components/PortfolioLightbox";
+import { FeaturedThumbnailsSection } from "@/components/sections/FeaturedThumbnailsSection";
 import { FiverrGigsSection } from "@/components/sections/FiverrGigsSection";
 import { PORTFOLIO_CATEGORIES } from "@/data/portfolio";
 
 /* Singular, human-readable labels shown in the lightbox for each category */
 const CATEGORY_LABELS: Record<string, string> = {
-  "youtube-thumbnails": "Thumbnail Design",
   "social-media-posts": "Social Media Post",
   logos: "Logo Design",
 };
@@ -155,7 +155,10 @@ export default function GraphicDesignPage() {
           </motion.div>
         </section>
 
-        {/* ══ 2. PORTFOLIO SHOWCASE ════════════════════════════ */}
+        {/* ══ 2. FEATURED THUMBNAILS ═══════════════════════════ */}
+        <FeaturedThumbnailsSection />
+
+        {/* ══ 3. PORTFOLIO SHOWCASE ════════════════════════════ */}
         <section id="featured-work" className="relative w-full overflow-hidden bg-[#050505]/75 px-5 py-16 sm:px-6 sm:py-20">
           <div
             className="pointer-events-none absolute left-1/2 top-0 h-[600px] w-[900px] -translate-x-1/2 rounded-full"
@@ -198,10 +201,10 @@ export default function GraphicDesignPage() {
           </div>
         </section>
 
-        {/* ══ 3. FIVERR GIG DESIGNS ════════════════════════════ */}
+        {/* ══ 4. FIVERR GIG DESIGNS ════════════════════════════ */}
         <FiverrGigsSection />
 
-        {/* ══ 4. CONTACT CTA ═══════════════════════════════════ */}
+        {/* ══ 5. CONTACT CTA ═══════════════════════════════════ */}
         <section className="relative w-full overflow-hidden bg-[#050505] px-5 py-20 text-center sm:px-6 sm:py-24">
           <div
             className="pointer-events-none absolute left-1/2 top-1/2 h-[420px] w-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full"
