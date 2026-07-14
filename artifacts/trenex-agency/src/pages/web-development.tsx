@@ -11,6 +11,7 @@ import { HeroBackground } from "@/components/HeroBackground";
 import { WebDevelopmentIntro } from "@/components/WebDevelopmentIntro";
 import { TechShowcase } from "@/components/sections/TechShowcase";
 import { WebDevPortfolio } from "@/components/sections/WebDevPortfolio";
+import { contactInfo } from "@/data/site";
 
 /* ── Animation presets ────────────────────────────────── */
 const FADE_UP: Variants = {
@@ -61,7 +62,7 @@ export default function WebDevelopmentPage() {
         <Header />
 
         {/* ══ 1. HERO ═════════════════════════════════════════ */}
-        <section className="relative flex h-[45vh] min-h-[380px] w-full flex-col items-center justify-center overflow-hidden bg-[#050505] px-5 text-center sm:px-6">
+        <section id="hero" className="relative flex h-[45vh] min-h-[380px] w-full scroll-mt-24 flex-col items-center justify-center overflow-hidden bg-[#050505] px-5 text-center sm:scroll-mt-28 sm:px-6">
           <HeroBackground />
           <FloatingTechBadges />
 
@@ -143,7 +144,7 @@ export default function WebDevelopmentPage() {
         </section>
 
         {/* ══ 5. CONTACT CTA ═══════════════════════════════════ */}
-        <section className="relative w-full overflow-hidden bg-[#050505] px-5 py-20 text-center sm:px-6 sm:py-24">
+        <section id="contact" className="relative w-full scroll-mt-24 overflow-hidden bg-[#050505] px-5 py-20 text-center sm:scroll-mt-28 sm:px-6 sm:py-24">
           <div
             className="pointer-events-none absolute left-1/2 top-1/2 h-[420px] w-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full"
             style={{ background: "radial-gradient(ellipse 60% 55% at 50% 50%, rgba(235,27,36,0.14), transparent 70%)", filter: "blur(70px)" }}
@@ -161,7 +162,10 @@ export default function WebDevelopmentPage() {
             </h2>
 
             <a
-              href="/#contact"
+              href={contactInfo.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-testid="link-cta-whatsapp"
               className="group mt-9 inline-flex items-center gap-3 bg-[#eb1b24] px-9 py-3.5 text-sm font-semibold uppercase tracking-[0.25em] text-white transition-all duration-300 hover:shadow-[0_0_35px_rgba(235,27,36,0.55)]"
             >
               <span>Start a Project</span>
