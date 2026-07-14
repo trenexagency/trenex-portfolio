@@ -11,6 +11,7 @@ import { HeroBackground } from "@/components/HeroBackground";
 import { VideoEditingIntro } from "@/components/VideoEditingIntro";
 import { VideoLightbox } from "@/components/VideoLightbox";
 import { VIDEO_WORK_CATEGORIES, type VideoWorkItem } from "@/data/video-work";
+import { contactInfo } from "@/data/site";
 
 /* ── Animation presets ────────────────────────────────── */
 const FADE_UP: Variants = {
@@ -119,7 +120,7 @@ export default function VideoEditingPage() {
         <Header />
 
         {/* ══ 1. HERO ═════════════════════════════════════════ */}
-        <section className="relative flex h-[45vh] min-h-[380px] w-full flex-col items-center justify-center overflow-hidden bg-[#050505] px-5 text-center sm:px-6">
+        <section id="hero" className="relative flex h-[45vh] min-h-[380px] w-full scroll-mt-24 flex-col items-center justify-center overflow-hidden bg-[#050505] px-5 text-center sm:scroll-mt-28 sm:px-6">
           <HeroBackground />
 
           <motion.div
@@ -152,7 +153,7 @@ export default function VideoEditingPage() {
         </section>
 
         {/* ══ 2. VIDEO PORTFOLIO ═══════════════════════════════ */}
-        <section id="featured-work" className="relative w-full overflow-hidden bg-[#050505]/75 px-5 py-16 sm:px-6 sm:py-20">
+        <section id="services" className="relative w-full scroll-mt-24 overflow-hidden bg-[#050505]/75 px-5 py-16 sm:scroll-mt-28 sm:px-6 sm:py-20">
           <div
             className="pointer-events-none absolute left-1/2 top-0 h-[600px] w-[900px] -translate-x-1/2 rounded-full"
             style={{ background: "radial-gradient(ellipse 65% 50% at 50% 0%, rgba(235,27,36,0.065), transparent 70%)", filter: "blur(90px)" }}
@@ -176,7 +177,7 @@ export default function VideoEditingPage() {
         </section>
 
         {/* ══ 3. CONTACT CTA ═══════════════════════════════════ */}
-        <section className="relative w-full overflow-hidden bg-[#050505] px-5 py-20 text-center sm:px-6 sm:py-24">
+        <section id="contact" className="relative w-full scroll-mt-24 overflow-hidden bg-[#050505] px-5 py-20 text-center sm:scroll-mt-28 sm:px-6 sm:py-24">
           <div
             className="pointer-events-none absolute left-1/2 top-1/2 h-[420px] w-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full"
             style={{ background: "radial-gradient(ellipse 60% 55% at 50% 50%, rgba(235,27,36,0.14), transparent 70%)", filter: "blur(70px)" }}
@@ -194,7 +195,10 @@ export default function VideoEditingPage() {
             </h2>
 
             <a
-              href="/#contact"
+              href={contactInfo.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-testid="link-cta-whatsapp"
               className="group mt-9 inline-flex items-center gap-3 bg-[#eb1b24] px-9 py-3.5 text-sm font-semibold uppercase tracking-[0.25em] text-white transition-all duration-300 hover:shadow-[0_0_35px_rgba(235,27,36,0.55)]"
             >
               <span>Start a Project</span>
