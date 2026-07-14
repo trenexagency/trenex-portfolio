@@ -11,7 +11,6 @@ import { HeroBackground } from "@/components/HeroBackground";
 import { VideoEditingIntro } from "@/components/VideoEditingIntro";
 import { VideoLightbox } from "@/components/VideoLightbox";
 import { VIDEO_WORK_CATEGORIES, type VideoWorkItem } from "@/data/video-work";
-import { contactInfo } from "@/data/site";
 
 /* ── Animation presets ────────────────────────────────── */
 const FADE_UP: Variants = {
@@ -195,7 +194,7 @@ export default function VideoEditingPage() {
             </h2>
 
             <a
-              href={contactInfo.whatsapp}
+              href="https://wa.me/923323848135?text=Hi%20Trenex%20Agency,%20I%20visited%20your%20Video%20Editing%20portfolio%20and%20would%20like%20to%20discuss%20a%20project."
               target="_blank"
               rel="noopener noreferrer"
               data-testid="link-cta-whatsapp"
