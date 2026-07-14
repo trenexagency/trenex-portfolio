@@ -7,3 +7,7 @@ declare module "virtual:portfolio-fiverr-gigs" {
 declare module "virtual:portfolio-thumbnails" {
   export const thumbnailFiles: string[];
 }
+
+declare module "virtual:portfolio-social-media-posts" {
+  export const socialMediaFiles: string[];
+}

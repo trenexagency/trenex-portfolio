@@ -15,7 +15,7 @@ import { PORTFOLIO_CATEGORIES } from "@/data/portfolio";
 
 /* Singular, human-readable labels shown in the lightbox for each category */
 const CATEGORY_LABELS: Record<string, string> = {
-  "social-media-posts": "Social Media Post",
+  "social-media-posts": "Social Media Design",
   logos: "Logo Design",
 };
 

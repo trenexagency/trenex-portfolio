@@ -65,6 +65,7 @@ export default defineConfig({
     runtimeErrorOverlay(),
     portfolioFolderManifest("fiverr-gigs", "fiverrGigFiles"),
     portfolioFolderManifest("thumbnails", "thumbnailFiles"),
+    portfolioFolderManifest("social-media-posts", "socialMediaFiles"),
     ...(process.env.NODE_ENV !== "production" &&
     process.env.REPL_ID !== undefined
       ? [

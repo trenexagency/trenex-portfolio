@@ -5,24 +5,23 @@
    category's `images` array — no page redesign needed.
 ───────────────────────────────────────────────────────── */
 
+import { socialMediaFiles } from "virtual:portfolio-social-media-posts";
+
 export interface PortfolioCategory {
   id: string;
   title: string;
   images: string[];
 }
 
+const SOCIAL_MEDIA_IMAGES = socialMediaFiles.map(
+  (file) => `${import.meta.env.BASE_URL}portfolio/social-media-posts/${file}`,
+);
+
 export const PORTFOLIO_CATEGORIES: PortfolioCategory[] = [
   {
     id: "social-media-posts",
-    title: "Social Media Posts",
-    images: [
-      "https://cdn.dribbble.com/userupload/5426267/file/original-9bb3a724f131e614402910775ba6cbcd.png?format=webp&resize=600x450&vertical=center",
-      "https://cdn.dribbble.com/userupload/10265388/file/original-cdd6edbb302e2a6b7d21b05330d945c9.jpg?format=webp&resize=600x450&vertical=center",
-      "https://cdn.dribbble.com/userupload/3864873/file/original-78a4ed4f88d64d81074dbd27c2b6c6e8.png?format=webp&resize=600x450&vertical=center",
-      "https://cdn.dribbble.com/userupload/37865290/file/still-2ef46cbdca6224011237bd2e5e7df7ff.png?format=webp&resize=600x450&vertical=center",
-      "https://cdn.dribbble.com/userupload/7954910/file/original-512460eb133099a730e1828043165ef7.png?format=webp&resize=600x450&vertical=center",
-      "https://blog.hootsuite.com/wp-content/uploads/2022/07/social-media-graphics-10.png",
-    ],
+    title: "Social Media Designs",
+    images: SOCIAL_MEDIA_IMAGES,
   },
   {
     id: "logos",
