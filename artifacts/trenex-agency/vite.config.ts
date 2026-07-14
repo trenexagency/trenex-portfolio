@@ -66,6 +66,7 @@ export default defineConfig({
     portfolioFolderManifest("fiverr-gigs", "fiverrGigFiles"),
     portfolioFolderManifest("thumbnails", "thumbnailFiles"),
     portfolioFolderManifest("social-media-posts", "socialMediaFiles"),
+    portfolioFolderManifest("logos", "logoFiles"),
     ...(process.env.NODE_ENV !== "production" &&
     process.env.REPL_ID !== undefined
       ? [

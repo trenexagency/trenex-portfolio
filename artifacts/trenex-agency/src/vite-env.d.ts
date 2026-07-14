@@ -11,3 +11,7 @@ declare module "virtual:portfolio-thumbnails" {
 declare module "virtual:portfolio-social-media-posts" {
   export const socialMediaFiles: string[];
 }
+
+declare module "virtual:portfolio-logos" {
+  export const logoFiles: string[];
+}

@@ -36,11 +36,14 @@ function CategoryGallery({
   images,
   offset,
   onImageClick,
+  premiumGlow = false,
 }: {
   title: string;
   images: string[];
   offset: number;
   onImageClick: (globalIndex: number) => void;
+  /* Subtle premium hover (scale + soft red glow) for logo-style cards */
+  premiumGlow?: boolean;
 }) {
   return (
     <div className="mb-14 last:mb-0 sm:mb-16">
@@ -63,15 +66,24 @@ function CategoryGallery({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.5, delay: i * 0.04, ease: "easeOut" }}
-            className="group relative aspect-square cursor-pointer overflow-hidden rounded-xl border border-white/8 bg-[#0a0a0a] text-left transition-all duration-500 hover:border-[#eb1b24]/50 hover:shadow-[0_18px_48px_-16px_rgba(235,27,36,0.45)] focus:outline-none focus-visible:border-[#eb1b24]/60"
+            className={`group relative aspect-square cursor-pointer overflow-hidden rounded-xl border border-white/8 bg-[#0a0a0a] text-left transition-all duration-500 hover:border-[#eb1b24]/50 focus:outline-none focus-visible:border-[#eb1b24]/60 ${
+              premiumGlow
+                ? "hover:scale-[1.04] hover:shadow-[0_0_38px_-6px_rgba(235,27,36,0.55)]"
+                : "hover:shadow-[0_18px_48px_-16px_rgba(235,27,36,0.45)]"
+            }`}
           >
             <img
               src={src}
               alt=""
               loading="lazy"
-              className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              className={`h-full w-full object-cover transition-transform duration-700 ease-out ${
+                premiumGlow ? "group-hover:scale-110" : "group-hover:scale-105"
+              }`}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/25 via-transparent to-transparent" />
+            {premiumGlow && (
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#eb1b24]/0 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-hover:from-[#eb1b24]/20" />
+            )}
 
             {/* Hover overlay */}
             <div className="absolute inset-0 flex items-center justify-center bg-black/55 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100">
@@ -176,6 +188,7 @@ export default function GraphicDesignPage() {
                   images={category.images}
                   offset={categoryOffset}
                   onImageClick={setLightboxIndex}
+                  premiumGlow={category.id === "logos"}
                 />
               );
             })}
