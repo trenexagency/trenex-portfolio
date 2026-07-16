@@ -47,6 +47,12 @@ const SHOPIFY_PROJECTS: Project[] = [
     image: "battlezone-pk.webp",
     platform: "Shopify",
   },
+  {
+    name: "Vemart",
+    url: "https://vemart.online/",
+    image: "vemart.webp",
+    platform: "Shopify",
+  },
 ];
 
 const WP_PROJECTS: Project[] = [
