@@ -71,16 +71,25 @@ export function GraphicDesignIntro() {
               transition={{ duration: 0.75, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             />
 
-            {/* Step 3 — tagline */}
+            {/* Step 3 — "GRAPHIC DESIGN" title */}
             <motion.p
-              className="relative mt-8 max-w-md text-lg font-semibold uppercase tracking-[0.28em] text-white sm:mt-9 sm:text-xl md:text-2xl"
+              className="relative mt-8 text-xl font-semibold uppercase tracking-[0.3em] text-white sm:mt-9 sm:text-2xl md:text-3xl"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1.0, ease: "easeOut" }}
             >
-              Creative<span className="text-[#eb1b24]">.</span> Bold
-              <span className="text-[#eb1b24]">.</span> Impactful
-              <span className="text-[#eb1b24]">.</span>
+              Graphic Design
+            </motion.p>
+
+            {/* Step 4 — supporting line */}
+            <motion.p
+              className="relative mt-4 max-w-md text-xs font-medium uppercase tracking-[0.25em] text-white/50 sm:text-sm"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1.55, ease: "easeOut" }}
+            >
+              Branding <span className="text-[#eb1b24]">•</span> Social Media{" "}
+              <span className="text-[#eb1b24]">•</span> Visual Identity
             </motion.p>
           </div>
         </motion.div>
