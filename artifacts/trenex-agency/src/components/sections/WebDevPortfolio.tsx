@@ -20,31 +20,31 @@ const SHOPIFY_PROJECTS: Project[] = [
   {
     name: "Trendify Mart",
     url: "https://trendifymart.online/",
-    image: "trendify-mart.png",
+    image: "trendify-mart.webp",
     platform: "Shopify",
   },
   {
     name: "Nexora UAE",
     url: "https://nexorauae.online/",
-    image: "nexora-uae.png",
+    image: "nexora-uae.webp",
     platform: "Shopify",
   },
   {
     name: "Ghani Collections",
     url: "https://ghanicollections.shop/",
-    image: "ghani-collections.png",
+    image: "ghani-collections.webp",
     platform: "Shopify",
   },
   {
     name: "IB Collective",
     url: "https://ibcollective.online/",
-    image: "ib-collective.png",
+    image: "ib-collective.webp",
     platform: "Shopify",
   },
   {
     name: "BattleZone PK",
     url: "https://www.battlezone.pk/",
-    image: "battlezone-pk.png",
+    image: "battlezone-pk.webp",
     platform: "Shopify",
   },
 ];
@@ -53,19 +53,19 @@ const WP_PROJECTS: Project[] = [
   {
     name: "Grene Luxury",
     url: "https://greneluxury.shop/",
-    image: "grene-luxury.png",
+    image: "grene-luxury.webp",
     platform: "WordPress",
   },
   {
     name: "Zulgari",
     url: "https://zulgari.com/",
-    image: "zulgari.png",
+    image: "zulgari.webp",
     platform: "WordPress",
   },
   {
     name: "TrendVistaHub",
     url: "https://www.trendvistahub.com/",
-    image: "trendvistahub.png",
+    image: "trendvistahub.webp",
     platform: "WordPress",
   },
 ];
@@ -104,6 +104,7 @@ function ProjectCard({ project, delay }: { project: Project; delay: number }) {
             src={imgSrc}
             alt={project.name}
             loading="lazy"
+            decoding="async"
             className="h-full w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
           />
           {/* subtle gradient overlay at bottom for readability */}
