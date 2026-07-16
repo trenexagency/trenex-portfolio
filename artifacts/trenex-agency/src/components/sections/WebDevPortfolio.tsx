@@ -89,6 +89,12 @@ const CUSTOM_PROJECTS: Project[] = [
     image: "david-jones-portfolio.webp",
     platform: "Custom",
   },
+  {
+    name: "Animated Landing Page",
+    url: "https://6a58d49048d3124895a81338--animateedsite.netlify.app/",
+    image: "animated-landing-page.webp",
+    platform: "Custom",
+  },
 ];
 
 const PLATFORM_COLORS: Record<Project["platform"], string> = {
