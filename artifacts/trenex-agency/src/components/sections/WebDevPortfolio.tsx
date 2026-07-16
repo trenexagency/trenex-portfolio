@@ -83,6 +83,12 @@ const CUSTOM_PROJECTS: Project[] = [
     image: "ummati-quran-academy.webp",
     platform: "Custom",
   },
+  {
+    name: "David Jones Frontend Portfolio",
+    url: "https://6a58c6561c9d4f1ef310c7b7--davidjonesss.netlify.app/",
+    image: "david-jones-portfolio.webp",
+    platform: "Custom",
+  },
 ];
 
 const PLATFORM_COLORS: Record<Project["platform"], string> = {
