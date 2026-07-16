@@ -4,122 +4,147 @@ const HOVER_SELECTOR = 'a, button, [data-cursor-hover], input, textarea, select'
 const MAGNETIC_SELECTOR = "[data-magnetic]";
 const MAX_BITS = 14;
 const BIT_LIFETIME = 700;
-const BIT_SPAWN_DISTANCE = 46;
+const BIT_SPAWN_DISTANCE_SQ = 46 * 46; // squared — avoids sqrt per mousemove
 
 interface Vec {
   x: number;
   y: number;
 }
 
-interface Bit {
-  id: number;
-  x: number;
-  y: number;
-  char: "0" | "1";
-  born: number;
-}
-
 /**
- * Premium cyber-tech cursor — no third-party libraries.
- * - Keeps a recognizable arrow silhouette (custom SVG), not a dot/orb.
- * - The arrow eases toward the raw pointer position (small lerp lag) for a
- *   smooth, weighted feel rather than 1:1 gaming snap.
- * - A very small (2-point) fading trail, subtle at all times.
- * - A faint red glow behind the arrow that intensifies slightly on hover.
- * - Hovering interactive elements adds a soft outline ring; `data-magnetic`
- *   elements pull toward the cursor.
- * - Tiny binary digits ("0"/"1") spawn sparsely while moving and fade out
- *   quickly — a restrained nod to a "hacker interface" rather than a
- *   particle shower.
- * All position updates go straight to DOM refs (no per-frame React state)
- * to stay smooth on lower-end devices.
+ * Premium cyber-tech cursor — zero React state per animation frame.
+ *
+ * Performance optimisations vs previous version:
+ * - `bits` are now DOM nodes created/removed directly (no setState → no React
+ *   re-renders on every 46 px of mouse travel).
+ * - `hovering` / `pressed` drive direct ref style mutations instead of state.
+ * - The ring expand/collapse uses CSS transform:scale rather than
+ *   width/height to stay on the compositor thread.
+ * - A single `requestAnimationFrame` loop owns all per-frame updates.
+ * - Squared-distance threshold check eliminates sqrt per mousemove.
+ * - The cursor translate and scale are combined in a single transform
+ *   string to avoid overwriting each other.
  */
 export function CustomCursor() {
-  const cursorRef = useRef<HTMLDivElement>(null);
-  const trailRefs = useRef<Array<HTMLDivElement | null>>([]);
-  const ringRef = useRef<HTMLDivElement>(null);
+  const cursorRef    = useRef<HTMLDivElement>(null);
+  const trailRefs    = useRef<Array<HTMLDivElement | null>>([]);
+  const ringRef      = useRef<HTMLDivElement>(null);
+  const bitsRef      = useRef<HTMLDivElement>(null);  // container for imperative bit nodes
 
   const [enabled, setEnabled] = useState(false);
-  const [hovering, setHovering] = useState(false);
-  const [pressed, setPressed] = useState(false);
-  const [bits, setBits] = useState<Bit[]>([]);
 
-  const mouse = useRef<Vec>({ x: -100, y: -100 });
-  const eased = useRef<Vec>({ x: -100, y: -100 });
-  const trailPositions = useRef<Vec[]>([
-    { x: -100, y: -100 },
-    { x: -100, y: -100 },
-  ]);
-  const magneticEl = useRef<HTMLElement | null>(null);
-  const lastBitSpawn = useRef<Vec>({ x: -9999, y: -9999 });
-  const bitIdRef = useRef(0);
+  // All mutable state lives in refs — never triggers re-renders.
+  const mouse        = useRef<Vec>({ x: -100, y: -100 });
+  const eased        = useRef<Vec>({ x: -100, y: -100 });
+  const trailPos     = useRef<Vec[]>([{ x: -100, y: -100 }, { x: -100, y: -100 }]);
+  const magneticEl   = useRef<HTMLElement | null>(null);
+  const lastSpawn    = useRef<Vec>({ x: -9999, y: -9999 });
+  const bitCountRef  = useRef(0);
+  const hoveringRef  = useRef(false);
+  const pressedRef   = useRef(false);
+  const scaleRef     = useRef(1);        // current lerped scale for press effect
 
+  // ── Mouse / keyboard event listeners ──────────────────────────
   useEffect(() => {
-    const isFinePointer = window.matchMedia("(pointer: fine)").matches;
-    if (!isFinePointer) return;
+    if (!window.matchMedia("(pointer: fine)").matches) return;
 
     setEnabled(true);
     document.documentElement.classList.add("custom-cursor-active");
+
+    function spawnBit(cx: number, cy: number) {
+      const container = bitsRef.current;
+      if (!container || bitCountRef.current >= MAX_BITS) return;
+
+      const char = Math.random() > 0.5 ? "1" : "0";
+      const jx   = cx + (Math.random() - 0.5) * 20;
+      const jy   = cy + (Math.random() - 0.5) * 20;
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "fixed left-0 top-0 pointer-events-none";
+      wrapper.style.transform = `translate3d(${jx}px,${jy}px,0) translate(-50%,-50%)`;
+
+      const span = document.createElement("span");
+      span.className = "block select-none font-mono text-[10px] font-medium text-[#FF1F1F] animate-bit-fade";
+      span.style.textShadow = "0 0 6px rgba(255,31,31,0.7)";
+      span.textContent = char;
+
+      wrapper.appendChild(span);
+      container.appendChild(wrapper);
+      bitCountRef.current++;
+
+      window.setTimeout(() => {
+        container.contains(wrapper) && container.removeChild(wrapper);
+        bitCountRef.current = Math.max(0, bitCountRef.current - 1);
+      }, BIT_LIFETIME);
+    }
 
     const handleMove = (e: MouseEvent) => {
       mouse.current.x = e.clientX;
       mouse.current.y = e.clientY;
 
+      // Magnetic pull
       const magnet = magneticEl.current;
       if (magnet) {
-        const rect = magnet.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height / 2;
-        const dx = (e.clientX - cx) * 0.3;
-        const dy = (e.clientY - cy) * 0.3;
-        magnet.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
+        const r  = magnet.getBoundingClientRect();
+        const dx = (e.clientX - (r.left + r.width  / 2)) * 0.3;
+        const dy = (e.clientY - (r.top  + r.height / 2)) * 0.3;
+        magnet.style.transform = `translate3d(${dx}px,${dy}px,0)`;
       }
 
-      const dx = e.clientX - lastBitSpawn.current.x;
-      const dy = e.clientY - lastBitSpawn.current.y;
-      if (dx * dx + dy * dy > BIT_SPAWN_DISTANCE * BIT_SPAWN_DISTANCE) {
-        lastBitSpawn.current = { x: e.clientX, y: e.clientY };
-        const id = bitIdRef.current++;
-        const char: "0" | "1" = Math.random() > 0.5 ? "1" : "0";
-        const jitterX = e.clientX + (Math.random() - 0.5) * 20;
-        const jitterY = e.clientY + (Math.random() - 0.5) * 20;
-        setBits((prev) => {
-          const next = [...prev, { id, x: jitterX, y: jitterY, char, born: performance.now() }];
-          return next.length > MAX_BITS ? next.slice(next.length - MAX_BITS) : next;
-        });
-        window.setTimeout(() => {
-          setBits((prev) => prev.filter((b) => b.id !== id));
-        }, BIT_LIFETIME);
+      // Bit spawn (squared-distance check — no sqrt)
+      const sdx = e.clientX - lastSpawn.current.x;
+      const sdy = e.clientY - lastSpawn.current.y;
+      if (sdx * sdx + sdy * sdy > BIT_SPAWN_DISTANCE_SQ) {
+        lastSpawn.current = { x: e.clientX, y: e.clientY };
+        spawnBit(e.clientX, e.clientY);
       }
     };
 
-    const handleDown = () => setPressed(true);
-    const handleUp = () => setPressed(false);
-    const handleLeaveWindow = () => {
-      mouse.current.x = -100;
-      mouse.current.y = -100;
-    };
+    const handleDown = () => { pressedRef.current = true; };
+    const handleUp   = () => { pressedRef.current = false; };
+    const handleOut  = () => { mouse.current.x = -100; mouse.current.y = -100; };
 
-    window.addEventListener("mousemove", handleMove, { passive: true });
-    window.addEventListener("mousedown", handleDown);
-    window.addEventListener("mouseup", handleUp);
-    document.addEventListener("mouseleave", handleLeaveWindow);
+    window.addEventListener("mousemove",   handleMove,     { passive: true });
+    window.addEventListener("mousedown",   handleDown);
+    window.addEventListener("mouseup",     handleUp);
+    document.addEventListener("mouseleave", handleOut);
 
     return () => {
-      window.removeEventListener("mousemove", handleMove);
-      window.removeEventListener("mousedown", handleDown);
-      window.removeEventListener("mouseup", handleUp);
-      document.removeEventListener("mouseleave", handleLeaveWindow);
+      window.removeEventListener("mousemove",   handleMove);
+      window.removeEventListener("mousedown",   handleDown);
+      window.removeEventListener("mouseup",     handleUp);
+      document.removeEventListener("mouseleave", handleOut);
       document.documentElement.classList.remove("custom-cursor-active");
     };
   }, []);
 
+  // ── Hover / magnetic detection ─────────────────────────────────
   useEffect(() => {
     if (!enabled) return;
 
     const handleOver = (e: Event) => {
       const target = e.target as HTMLElement;
-      setHovering(!!target.closest(HOVER_SELECTOR));
+      const nowHovering = !!target.closest(HOVER_SELECTOR);
+
+      if (nowHovering !== hoveringRef.current) {
+        hoveringRef.current = nowHovering;
+
+        // Ring: use scale rather than width/height for compositor-only change
+        const ring = ringRef.current;
+        if (ring) {
+          ring.style.transform = ringRef.current!.style.transform; // keep translate
+          ring.style.opacity   = nowHovering ? "1" : "0";
+          ring.style.setProperty("--ring-scale", nowHovering ? "1" : "0");
+        }
+
+        // Cursor SVG glow — SVGElement has .style at runtime; cast via unknown to satisfy TS
+        const svg = cursorRef.current?.querySelector("svg");
+        if (svg) {
+          (svg as unknown as HTMLElement).style.filter = nowHovering
+            ? "drop-shadow(0 0 9px rgba(255,31,31,0.75)) drop-shadow(0 0 3px rgba(255,31,31,0.9))"
+            : "drop-shadow(0 0 4px rgba(255,31,31,0.5))";
+        }
+      }
 
       const magnetic = target.closest(MAGNETIC_SELECTOR) as HTMLElement | null;
       if (magnetic && magneticEl.current !== magnetic) {
@@ -132,52 +157,60 @@ export function CustomCursor() {
       const target = e.target as HTMLElement;
       const magnetic = target.closest(MAGNETIC_SELECTOR) as HTMLElement | null;
       if (magnetic) {
-        magnetic.style.transition = "transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)";
-        magnetic.style.transform = "translate3d(0, 0, 0)";
+        magnetic.style.transition = "transform 0.4s cubic-bezier(0.25,1,0.5,1)";
+        magnetic.style.transform  = "translate3d(0,0,0)";
         if (magneticEl.current === magnetic) magneticEl.current = null;
       }
     };
 
     document.addEventListener("mouseover", handleOver);
-    document.addEventListener("mouseout", handleOut);
+    document.addEventListener("mouseout",  handleOut);
     return () => {
       document.removeEventListener("mouseover", handleOver);
-      document.removeEventListener("mouseout", handleOut);
+      document.removeEventListener("mouseout",  handleOut);
     };
   }, [enabled]);
 
+  // ── rAF animation loop ─────────────────────────────────────────
   useEffect(() => {
     if (!enabled) return;
 
     let raf = 0;
-    const ease = 0.22;
+    const ease      = 0.22;
     const trailEase = 0.4;
+    const SCALE_EASE = 0.18;
 
     const tick = () => {
+      // Lerp eased cursor position
       eased.current.x += (mouse.current.x - eased.current.x) * ease;
       eased.current.y += (mouse.current.y - eased.current.y) * ease;
 
+      // Lerp scale for press effect (avoids React state re-render)
+      const targetScale = pressedRef.current ? 0.85 : 1;
+      scaleRef.current += (targetScale - scaleRef.current) * SCALE_EASE;
+      const sc = scaleRef.current;
+
       if (cursorRef.current) {
-        cursorRef.current.style.transform = `translate3d(${eased.current.x}px, ${eased.current.y}px, 0)`;
+        // Combine translate + scale in one transform — no React involved
+        cursorRef.current.style.transform =
+          `translate3d(${eased.current.x}px,${eased.current.y}px,0) scale(${sc.toFixed(3)})`;
       }
+
       if (ringRef.current) {
-        ringRef.current.style.transform = `translate3d(${eased.current.x}px, ${eased.current.y}px, 0) translate(-50%, -50%)`;
+        const s = hoveringRef.current ? 1 : 0;
+        ringRef.current.style.transform =
+          `translate3d(${eased.current.x}px,${eased.current.y}px,0) translate(-50%,-50%) scale(${s})`;
       }
 
-      let targetX = eased.current.x;
-      let targetY = eased.current.y;
-
-      trailPositions.current.forEach((pos, i) => {
-        pos.x += (targetX - pos.x) * trailEase;
-        pos.y += (targetY - pos.y) * trailEase;
-
+      // Trail positions
+      let tx = eased.current.x;
+      let ty = eased.current.y;
+      trailPos.current.forEach((pos, i) => {
+        pos.x += (tx - pos.x) * trailEase;
+        pos.y += (ty - pos.y) * trailEase;
         const el = trailRefs.current[i];
-        if (el) {
-          el.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0) translate(-50%, -50%)`;
-        }
-
-        targetX = pos.x;
-        targetY = pos.y;
+        if (el) el.style.transform = `translate3d(${pos.x}px,${pos.y}px,0) translate(-50%,-50%)`;
+        tx = pos.x; ty = pos.y;
       });
 
       raf = requestAnimationFrame(tick);
@@ -191,15 +224,17 @@ export function CustomCursor() {
 
   return (
     <div className="pointer-events-none fixed inset-0 z-[999]" aria-hidden="true">
-      {trailPositions.current.map((_, i) => (
+      {/* Bit particle container — populated imperatively (no React state) */}
+      <div ref={bitsRef} className="pointer-events-none fixed inset-0" />
+
+      {/* Trail dots */}
+      {trailPos.current.map((_, i) => (
         <div
           key={i}
-          ref={(el) => {
-            trailRefs.current[i] = el;
-          }}
+          ref={(el) => { trailRefs.current[i] = el; }}
           className="fixed left-0 top-0 rounded-full bg-[#FF1F1F]"
           style={{
-            width: 3 - i * 0.8,
+            width:  3 - i * 0.8,
             height: 3 - i * 0.8,
             opacity: 0.35 - i * 0.12,
             willChange: "transform",
@@ -207,39 +242,29 @@ export function CustomCursor() {
         />
       ))}
 
-      {bits.map((bit) => (
-        <div
-          key={bit.id}
-          className="fixed left-0 top-0"
-          style={{ transform: `translate3d(${bit.x}px, ${bit.y}px, 0) translate(-50%, -50%)` }}
-        >
-          <span
-            className="block select-none font-mono text-[10px] font-medium text-[#FF1F1F] animate-bit-fade"
-            style={{ textShadow: "0 0 6px rgba(255,31,31,0.7)" }}
-          >
-            {bit.char}
-          </span>
-        </div>
-      ))}
-
+      {/* Hover ring — scale-based expand (compositor-only, no layout) */}
       <div
         ref={ringRef}
-        className="fixed left-0 top-0 rounded-full border transition-[width,height,opacity] duration-300 ease-out"
+        className="fixed left-0 top-0"
         style={{
-          width: hovering ? 40 : 0,
-          height: hovering ? 40 : 0,
-          borderColor: "rgba(255,31,31,0.4)",
-          opacity: hovering ? 1 : 0,
+          width: 40,
+          height: 40,
+          marginLeft: -20,
+          marginTop: -20,
+          borderRadius: "50%",
+          border: "1px solid rgba(255,31,31,0.4)",
+          opacity: 0,
+          transform: "translate3d(-100px,-100px,0) translate(-50%,-50%) scale(0)",
+          transition: "opacity 0.3s ease-out",
+          willChange: "transform, opacity",
         }}
       />
 
+      {/* Cursor arrow */}
       <div
         ref={cursorRef}
-        className="fixed left-0 top-0 transition-transform duration-150 ease-out"
-        style={{
-          willChange: "transform",
-          transform: `scale(${pressed ? 0.85 : 1})`,
-        }}
+        className="fixed left-0 top-0"
+        style={{ willChange: "transform" }}
       >
         <svg
           width="20"
@@ -247,9 +272,7 @@ export function CustomCursor() {
           viewBox="0 0 20 20"
           fill="none"
           style={{
-            filter: hovering
-              ? "drop-shadow(0 0 9px rgba(255,31,31,0.75)) drop-shadow(0 0 3px rgba(255,31,31,0.9))"
-              : "drop-shadow(0 0 4px rgba(255,31,31,0.5))",
+            filter: "drop-shadow(0 0 4px rgba(255,31,31,0.5))",
             transition: "filter 0.25s ease-out",
           }}
         >

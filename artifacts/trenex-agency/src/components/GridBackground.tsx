@@ -18,9 +18,14 @@ export function GridBackground() {
     window.addEventListener("scroll", onScroll, { passive: true });
 
     const tick = () => {
-      currentY.current += (scrollRef.current * 0.12 - currentY.current) * 0.08;
-      if (innerRef.current) {
-        innerRef.current.style.transform = `translateY(${currentY.current}px)`;
+      const next = currentY.current + (scrollRef.current * 0.12 - currentY.current) * 0.08;
+      // Skip DOM write when the change is sub-pixel — avoids unnecessary
+      // style mutations and compositor layer invalidation while idle.
+      if (Math.abs(next - currentY.current) > 0.05) {
+        currentY.current = next;
+        if (innerRef.current) {
+          innerRef.current.style.transform = `translateY(${next.toFixed(2)}px)`;
+        }
       }
       rafRef.current = requestAnimationFrame(tick);
     };

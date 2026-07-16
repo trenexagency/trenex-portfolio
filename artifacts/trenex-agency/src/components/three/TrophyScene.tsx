@@ -288,12 +288,16 @@ function AtmosphereParticles() {
     const pts = ptsRef.current;
     if (!pts) return;
     const arr = posRef.current;
+    // Use squared-distance comparison — eliminates Math.sqrt() for every particle
+    // each frame (100 sqrt calls → 100 multiply-adds, a significant saving).
+    const MAX_D2 = 6.0 * 6.0;
+    const MIN_D2 = 2.4 * 2.4;
     for (let i = 0; i < COUNT; i++) {
       arr[i * 3]     += velocities[i * 3];
       arr[i * 3 + 1] += velocities[i * 3 + 1];
       arr[i * 3 + 2] += velocities[i * 3 + 2];
-      const d = Math.sqrt(arr[i*3]**2 + arr[i*3+1]**2 + arr[i*3+2]**2);
-      if (d > 6.0 || d < 2.4) {
+      const d2 = arr[i*3]**2 + arr[i*3+1]**2 + arr[i*3+2]**2;
+      if (d2 > MAX_D2 || d2 < MIN_D2) {
         velocities[i*3] *= -1; velocities[i*3+1] *= -1; velocities[i*3+2] *= -1;
       }
     }

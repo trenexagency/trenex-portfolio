@@ -38,9 +38,10 @@ export function AmbientBackground() {
     return () => mql.removeEventListener("change", handleChange);
   }, []);
 
-  const dpr: [number, number] = isSmallScreen ? [1, 1.5] : DPR;
-  const primaryCount = isSmallScreen ? 110 : 220;
-  const secondaryCount = isSmallScreen ? 35 : 70;
+  const dpr: [number, number] = isSmallScreen ? [1, 1] : DPR;
+  // Reduce particle counts on mobile — smaller canvas + fewer GPU draws
+  const primaryCount   = isSmallScreen ? 80  : 220;
+  const secondaryCount = isSmallScreen ? 25  : 70;
 
   return (
     <div className="pointer-events-none fixed inset-0 z-0 bg-[#050505]">

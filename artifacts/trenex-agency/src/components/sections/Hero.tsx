@@ -19,65 +19,40 @@ export function Hero() {
     const section = sectionRef.current;
     if (!section) return;
 
-    const isFinePointer = window.matchMedia("(pointer: fine)").matches;
-    if (!isFinePointer) return;
+    if (!window.matchMedia("(pointer: fine)").matches) return;
+
+    // gsap.quickTo() creates a reusable tween function — calling it on every
+    // pointermove only updates the target value instead of spawning a new
+    // tween each time, which was the main perf cost of the previous approach.
+    const qFarX  = gsap.quickTo(farLayerRef.current,      "x", { duration: 1.8, ease: "power3.out" });
+    const qFarY  = gsap.quickTo(farLayerRef.current,      "y", { duration: 1.8, ease: "power3.out" });
+    const qMidX  = gsap.quickTo(midLayerRef.current,      "x", { duration: 1.4, ease: "power3.out" });
+    const qMidY  = gsap.quickTo(midLayerRef.current,      "y", { duration: 1.4, ease: "power3.out" });
+    const qPFarX = gsap.quickTo(particlesFarRef.current,  "x", { duration: 1.9, ease: "power3.out" });
+    const qPFarY = gsap.quickTo(particlesFarRef.current,  "y", { duration: 1.9, ease: "power3.out" });
+    const qPMidX = gsap.quickTo(particlesMidRef.current,  "x", { duration: 1.5, ease: "power3.out" });
+    const qPMidY = gsap.quickTo(particlesMidRef.current,  "y", { duration: 1.5, ease: "power3.out" });
+    const qPNrX  = gsap.quickTo(particlesNearRef.current, "x", { duration: 1.1, ease: "power3.out" });
+    const qPNrY  = gsap.quickTo(particlesNearRef.current, "y", { duration: 1.1, ease: "power3.out" });
+    const qGlowX = gsap.quickTo(glowRef.current,          "x", { duration: 1.1, ease: "power3.out" });
+    const qGlowY = gsap.quickTo(glowRef.current,          "y", { duration: 1.1, ease: "power3.out" });
+    const qHeadX = gsap.quickTo(headlineRef.current,      "x", { duration: 1.2, ease: "power3.out" });
+    const qHeadY = gsap.quickTo(headlineRef.current,      "y", { duration: 1.2, ease: "power3.out" });
 
     const handlePointerMove = (e: PointerEvent) => {
-      const { innerWidth, innerHeight } = window;
-      const x = (e.clientX / innerWidth - 0.5) * 2;
-      const y = (e.clientY / innerHeight - 0.5) * 2;
+      const x = (e.clientX / window.innerWidth  - 0.5) * 2;
+      const y = (e.clientY / window.innerHeight - 0.5) * 2;
 
-      gsap.to(farLayerRef.current, {
-        x: x * 18,
-        y: y * 12,
-        duration: 1.8,
-        ease: "power3.out",
-      });
-
-      gsap.to(midLayerRef.current, {
-        x: x * 32,
-        y: y * 20,
-        duration: 1.4,
-        ease: "power3.out",
-      });
-
-      gsap.to(particlesFarRef.current, {
-        x: x * 10,
-        y: y * 6,
-        duration: 1.9,
-        ease: "power3.out",
-      });
-
-      gsap.to(particlesMidRef.current, {
-        x: x * 24,
-        y: y * 16,
-        duration: 1.5,
-        ease: "power3.out",
-      });
-
-      gsap.to(particlesNearRef.current, {
-        x: x * 48,
-        y: y * 30,
-        duration: 1.1,
-        ease: "power3.out",
-      });
-
-      gsap.to(glowRef.current, {
-        x: x * 55,
-        y: y * 35,
-        duration: 1.1,
-        ease: "power3.out",
-      });
-
-      gsap.to(headlineRef.current, {
-        x: x * 14,
-        y: y * 8,
-        duration: 1.2,
-        ease: "power3.out",
-      });
+      qFarX(x * 18);  qFarY(y * 12);
+      qMidX(x * 32);  qMidY(y * 20);
+      qPFarX(x * 10); qPFarY(y * 6);
+      qPMidX(x * 24); qPMidY(y * 16);
+      qPNrX(x * 48);  qPNrY(y * 30);
+      qGlowX(x * 55); qGlowY(y * 35);
+      qHeadX(x * 14); qHeadY(y * 8);
     };
 
-    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointermove", handlePointerMove, { passive: true });
     return () => window.removeEventListener("pointermove", handlePointerMove);
   }, []);
 

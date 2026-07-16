@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import { motion } from "framer-motion";
 
 interface ParticlesProps {
   count?: number;
@@ -21,10 +20,15 @@ interface Particle {
 }
 
 /**
- * Lightweight ambient particle field. Purely decorative — pointer-events
- * disabled so it never interferes with interactive content above it.
- * Supports optional size range / blur / drift to compose multiple depth
- * layers (e.g. small sharp far particles + larger soft-focus near embers).
+ * Lightweight ambient particle field — pure CSS animations.
+ *
+ * Performance vs previous (Framer Motion) version:
+ * - Each particle was a `motion.span` with an infinite Framer Motion
+ *   animation, requiring JS to compute and apply values every frame.
+ * - Now each particle is a plain `<span>` driven by a CSS @keyframes
+ *   animation; the browser compositor handles it with zero JS overhead.
+ * - For 100 particles in the hero alone this eliminates ~100 Framer
+ *   Motion animators running concurrently.
  */
 export function Particles({
   count = 40,
@@ -45,7 +49,8 @@ export function Particles({
         opacity: 0.2 + Math.random() * 0.5,
         driftX: (Math.random() - 0.5) * drift,
       })),
-    [count, sizeRange, drift],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [count, sizeRange[0], sizeRange[1], drift],
   );
 
   return (
@@ -54,7 +59,7 @@ export function Particles({
       style={blurPx ? { filter: `blur(${blurPx}px)` } : undefined}
     >
       {particles.map((p) => (
-        <motion.span
+        <span
           key={p.id}
           className="absolute rounded-full bg-[#FF1F1F]"
           style={{
@@ -63,19 +68,17 @@ export function Particles({
             width: p.size,
             height: p.size,
             boxShadow: "0 0 6px 1px rgba(255,31,31,0.6)",
-          }}
-          initial={{ opacity: 0, y: 0, x: 0 }}
-          animate={{
-            opacity: [0, p.opacity, 0],
-            y: [-10, -60],
-            x: [0, p.driftX],
-          }}
-          transition={{
-            duration: p.duration,
-            delay: p.delay,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+            // CSS custom properties feed the keyframe — per-particle values
+            // without any JS involvement after mount.
+            "--particle-opacity": p.opacity,
+            "--particle-drift": `${p.driftX}px`,
+            animationName: "particle-rise",
+            animationDuration: `${p.duration}s`,
+            animationDelay: `${p.delay}s`,
+            animationTimingFunction: "ease-in-out",
+            animationIterationCount: "infinite",
+            animationFillMode: "both",
+          } as React.CSSProperties}
         />
       ))}
     </div>

@@ -15,10 +15,10 @@ export function Services() {
     <motion.section
       id="services"
       className="relative w-full overflow-hidden bg-[#050505]/75 px-5 py-20 sm:px-6 sm:py-28 md:py-36"
-      initial={{ opacity: 0, filter: "blur(8px)" }}
-      whileInView={{ opacity: 1, filter: "blur(0px)" }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
       viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 1.1, ease: "easeOut" }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
     >
       <SectionAmbience variant="services" />
 

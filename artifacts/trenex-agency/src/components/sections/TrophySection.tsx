@@ -28,10 +28,10 @@ export function TrophySection() {
       ref={sectionRef}
       id="signature"
       className="relative w-full overflow-hidden bg-[#050505]/75 px-5 py-12 sm:px-6 sm:py-16"
-      initial={{ opacity: 0, filter: "blur(8px)" }}
-      whileInView={{ opacity: 1, filter: "blur(0px)" }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
       viewport={{ once: true, amount: 0.08 }}
-      transition={{ duration: 1.1, ease: "easeOut" }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
     >
       <SectionAmbience variant="signature" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#FF1F1F]/20 to-transparent" />

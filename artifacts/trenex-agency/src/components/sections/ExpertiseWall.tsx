@@ -75,14 +75,15 @@ function ToolCard({ tool, index }: ToolCardProps) {
       style={{ perspective: 900 }}
       className="group relative"
     >
-      <motion.div
-        animate={{ y: [0, -6, 0] }}
-        transition={{
-          duration: 3 + (index % 4) * 0.3,
-          repeat: Infinity,
-          repeatType: "mirror",
-          ease: "easeInOut",
-          delay: (index % 5) * 0.2,
+      {/* Pure CSS float — replaces Framer Motion repeat:Infinity to cut JS per-frame cost */}
+      <div
+        style={{
+          animationName: "tool-float",
+          animationDuration: `${3 + (index % 4) * 0.3}s`,
+          animationDelay: `${(index % 5) * 0.2}s`,
+          animationTimingFunction: "ease-in-out",
+          animationIterationCount: "infinite",
+          animationDirection: "alternate",
         }}
       >
         <motion.div
@@ -139,7 +140,7 @@ function ToolCard({ tool, index }: ToolCardProps) {
             </span>
           </div>
         </motion.div>
-      </motion.div>
+      </div>
     </motion.div>
   );
 }
@@ -149,10 +150,10 @@ export function ExpertiseWall() {
     <motion.section
       id="expertise"
       className="relative w-full overflow-hidden bg-[#050505]/75 px-5 py-20 sm:px-6 sm:py-28 md:py-32"
-      initial={{ opacity: 0, filter: "blur(8px)" }}
-      whileInView={{ opacity: 1, filter: "blur(0px)" }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
       viewport={{ once: true, amount: 0.1 }}
-      transition={{ duration: 1.1, ease: "easeOut" }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
     >
       <SectionAmbience variant="expertise" />
 

@@ -477,6 +477,25 @@ html.custom-cursor-active * {
     animation: grid-glow-pulse 4s ease-in-out infinite;
   }
 
+  /* ── Particle component — CSS-driven ambient rise (replaces Framer Motion) ──
+     Each particle reads per-element CSS custom properties for opacity peak and
+     horizontal drift, so a single keyframe drives any number of particles
+     without JS involvement after mount. Translate-only = compositor layer. */
+  @keyframes particle-rise {
+    0%   { opacity: 0;                              transform: translate3d(0, -10px, 0); }
+    20%  { opacity: var(--particle-opacity, 0.45); }
+    80%  { opacity: var(--particle-opacity, 0.45); }
+    100% { opacity: 0;                              transform: translate3d(var(--particle-drift, 0px), -60px, 0); }
+  }
+
+  /* ── ExpertiseWall tool-card float — CSS replaces Framer Motion infinite loop ──
+     Running 14 concurrent Framer Motion repeat:Infinity animations burns JS
+     budget; a CSS keyframe runs on the compositor with zero JS per frame. */
+  @keyframes tool-float {
+    from { transform: translateY(0px); }
+    to   { transform: translateY(-6px); }
+  }
+
   /* Slow, gentle vertical drift for the hero software badges.
      Translate-only: no scale/rotate bounce, no opacity flashing. */
   @keyframes sf-float {
