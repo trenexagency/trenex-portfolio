@@ -13,7 +13,7 @@ interface Project {
   name: string;
   url: string;
   image: string; /* filename inside public/portfolio/web-projects/ */
-  platform: "Shopify" | "WordPress";
+  platform: "Shopify" | "WordPress" | "Custom";
 }
 
 const SHOPIFY_PROJECTS: Project[] = [
@@ -76,9 +76,19 @@ const WP_PROJECTS: Project[] = [
   },
 ];
 
+const CUSTOM_PROJECTS: Project[] = [
+  {
+    name: "Ummati Quran Academy",
+    url: "https://ummatiquranacadmey.blogspot.com/",
+    image: "ummati-quran-academy.webp",
+    platform: "Custom",
+  },
+];
+
 const PLATFORM_COLORS: Record<Project["platform"], string> = {
   Shopify: "border-[#96bf48]/40 bg-[#96bf48]/10 text-[#96bf48]",
   WordPress: "border-[#21759b]/40 bg-[#21759b]/10 text-[#6fb8d8]",
+  Custom: "border-[#a78bfa]/40 bg-[#a78bfa]/10 text-[#c4b5fd]",
 };
 
 function ProjectCard({ project, delay }: { project: Project; delay: number }) {
@@ -198,6 +208,12 @@ export function WebDevPortfolio() {
           label="Our Work"
           title="WordPress Development"
           projects={WP_PROJECTS}
+          baseDelay={0}
+        />
+        <PortfolioSection
+          label="Our Work"
+          title="Custom Development"
+          projects={CUSTOM_PROJECTS}
           baseDelay={0}
         />
       </div>
