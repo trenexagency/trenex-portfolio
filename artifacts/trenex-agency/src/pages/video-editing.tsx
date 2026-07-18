@@ -239,7 +239,7 @@ export default function VideoEditingPage() {
                 <div className="h-px flex-1 bg-gradient-to-r from-[#eb1b24]/50 to-transparent" />
               </div>
               <p className="max-w-xl text-sm text-white/50 sm:text-base">
-                Click any Short to watch on YouTube. Tap to play on mobile.
+                Real client video edits optimized for reach, retention and engagement.
               </p>
             </motion.div>
 
