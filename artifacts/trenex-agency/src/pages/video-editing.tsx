@@ -10,7 +10,7 @@ import { CustomCursor } from "@/components/CustomCursor";
 import { HeroBackground } from "@/components/HeroBackground";
 import { FloatingVideoSoftwareBadges } from "@/components/FloatingVideoSoftwareBadges";
 import { VideoEditingIntro } from "@/components/VideoEditingIntro";
-import { YOUTUBE_SHORTS, type YouTubeShort } from "@/data/video-work";
+import { YOUTUBE_SHORTS, LONG_FORM_VIDEOS, type YouTubeShort, type LongFormVideo } from "@/data/video-work";
 import { motion as m, type Variants } from "framer-motion";
 
 /* ── Animation presets ────────────────────────────────── */
@@ -139,6 +139,80 @@ const ShortCard = memo(function ShortCard({
 });
 
 /* ══════════════════════════════════════════════════════
+   LONG FORM CARD
+   Landscape 16:9 card — wider than Shorts for long-form.
+   Same hover effects, lazy loading, and fallback chain.
+   Click → opens YouTube video in new tab.
+══════════════════════════════════════════════════════ */
+const LongFormCard = memo(function LongFormCard({
+  video,
+  index,
+}: {
+  video: LongFormVideo;
+  index: number;
+}) {
+  const hasCustom = Boolean(video.customThumb);
+  const [imgState, setImgState] = useState<0 | 1 | 2>(0);
+
+  const handleError = useCallback(() => {
+    if (hasCustom) { setImgState(2); return; }
+    setImgState((s) => (s < 2 ? ((s + 1) as 1 | 2) : 2));
+  }, [hasCustom]);
+
+  const src =
+    imgState === 2 ? null
+    : hasCustom     ? video.customThumb!
+    : imgState === 0 ? thumbUrl(video.id, "maxresdefault")
+    : thumbUrl(video.id, "hqdefault");
+
+  return (
+    <motion.a
+      href={video.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Watch video ${index + 1} on YouTube`}
+      initial={{ opacity: 0, y: 22 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.5, delay: index * 0.08, ease: "easeOut" }}
+      className="group relative block aspect-video cursor-pointer overflow-hidden rounded-xl border border-white/8 bg-[#0a0a0a] transition-all duration-500 hover:border-[#eb1b24]/50 hover:shadow-[0_18px_48px_-16px_rgba(235,27,36,0.45)] focus:outline-none focus-visible:border-[#eb1b24]/60"
+    >
+      {src ? (
+        <img
+          src={src}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          onError={handleError}
+          className="h-full w-full object-cover object-center transition-transform duration-700 ease-out will-change-transform group-hover:scale-105"
+          style={{ display: "block" }}
+        />
+      ) : (
+        <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-gradient-to-b from-[#0f0f0f] to-[#050505]">
+          <svg viewBox="0 0 24 24" fill="none" className="h-10 w-10 text-[#eb1b24]/60" aria-hidden>
+            <path d="M10 15l5.19-3L10 9v6zm11.56-7.83c.21.77.35 1.8.44 3.07L22 12l-.01 1.76c-.09 1.27-.23 2.3-.43 3.07-.39 1.42-1.55 2.55-3.01 2.93-.82.21-2.3.35-4.55.43L12 20l-1.99-.01c-2.24-.08-3.72-.22-4.54-.43-1.46-.38-2.62-1.51-3.01-2.93-.21-.77-.35-1.8-.44-3.07L2 12l.01-1.76c.09-1.27.23-2.3.43-3.07.39-1.42 1.55-2.55 3.01-2.93.82-.21 2.3-.35 4.55-.43L12 4l1.99.01c2.24.08 3.72.22 4.54.43 1.46.38 2.62 1.51 3.03 2.73z" fill="currentColor" />
+          </svg>
+          <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/25">Video {index + 1}</span>
+        </div>
+      )}
+
+      {/* Gradient scrim */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050505]/70 via-[#050505]/10 to-transparent" />
+
+      {/* Red glow wash on hover */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#eb1b24]/0 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-hover:from-[#eb1b24]/20" />
+
+      {/* Play button */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <span className="flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white opacity-80 backdrop-blur-sm transition-all duration-300 group-hover:scale-110 group-hover:border-[#eb1b24]/70 group-hover:bg-[#eb1b24]/20 group-hover:opacity-100">
+          <Play className="h-5 w-5 fill-current" style={{ marginLeft: "2px" }} />
+        </span>
+      </div>
+    </motion.a>
+  );
+});
+
+/* ══════════════════════════════════════════════════════
    SHORTS GRID
    Responsive portrait grid — 2 cols mobile, 3 tablet,
    4 desktop, 5 wide. Matches the quality of the Graphic
@@ -247,7 +321,53 @@ export default function VideoEditingPage() {
           </div>
         </section>
 
-        {/* ══ 3. CONTACT CTA ═══════════════════════════════════ */}
+        {/* ══ 3. LONG FORM CONTENT ═════════════════════════════ */}
+        <section
+          id="long-form"
+          className="relative w-full scroll-mt-24 overflow-hidden bg-[#050505] px-5 py-16 sm:scroll-mt-28 sm:px-6 sm:py-20"
+        >
+          <div
+            className="pointer-events-none absolute left-1/2 top-0 h-[600px] w-[900px] -translate-x-1/2 rounded-full"
+            style={{
+              background:
+                "radial-gradient(ellipse 65% 50% at 50% 0%, rgba(235,27,36,0.065), transparent 70%)",
+              filter: "blur(90px)",
+            }}
+          />
+
+          <div className="relative z-10 mx-auto max-w-6xl">
+            {/* Section header */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 0.7, ease: "easeOut" }}
+              className="mb-10 flex flex-col items-start gap-3 sm:mb-12"
+            >
+              <span className="font-mono text-xs uppercase tracking-[0.4em] text-[#eb1b24]">
+                Real Client Work
+              </span>
+              <div className="flex w-full items-center gap-4">
+                <h2 className="whitespace-nowrap text-2xl font-semibold uppercase tracking-tight text-white sm:text-3xl md:text-4xl">
+                  Long Form Content
+                </h2>
+                <div className="h-px flex-1 bg-gradient-to-r from-[#eb1b24]/50 to-transparent" />
+              </div>
+              <p className="max-w-xl text-sm text-white/50 sm:text-base">
+                Professional long-form video editing projects.
+              </p>
+            </motion.div>
+
+            {/* 2-col desktop / 1-col mobile grid */}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
+              {LONG_FORM_VIDEOS.map((video, i) => (
+                <LongFormCard key={video.id} video={video} index={i} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ══ 4. CONTACT CTA ═══════════════════════════════════ */}
         <section
           id="contact"
           className="relative w-full scroll-mt-24 overflow-hidden bg-[#050505] px-5 py-20 text-center sm:scroll-mt-28 sm:px-6 sm:py-24"

@@ -29,6 +29,21 @@ export const YOUTUBE_SHORTS: YouTubeShort[] = [
   { id: "mYMvvOAWevQ", url: "https://youtube.com/shorts/mYMvvOAWevQ" },
 ];
 
+/* ─────────────────────────────────────────────────────────
+   Long-Form Content
+───────────────────────────────────────────────────────── */
+export interface LongFormVideo {
+  id: string;
+  url: string;
+  /** Optional custom thumbnail override */
+  customThumb?: string;
+}
+
+export const LONG_FORM_VIDEOS: LongFormVideo[] = [
+  { id: "61Nz3BDpOrQ", url: "https://youtu.be/61Nz3BDpOrQ" },
+  { id: "uBKw3_OFNu4", url: "https://youtu.be/uBKw3_OFNu4" },
+];
+
 /* Legacy type kept for VideoLightbox — no longer used by the video page */
 export interface VideoWorkItem {
   youtubeId: string;
