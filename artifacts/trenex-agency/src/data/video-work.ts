@@ -41,7 +41,11 @@ export interface LongFormVideo {
 
 export const LONG_FORM_VIDEOS: LongFormVideo[] = [
   { id: "61Nz3BDpOrQ", url: "https://youtu.be/61Nz3BDpOrQ" },
-  { id: "uBKw3_OFNu4", url: "https://youtu.be/uBKw3_OFNu4" },
+  {
+    id: "uBKw3_OFNu4",
+    url: "https://youtu.be/uBKw3_OFNu4",
+    customThumb: `${import.meta.env.BASE_URL}portfolio/shorts-thumbs/uBKw3_OFNu4.jpg`,
+  },
 ];
 
 /* Legacy type kept for VideoLightbox — no longer used by the video page */
