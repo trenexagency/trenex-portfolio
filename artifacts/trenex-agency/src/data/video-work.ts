@@ -1,44 +1,36 @@
 /* ─────────────────────────────────────────────────────────
-   Trenex Video Editing Portfolio Data
-   Three fixed categories, each a pure video reel gallery.
-   Swap in real project reels by replacing `youtubeId` with
-   your own YouTube video ID — no page redesign needed.
+   Trenex Video Editing — YouTube Shorts Portfolio
+   Add or remove Shorts by editing this array only.
+   `id`  → YouTube video ID (the part after /shorts/)
+   `url` → full YouTube Shorts URL (opens in new tab)
 ───────────────────────────────────────────────────────── */
 
+export interface YouTubeShort {
+  id: string;
+  url: string;
+}
+
+export const YOUTUBE_SHORTS: YouTubeShort[] = [
+  { id: "lD1Zz9hzKuQ", url: "https://youtube.com/shorts/lD1Zz9hzKuQ" },
+  { id: "CK8wAcglKpI", url: "https://youtube.com/shorts/CK8wAcglKpI" },
+  { id: "1ZB5w6jFaFI", url: "https://youtube.com/shorts/1ZB5w6jFaFI" },
+  { id: "QFEJbQrKnn0", url: "https://youtube.com/shorts/QFEJbQrKnn0" },
+  { id: "6S7o5XwwsME", url: "https://youtube.com/shorts/6S7o5XwwsME" },
+  { id: "j0OSbts9OG4", url: "https://youtube.com/shorts/j0OSbts9OG4" },
+  { id: "AbTz5WrZhRo", url: "https://youtube.com/shorts/AbTz5WrZhRo" },
+  { id: "wPmmv7ugJgg", url: "https://youtube.com/shorts/wPmmv7ugJgg" },
+  { id: "xCKgWmAiriU", url: "https://youtube.com/shorts/xCKgWmAiriU" },
+  { id: "mYMvvOAWevQ", url: "https://youtube.com/shorts/mYMvvOAWevQ" },
+];
+
+/* Legacy type kept for VideoLightbox — no longer used by the video page */
 export interface VideoWorkItem {
   youtubeId: string;
   title: string;
 }
-
 export interface VideoWorkCategory {
   id: string;
   title: string;
   items: VideoWorkItem[];
 }
-
-export const VIDEO_WORK_CATEGORIES: VideoWorkCategory[] = [
-  {
-    id: "commercial-editing",
-    title: "Commercial Editing",
-    items: [
-      { youtubeId: "1CTExL19-8w", title: "TV Commercial Showreel" },
-      { youtubeId: "a27Ek2AFWs4", title: "Video Editor Showreel" },
-    ],
-  },
-  {
-    id: "motion-graphics",
-    title: "Motion Graphics",
-    items: [
-      { youtubeId: "rKr7cdwhiA0", title: "Motion Graphics Showreel" },
-      { youtubeId: "D3RK5Zy7WBE", title: "Animation & Motion Reel" },
-    ],
-  },
-  {
-    id: "color-grading",
-    title: "Color Grading",
-    items: [
-      { youtubeId: "ubF4_Jda5zA", title: "Cinematic Color Grade Reel" },
-      { youtubeId: "bq4yQu32BOw", title: "Color Grading Breakdown" },
-    ],
-  },
-];
+export const VIDEO_WORK_CATEGORIES: VideoWorkCategory[] = [];
