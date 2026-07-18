@@ -45,17 +45,26 @@ const ShortCard = memo(function ShortCard({
   short: YouTubeShort;
   index: number;
 }) {
-  // 0 = try maxres, 1 = try hqdefault, 2 = show placeholder
+  // Custom thumb provided → use it directly (no YT CDN fallback chain needed)
+  const hasCustom = Boolean(short.customThumb);
+
+  // 0 = try maxres (or custom), 1 = try hqdefault, 2 = show placeholder
   const [imgState, setImgState] = useState<0 | 1 | 2>(0);
 
   const handleError = useCallback(() => {
-    setImgState((s) => (s < 2 ? ((s + 1) as 1 | 2) : 2));
-  }, []);
+    if (hasCustom) {
+      // Custom image failed → show placeholder
+      setImgState(2);
+    } else {
+      setImgState((s) => (s < 2 ? ((s + 1) as 1 | 2) : 2));
+    }
+  }, [hasCustom]);
 
   const src =
-    imgState === 0 ? thumbUrl(short.id, "maxresdefault")
-    : imgState === 1 ? thumbUrl(short.id, "hqdefault")
-    : null;
+    imgState === 2 ? null
+    : hasCustom     ? short.customThumb!
+    : imgState === 0 ? thumbUrl(short.id, "maxresdefault")
+    : thumbUrl(short.id, "hqdefault");
 
   return (
     <motion.a

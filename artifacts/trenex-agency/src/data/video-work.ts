@@ -8,11 +8,17 @@
 export interface YouTubeShort {
   id: string;
   url: string;
+  /** Optional custom thumbnail — used when YouTube's CDN serves a broken/grey image */
+  customThumb?: string;
 }
 
 export const YOUTUBE_SHORTS: YouTubeShort[] = [
   { id: "lD1Zz9hzKuQ", url: "https://youtube.com/shorts/lD1Zz9hzKuQ" },
-  { id: "CK8wAcglKpI", url: "https://youtube.com/shorts/CK8wAcglKpI" },
+  {
+    id: "CK8wAcglKpI",
+    url: "https://youtube.com/shorts/CK8wAcglKpI",
+    customThumb: `${import.meta.env.BASE_URL}portfolio/shorts-thumbs/CK8wAcglKpI.png`,
+  },
   { id: "1ZB5w6jFaFI", url: "https://youtube.com/shorts/1ZB5w6jFaFI" },
   { id: "QFEJbQrKnn0", url: "https://youtube.com/shorts/QFEJbQrKnn0" },
   { id: "6S7o5XwwsME", url: "https://youtube.com/shorts/6S7o5XwwsME" },
