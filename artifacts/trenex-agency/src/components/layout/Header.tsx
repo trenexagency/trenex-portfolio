@@ -25,22 +25,19 @@ export function Header() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-4 py-2 sm:px-8 md:px-12 md:py-3 lg:px-16">
-      <a href="#hero" className="group flex items-center gap-2.5 sm:gap-3" data-testid="link-logo">
+      <a href="#hero" className="group flex items-center" data-testid="link-logo">
         <img
           src={logoUrl}
           alt="Trenex Agency"
-          className="h-11 w-11 shrink-0 object-contain transition-transform duration-300 group-hover:scale-105 sm:h-16 sm:w-16 md:h-20 md:w-20"
+          className="h-9 w-9 shrink-0 object-contain transition-transform duration-300 group-hover:scale-105 sm:h-11 sm:w-11"
           style={{
             filter:
-              "drop-shadow(0 0 10px rgba(255,31,31,0.55)) drop-shadow(0 0 26px rgba(255,31,31,0.3))",
+              "drop-shadow(0 0 8px rgba(255,31,31,0.5)) drop-shadow(0 0 20px rgba(255,31,31,0.25))",
             imageRendering: "auto",
           }}
           decoding="async"
           loading="eager"
         />
-        <span className="text-xs font-semibold uppercase tracking-[0.3em] text-white sm:text-sm">
-          Trenex
-        </span>
       </a>
 
       <nav className="hidden items-center gap-8 md:flex lg:gap-10">

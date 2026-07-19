@@ -517,6 +517,14 @@ html.custom-cursor-active * {
   }
   .logo-float { animation: logo-float 7s ease-in-out infinite; will-change: transform; }
 
+  /* ── Hero logo gentle — 3-5px movement only, ultra-slow ── */
+  @keyframes logo-float-gentle {
+    0%   { transform: translateY(0px); }
+    50%  { transform: translateY(-4px); }
+    100% { transform: translateY(0px); }
+  }
+  .logo-float-gentle { animation: logo-float-gentle 8s ease-in-out infinite; will-change: transform; }
+
   /* Hero background: binary rain, light particles, timeline scan beam.
      All translate/opacity only — slow, professional motion, no bounce/spin. */
   @keyframes hero-binary-fade {
