@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Particles } from "@/components/Particles";
-import signatureUrl from "@assets/Signature_1784486516004.svg";
+import { HeroVisual } from "@/components/HeroVisual";
 
 /* ─── Animation helpers ─────────────────────────────────────────── */
 const fadeUp = (delay: number) => ({
@@ -110,51 +110,8 @@ export function Hero() {
           </motion.div>
         </div>
 
-        {/* ── RIGHT: Signature T ───────────────────────────────── */}
-        <motion.div
-          {...fadeIn(0.3)}
-          className="flex items-center justify-center lg:justify-end"
-        >
-          {/* 3D-styled container */}
-          <div
-            className="logo-float-gentle relative flex items-center justify-center"
-            style={{
-              width: "clamp(280px, 42vw, 520px)",
-              height: "clamp(280px, 42vw, 520px)",
-              /* Subtle perspective tilt for depth feel */
-              transform: "perspective(900px) rotateY(-6deg) rotateX(2deg)",
-            }}
-          >
-            {/* Layered glow — gives the 3D "lit from left" effect */}
-            <div
-              className="absolute inset-[-10%] rounded-full opacity-55 blur-[80px]"
-              style={{ background: "radial-gradient(ellipse at 40% 50%, rgba(255,31,31,0.55) 0%, transparent 65%)" }}
-            />
-            {/* Tighter bright core */}
-            <div
-              className="absolute inset-[20%] rounded-full opacity-40 blur-[40px]"
-              style={{ background: "radial-gradient(circle, rgba(255,80,80,0.6) 0%, transparent 70%)" }}
-            />
-
-            {/* The T — SVG with premium drop-shadow stack */}
-            <img
-              src={signatureUrl}
-              alt="Trenex"
-              className="relative z-10 h-full w-full object-contain"
-              style={{
-                filter: [
-                  "drop-shadow(0 0 12px rgba(255,31,31,0.9))",
-                  "drop-shadow(0 0 40px rgba(255,31,31,0.5))",
-                  "drop-shadow(0 4px 32px rgba(255,31,31,0.25))",
-                  "drop-shadow(0 24px 60px rgba(0,0,0,0.6))",
-                ].join(" "),
-                imageRendering: "auto",
-              }}
-              loading="eager"
-              decoding="async"
-            />
-          </div>
-        </motion.div>
+        {/* ── RIGHT: 3D hero visual ────────────────────────────── */}
+        <HeroVisual />
       </div>
 
       {/* Scroll indicator */}

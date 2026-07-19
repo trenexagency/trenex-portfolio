@@ -525,6 +525,18 @@ html.custom-cursor-active * {
   }
   .logo-float-gentle { animation: logo-float-gentle 8s ease-in-out infinite; will-change: transform; }
 
+  /* ── HUD rings — pure CSS rotate, no JS ── */
+  @keyframes hud-cw {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  @keyframes hud-ccw {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(-360deg); }
+  }
+  .hud-cw  { animation: hud-cw  32s linear infinite; will-change: transform; }
+  .hud-ccw { animation: hud-ccw 52s linear infinite; will-change: transform; }
+
   /* Hero background: binary rain, light particles, timeline scan beam.
      All translate/opacity only — slow, professional motion, no bounce/spin. */
   @keyframes hero-binary-fade {
