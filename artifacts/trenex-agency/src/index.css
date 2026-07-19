@@ -509,6 +509,14 @@ html.custom-cursor-active * {
   .sf-float-e { animation: sf-float 8.5s ease-in-out infinite alternate; animation-delay: -4.5s; }
   .sf-float-f { animation: sf-float 10.5s ease-in-out infinite alternate; animation-delay: -7.5s; }
 
+  /* ── Hero logo — very slow vertical float, no bounce/spin ── */
+  @keyframes logo-float {
+    0%   { transform: translateY(0px); }
+    50%  { transform: translateY(-12px); }
+    100% { transform: translateY(0px); }
+  }
+  .logo-float { animation: logo-float 7s ease-in-out infinite; will-change: transform; }
+
   /* Hero background: binary rain, light particles, timeline scan beam.
      All translate/opacity only — slow, professional motion, no bounce/spin. */
   @keyframes hero-binary-fade {
