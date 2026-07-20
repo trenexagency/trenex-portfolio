@@ -44,8 +44,8 @@ function buildTrophyGeometries(): THREE.BufferGeometry[] {
 function BrandLighting() {
   return (
     <>
-      {/* Darker ambient — more contrast, richer shadows */}
-      <ambientLight intensity={0.18} color={R_DEEP} />
+      {/* Ambient — lifted to keep front faces visibly red */}
+      <ambientLight intensity={0.32} color={R_DEEP} />
 
       {/* Primary key: top-left-front — main face illumination */}
       <directionalLight
@@ -80,10 +80,10 @@ function TrophyMesh() {
    *           Medium-bright red, moderate shininess — the visible face.
    */
   const capMat = useMemo(() => new THREE.MeshPhongMaterial({
-    color:     new THREE.Color("#c21020"),
-    emissive:  new THREE.Color("#1e0002"),
-    specular:  new THREE.Color("#dd2030"),
-    shininess: 42,
+    color:     new THREE.Color("#eb1b24"),   // official Trenex red — 70 % of surface
+    emissive:  new THREE.Color("#3a0004"),   // warm emissive so unlit areas stay red
+    specular:  new THREE.Color("#ff4455"),
+    shininess: 36,
   }), []);
 
   /*
@@ -93,10 +93,10 @@ function TrophyMesh() {
    *           from the key light → automotive / luxury badge look.
    */
   const sideMat = useMemo(() => new THREE.MeshPhongMaterial({
-    color:     new THREE.Color("#3a0406"),
-    emissive:  new THREE.Color("#080001"),
+    color:     new THREE.Color("#7a0c14"),   // dark red — 20 % side/groove surfaces
+    emissive:  new THREE.Color("#180002"),   // near-black red emissive — 10 % shadow depth
     specular:  new THREE.Color("#ff3040"),
-    shininess: 95,
+    shininess: 95,                            // sharp specular keeps bevel edges crisp
   }), []);
 
   /* Thin outer emissive hull — creates the glowing red rim */
