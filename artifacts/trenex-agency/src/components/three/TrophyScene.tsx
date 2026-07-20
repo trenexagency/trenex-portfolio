@@ -16,18 +16,19 @@ function buildTrophyGeometries(): THREE.BufferGeometry[] {
   const loader = new SVGLoader();
   const data   = loader.parse(trophySvgRaw);
   const geos: THREE.BufferGeometry[] = [];
-  const DEPTH = 90;
+  /* Deeper extrusion + sharper bevel for premium depth and edge quality */
+  const DEPTH = 110;
   const SCALE = 1 / 270;
 
   data.paths.forEach((path) => {
     path.toShapes().forEach((shape) => {
       const geo = new THREE.ExtrudeGeometry(shape, {
         depth: DEPTH,
-        bevelEnabled: true,
-        bevelThickness: 7,
-        bevelSize: 5,
-        bevelSegments: 6,
-        curveSegments: 18,
+        bevelEnabled:    true,
+        bevelThickness:  9,
+        bevelSize:       7,
+        bevelSegments:  10,   // smoother bevel curve = cleaner edge highlight
+        curveSegments:  20,
       });
       geo.translate(-540, -540, -(DEPTH / 2));
       geo.applyMatrix4(new THREE.Matrix4().makeScale(1, -1, 1));
@@ -43,65 +44,81 @@ function buildTrophyGeometries(): THREE.BufferGeometry[] {
 function BrandLighting() {
   return (
     <>
-      {/* Very dark ambient — prevents pure-black but keeps drama */}
-      <ambientLight intensity={0.28} color={R_DEEP} />
+      {/* Darker ambient — more contrast, richer shadows */}
+      <ambientLight intensity={0.18} color={R_DEEP} />
 
-      {/* Strong key from top-left-front — creates face-shading depth */}
+      {/* Primary key: top-left-front — main face illumination */}
       <directionalLight
-        position={[-3.5, 5, 4]}
-        intensity={5.5}
+        position={[-2.5, 4.5, 5.5]}
+        intensity={7.5}
         color={R_BRIGHT}
       />
 
-      {/* Softer fill from right-bottom — keeps shadow side visible */}
-      <pointLight position={[4, -1, 3]} intensity={2.0} color={R_MID} distance={16} />
+      {/* Sharp specular highlight from upper-right — catches bevel edges cleanly */}
+      <pointLight position={[3.0, 3.5, 4.5]} intensity={5.0} color={R_BRIGHT} distance={12} />
 
-      {/* Top rim — separates top edge from background */}
-      <pointLight position={[0, 7, -1]} intensity={2.8} color={R_BRIGHT} distance={14} />
+      {/* Reduced fill from right-bottom — keeps shadow side readable but not flat */}
+      <pointLight position={[4, -1, 3]} intensity={1.4} color={R_MID} distance={16} />
 
-      {/* Rear-bottom rim — wraps red around back edges */}
-      <pointLight position={[0, -4, -4]} intensity={3.5} color={R_DARK} distance={13} />
+      {/* Stronger top rim — sharper separation of top edges from background */}
+      <pointLight position={[0, 7, -1]} intensity={3.5} color={R_BRIGHT} distance={14} />
 
-      {/* Inner volumetric glow source — makes center feel illuminated */}
-      <pointLight position={[0, 0, 1.5]} intensity={1.0} color={"#eb1b24"} distance={5} />
+      {/* Rear-bottom rim — wraps deep red around back and bottom edges */}
+      <pointLight position={[0, -4, -4]} intensity={4.0} color={R_DARK} distance={13} />
     </>
   );
 }
 
-/* ─── Trophy mesh — red Phong with red specular ─────────── */
+/* ─── Trophy mesh — two-material split for depth contrast ── */
 function TrophyMesh() {
-  const groupRef    = useRef<THREE.Group>(null);
-  const edgeMatRef  = useRef<THREE.MeshStandardMaterial | null>(null);
-  const geometries  = useMemo(() => buildTrophyGeometries(), []);
+  const groupRef   = useRef<THREE.Group>(null);
+  const edgeMatRef = useRef<THREE.MeshStandardMaterial | null>(null);
+  const geometries = useMemo(() => buildTrophyGeometries(), []);
 
-  /* Phong material — specular is red, so highlights are red not white */
-  const bodyMat = useMemo(() => new THREE.MeshPhongMaterial({
-    color:     new THREE.Color("#eb1b24"),
-    emissive:  new THREE.Color("#3a0004"),
-    specular:  R_BRIGHT,
-    shininess: 28,
+  /*
+   * capMat  → ExtrudeGeometry group 0 (front + back faces)
+   *           Medium-bright red, moderate shininess — the visible face.
+   */
+  const capMat = useMemo(() => new THREE.MeshPhongMaterial({
+    color:     new THREE.Color("#c21020"),
+    emissive:  new THREE.Color("#1e0002"),
+    specular:  new THREE.Color("#dd2030"),
+    shininess: 42,
   }), []);
 
-  /* Thin outer emissive hull — creates the glowing red edge */
+  /*
+   * sideMat → ExtrudeGeometry group 1 (extruded side walls + bevel)
+   *           Very dark maroon base = deep recessed grooves.
+   *           High shininess = bevel edges catch sharp specular highlights
+   *           from the key light → automotive / luxury badge look.
+   */
+  const sideMat = useMemo(() => new THREE.MeshPhongMaterial({
+    color:     new THREE.Color("#3a0406"),
+    emissive:  new THREE.Color("#080001"),
+    specular:  new THREE.Color("#ff3040"),
+    shininess: 95,
+  }), []);
+
+  /* Thin outer emissive hull — creates the glowing red rim */
   const edgeMat = useMemo(() => new THREE.MeshStandardMaterial({
-    color:            new THREE.Color("#000000"),
-    emissive:         new THREE.Color("#eb1b24"),
-    emissiveIntensity: 0.75,
-    transparent:      true,
-    opacity:          0.55,
-    side:             THREE.BackSide,
-    depthWrite:       false,
+    color:             new THREE.Color("#000000"),
+    emissive:          new THREE.Color("#eb1b24"),
+    emissiveIntensity: 0.70,
+    transparent:       true,
+    opacity:           0.50,
+    side:              THREE.BackSide,
+    depthWrite:        false,
   }), []);
 
-  /* Second, wider halo hull */
+  /* Wider soft halo */
   const haloMat = useMemo(() => new THREE.MeshStandardMaterial({
-    color:            new THREE.Color("#000000"),
-    emissive:         new THREE.Color("#cc0f18"),
-    emissiveIntensity: 0.3,
-    transparent:      true,
-    opacity:          0.25,
-    side:             THREE.BackSide,
-    depthWrite:       false,
+    color:             new THREE.Color("#000000"),
+    emissive:          new THREE.Color("#cc0f18"),
+    emissiveIntensity: 0.28,
+    transparent:       true,
+    opacity:           0.22,
+    side:              THREE.BackSide,
+    depthWrite:        false,
   }), []);
 
   useFrame(({ clock }) => {
@@ -112,28 +129,30 @@ function TrophyMesh() {
       groupRef.current.rotation.x = Math.sin(t * 0.21) * 0.028;
     }
 
-    /* Breathing emissive edge glow */
+    /* Breathing edge glow */
     if (edgeMatRef.current) {
-      edgeMatRef.current.emissiveIntensity = 0.65 + Math.sin(t * 1.1) * 0.25;
+      edgeMatRef.current.emissiveIntensity = 0.60 + Math.sin(t * 1.1) * 0.22;
     }
 
-    /* Sync body emissive with edge breathing (subtle) */
-    if (bodyMat) {
-      (bodyMat as THREE.MeshPhongMaterial).emissive.setScalar(
-        0.05 + Math.sin(t * 1.1) * 0.025,
-      );
-    }
+    /* Subtle face emissive breath — only the front face pulses */
+    capMat.emissive.setScalar(0.06 + Math.sin(t * 1.1) * 0.028);
   });
 
+  /* Multi-material array: index matches ExtrudeGeometry group index */
+  const meshMaterials = useMemo(
+    () => [capMat, sideMat] as THREE.Material[],
+    [capMat, sideMat],
+  );
+
   return (
-    <group ref={groupRef} scale={[0.6, 0.6, 0.6]}>
-      {/* ── Main red body ── */}
+    <group ref={groupRef} scale={[0.70, 0.70, 0.70]}>
+      {/* ── Main body — two-material (cap face / side grooves) ── */}
       {geometries.map((geo, i) => (
-        <mesh key={`b${i}`} geometry={geo} material={bodyMat} castShadow={false} />
+        <mesh key={`b${i}`} geometry={geo} material={meshMaterials} castShadow={false} />
       ))}
 
       {/* ── Thin glowing edge hull ── */}
-      <group scale={[1.055, 1.055, 1.055]}>
+      <group scale={[1.048, 1.048, 1.048]}>
         {geometries.map((geo, i) => (
           <mesh
             key={`e${i}`}
@@ -145,7 +164,7 @@ function TrophyMesh() {
       </group>
 
       {/* ── Wider soft halo ── */}
-      <group scale={[1.12, 1.12, 1.12]}>
+      <group scale={[1.10, 1.10, 1.10]}>
         {geometries.map((geo, i) => (
           <mesh key={`h${i}`} geometry={geo} material={haloMat} />
         ))}
