@@ -6,6 +6,11 @@ interface ParticlesProps {
   sizeRange?: [number, number];
   blurPx?: number;
   drift?: number;
+  /**
+   * lowPower — skips the per-particle box-shadow glow.
+   * Pass true on mobile to avoid GPU overdraw from many small radial shadows.
+   */
+  lowPower?: boolean;
 }
 
 interface Particle {
@@ -29,6 +34,11 @@ interface Particle {
  *   animation; the browser compositor handles it with zero JS overhead.
  * - For 100 particles in the hero alone this eliminates ~100 Framer
  *   Motion animators running concurrently.
+ *
+ * Additional mobile optimisations (controlled by props / prefers-reduced-motion):
+ * - Returns null for prefers-reduced-motion users (no animation at all).
+ * - lowPower=true removes the box-shadow glow (saves GPU overdraw per particle).
+ * - Caller (Hero) passes a smaller count on mobile.
  */
 export const Particles = memo(function Particles({
   count = 40,
@@ -36,7 +46,20 @@ export const Particles = memo(function Particles({
   sizeRange = [1, 3.5],
   blurPx = 0,
   drift = 12,
+  lowPower = false,
 }: ParticlesProps) {
+  /*
+   * Check prefers-reduced-motion once at render time.
+   * This never changes during a session so useMemo([]) is correct.
+   * Must be declared before the early-return so hook call order is stable.
+   */
+  const prefersReduced = useMemo(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    [],
+  );
+
   const particles = useMemo<Particle[]>(
     () =>
       Array.from({ length: count }, (_, i) => ({
@@ -53,6 +76,9 @@ export const Particles = memo(function Particles({
     [count, sizeRange[0], sizeRange[1], drift],
   );
 
+  /* Particles are purely decorative — skip entirely for reduced-motion users. */
+  if (prefersReduced) return null;
+
   return (
     <div
       className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`}
@@ -67,9 +93,13 @@ export const Particles = memo(function Particles({
             top: p.top,
             width: p.size,
             height: p.size,
-            boxShadow: "0 0 6px 1px rgba(255,31,31,0.6)",
-            // CSS custom properties feed the keyframe — per-particle values
-            // without any JS involvement after mount.
+            /*
+             * lowPower: skip box-shadow to avoid per-particle GPU overdraw.
+             * On mobile with small counts this saves compositing work per frame.
+             */
+            boxShadow: lowPower ? undefined : "0 0 6px 1px rgba(255,31,31,0.6)",
+            /* CSS custom properties feed the keyframe — per-particle values
+               without any JS involvement after mount. */
             "--particle-opacity": p.opacity,
             "--particle-drift": `${p.driftX}px`,
             animationName: "particle-rise",

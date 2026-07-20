@@ -10,7 +10,8 @@
  * All animations are GPU-friendly transform/opacity only — no JS per-frame.
  */
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import { useMemo } from "react";
 
 /* ── Path data from Signature_1784486516004.svg ──────────────────── */
 const P1 =
@@ -51,11 +52,27 @@ const CARDS = [
 ] as const;
 
 export function HeroVisual() {
+  /*
+   * Detect mobile once on mount — used to skip expensive GPU operations:
+   *   • SVG feGaussianBlur filter (hv-glow) — forces a raster pass over the
+   *     entire SVG element on every composite; costly on low-end mobile.
+   *   • backdropFilter: blur(10px) on glass cards — each card creates a
+   *     separate compositor layer; 3 cards × blur = significant GPU overdraw.
+   *   • Ambient glow div opacity is reduced on mobile.
+   */
+  const isMobile = useMemo(
+    () => typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches,
+    [],
+  );
+
+  /* Skip fade-in animation for prefers-reduced-motion users */
+  const prefersReduced = useReducedMotion() ?? false;
+
   return (
     <motion.div
-      initial={{ opacity: 0 }}
+      initial={{ opacity: prefersReduced ? 1 : 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 1.1, delay: 0.3, ease: "easeOut" }}
+      transition={prefersReduced ? { duration: 0 } : { duration: 1.1, delay: 0.3, ease: "easeOut" }}
       className="flex items-center justify-center lg:justify-end"
     >
       {/* Float wrapper — translateY only, no conflict with inner perspective */}
@@ -95,8 +112,9 @@ export function HeroVisual() {
 
           {/* ── Ambient glow behind the T ────────────────────────── */}
           <div
-            className="pointer-events-none absolute inset-[8%] rounded-full opacity-65 blur-[55px]"
+            className="pointer-events-none absolute inset-[8%] rounded-full blur-[55px]"
             style={{
+              opacity: isMobile ? 0.35 : 0.65,
               background:
                 "radial-gradient(ellipse at 44% 52%, rgba(255,31,31,0.42) 0%, transparent 68%)",
             }}
@@ -175,8 +193,13 @@ export function HeroVisual() {
                 <path d={P2} fill="#5C0000" />
               </g>
 
-              {/* Front face: metallic gradient + glow filter */}
-              <g filter="url(#hv-glow)">
+              {/*
+               * Front face: metallic gradient + glow filter.
+               * Skip the feGaussianBlur filter on mobile — it forces a full
+               * raster pass over the SVG bounding box on every composite and
+               * is the single most expensive operation in this component.
+               */}
+              <g filter={isMobile ? undefined : "url(#hv-glow)"}>
                 <path d={P1} fill="url(#hv-metal)" />
                 <path d={P2} fill="url(#hv-metal)" />
               </g>
@@ -200,10 +223,16 @@ export function HeroVisual() {
               className={`hv-card hv-card-${i} pointer-events-none absolute flex items-center gap-2 rounded-[5px] px-3 py-[7px]`}
               style={{
                 ...c.pos,
-                background: "rgba(10,0,0,0.55)",
+                /*
+                 * backdropFilter creates a compositor layer for each card.
+                 * On mobile (3 cards = 3 layers) this causes GPU overdraw
+                 * at exactly the wrong moment — during the hero entry paint.
+                 * Use a denser solid background on mobile instead.
+                 */
+                background: isMobile ? "rgba(5,0,0,0.82)" : "rgba(10,0,0,0.55)",
                 border: "1px solid rgba(255,31,31,0.20)",
-                backdropFilter: "blur(10px)",
-                WebkitBackdropFilter: "blur(10px)",
+                backdropFilter: isMobile ? undefined : "blur(10px)",
+                WebkitBackdropFilter: isMobile ? undefined : "blur(10px)",
                 boxShadow:
                   "0 0 14px rgba(255,31,31,0.06), inset 0 1px 0 rgba(255,255,255,0.04)",
                 whiteSpace: "nowrap",

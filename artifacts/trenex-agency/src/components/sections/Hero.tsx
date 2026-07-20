@@ -1,45 +1,93 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import { useMemo } from "react";
 import { Particles } from "@/components/Particles";
 import { HeroVisual } from "@/components/HeroVisual";
-
-/* ─── Animation helpers ─────────────────────────────────────────── */
-const fadeUp = (delay: number) => ({
-  initial: { opacity: 0, y: 22 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.85, delay, ease: [0.22, 1, 0.36, 1] as const },
-});
-
-const fadeIn = (delay: number) => ({
-  initial: { opacity: 0 },
-  animate: { opacity: 1 },
-  transition: { duration: 1, delay, ease: "easeOut" as const },
-});
+import { useLaunchPhase } from "@/context/LaunchContext";
 
 export function Hero() {
+  const phase          = useLaunchPhase();
+  const prefersReduced = useReducedMotion() ?? false;
+
+  /*
+   * Detect mobile once on mount — used to:
+   *   • skip the large blur-[140px] / blur-[200px] glow divs (expensive
+   *     compositor layers that thrash the GPU on scroll on low-end devices)
+   *   • pass lowPower to Particles so each dot skips its box-shadow glow
+   *   • reduce particle count
+   */
+  const isMobile = useMemo(
+    () => typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches,
+    [],
+  );
+
+  /* ── Animation factories ──────────────────────────────────────────── */
+  /*
+   * When prefers-reduced-motion is set, return props that make each element
+   * appear immediately with no transition — Framer Motion still runs but
+   * the duration is 0 so there is no animation work on the main thread.
+   */
+  const fadeUp = (delay: number) =>
+    prefersReduced
+      ? { initial: { opacity: 1, y: 0 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0 } }
+      : {
+          initial: { opacity: 0, y: 22 },
+          animate: { opacity: 1, y: 0 },
+          transition: { duration: 0.85, delay, ease: [0.22, 1, 0.36, 1] as const },
+        };
+
+  const fadeIn = (delay: number) =>
+    prefersReduced
+      ? { initial: { opacity: 1 }, animate: { opacity: 1 }, transition: { duration: 0 } }
+      : {
+          initial: { opacity: 0 },
+          animate: { opacity: 1 },
+          transition: { duration: 1, delay, ease: "easeOut" as const },
+        };
+
   return (
     <section
       id="hero"
       className="relative flex min-h-[100svh] w-full items-center overflow-hidden px-6 py-28 sm:px-10 sm:py-32 lg:px-16"
     >
-      {/* ── Ambient glow — shifted right to sit behind the T ──────── */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
-        <div
-          className="absolute right-[10%] top-1/2 -translate-y-1/2 h-[640px] w-[640px] rounded-full opacity-20 blur-[140px]"
-          style={{ background: "radial-gradient(circle, rgba(255,31,31,0.45) 0%, transparent 70%)" }}
-        />
-        <div
-          className="absolute right-[5%] top-1/2 -translate-y-1/2 h-[900px] w-[900px] rounded-full opacity-10 blur-[200px]"
-          style={{ background: "radial-gradient(circle, rgba(255,31,31,0.3) 0%, transparent 65%)" }}
-        />
-      </div>
+      {/*
+       * Ambient glow — the blur-[140px] and blur-[200px] divs force the
+       * browser to create compositing layers and run Gaussian blur at the
+       * element's full raster size on every paint. On desktop this is fine;
+       * on mobile it adds ~15–25 ms per paint and causes jank on first render.
+       * We skip them entirely on mobile — the Three.js AmbientBackground
+       * already provides a red atmospheric glow on all screen sizes.
+       */}
+      {!isMobile && (
+        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+          <div
+            className="absolute right-[10%] top-1/2 -translate-y-1/2 h-[640px] w-[640px] rounded-full opacity-20 blur-[140px]"
+            style={{ background: "radial-gradient(circle, rgba(255,31,31,0.45) 0%, transparent 70%)" }}
+          />
+          <div
+            className="absolute right-[5%] top-1/2 -translate-y-1/2 h-[900px] w-[900px] rounded-full opacity-10 blur-[200px]"
+            style={{ background: "radial-gradient(circle, rgba(255,31,31,0.3) 0%, transparent 65%)" }}
+          />
+        </div>
+      )}
 
-      {/* ── Subtle particles ─────────────────────────────────────── */}
-      <Particles count={16} sizeRange={[1, 2]} drift={5} />
+      {/*
+       * Particles — deferred to phase 3 so they don't compete with the
+       * initial hero text paint and the HeroVisual SVG render.
+       * Mobile: 6 particles (was 16) with no glow box-shadow.
+       */}
+      {phase >= 3 && (
+        <Particles
+          count={isMobile ? 6 : 16}
+          sizeRange={[1, 2]}
+          drift={5}
+          lowPower={isMobile}
+        />
+      )}
 
-      {/* ── Two-column grid ──────────────────────────────────────── */}
+      {/* ── Two-column grid ────────────────────────────────────────── */}
       <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2 lg:gap-12">
 
-        {/* ── LEFT: copy ───────────────────────────────────────── */}
+        {/* ── LEFT: copy ─────────────────────────────────────────── */}
         <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
 
           {/* Agency label */}
@@ -110,15 +158,25 @@ export function Hero() {
           </motion.div>
         </div>
 
-        {/* ── RIGHT: 3D hero visual ────────────────────────────── */}
-        <HeroVisual />
+        {/*
+         * RIGHT: 3D hero visual — deferred to phase 2 so it does not
+         * compete with the hero text Framer Motion animations on the
+         * same frame.  A hidden spacer preserves the two-column grid
+         * layout during phase 1 so there is no layout shift.
+         */}
+        {phase >= 2
+          ? <HeroVisual />
+          : <div className="hidden lg:block" aria-hidden />
+        }
       </div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        {...fadeIn(1.05)}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 h-14 w-px bg-gradient-to-b from-white/20 to-transparent"
-      />
+      {/* Scroll indicator — deferred to phase 3 */}
+      {phase >= 3 && (
+        <motion.div
+          {...fadeIn(1.05)}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 h-14 w-px bg-gradient-to-b from-white/20 to-transparent"
+        />
+      )}
     </section>
   );
 }

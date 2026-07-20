@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { CAMERA_DEFAULTS, DPR } from "@/lib/three-config";
 import { isWebGLAvailable } from "@/lib/webgl";
@@ -9,6 +9,7 @@ import { AmbientRedLighting } from "./AmbientRedLighting";
 import { CanvasErrorBoundary } from "./CanvasErrorBoundary";
 import { VolumetricFog } from "./VolumetricFog";
 import { ScrollDepthLayers } from "./ScrollDepthLayers";
+import { useLaunchPhase } from "@/context/LaunchContext";
 
 /**
  * Persistent full-page 3D backdrop: a dark, sparse particle field with slow
@@ -20,15 +21,44 @@ import { ScrollDepthLayers } from "./ScrollDepthLayers";
  *
  * Degrades gracefully (renders nothing but the flat dark background) when
  * WebGL is unavailable, so the site never crashes on restrictive devices.
+ *
+ * Performance:
+ * - WebGL Canvas is NOT initialised while the loading screen is showing
+ *   (phase 0). This prevents Three.js from competing with the GSAP loading
+ *   screen animation for GPU time, making the loading screen smoother.
+ * - Canvas is skipped entirely for prefers-reduced-motion users.
+ * - DPR is capped at 1 on mobile; particle counts are halved.
  */
 export function AmbientBackground() {
+  const phase = useLaunchPhase();
+
   const [webglSupported, setWebglSupported] = useState(false);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
 
+  /*
+   * Skip animated WebGL canvas for users who prefer reduced motion.
+   * Evaluated once — this preference does not change mid-session.
+   */
+  const prefersReduced = useMemo(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    [],
+  );
+
+  /*
+   * Gate WebGL initialisation on phase >= 1 (loading screen has exited).
+   * Using a ref guard so the effect body only executes once even though
+   * `phase` is in the dependency array and could trigger re-runs.
+   */
+  const webglInitialized = useRef(false);
+
   useEffect(() => {
+    if (phase < 1 || webglInitialized.current) return;
+    webglInitialized.current = true;
     setWebglSupported(isWebGLAvailable());
     return initScrollProgressTracking();
-  }, []);
+  }, [phase]);
 
   useEffect(() => {
     const mql = window.matchMedia("(max-width: 767px)");
@@ -39,13 +69,17 @@ export function AmbientBackground() {
   }, []);
 
   const dpr: [number, number] = isSmallScreen ? [1, 1] : DPR;
-  // Reduce particle counts on mobile — smaller canvas + fewer GPU draws
-  const primaryCount   = isSmallScreen ? 80  : 220;
-  const secondaryCount = isSmallScreen ? 25  : 70;
+  /* Reduced particle counts on mobile — smaller canvas + fewer GPU draws */
+  const primaryCount   = isSmallScreen ? 60  : 220;
+  const secondaryCount = isSmallScreen ? 15  : 70;
 
   return (
     <div className="pointer-events-none fixed inset-0 z-0 bg-[#050505]">
-      {webglSupported && (
+      {/*
+       * Canvas only mounts once phase >= 1 AND WebGL is confirmed available
+       * AND the user has not requested reduced motion.
+       */}
+      {phase >= 1 && webglSupported && !prefersReduced && (
         <CanvasErrorBoundary>
           <Canvas
             dpr={dpr}
