@@ -601,4 +601,48 @@ html.custom-cursor-active * {
     72%  { opacity: 0; }
     100% { opacity: 0; }
   }
+
+  /* ── HeroVisual mobile overrides (< 768 px only) ──────────────────
+     Larger T, cards pushed outside the container boundary for breathing
+     room, slightly smaller card text. Desktop/tablet untouched.        */
+  @media (max-width: 767px) {
+    /* ~25-30 % bigger container than the 280 px desktop clamp floor */
+    .hv-container {
+      width:  min(360px, 92vw) !important;
+      height: min(360px, 92vw) !important;
+    }
+
+    /* Cards: smaller padding + text on mobile */
+    .hv-card {
+      padding: 5px 9px !important;
+    }
+    .hv-card-label {
+      font-size: 0.45rem !important;
+      letter-spacing: 0.15em !important;
+    }
+    .hv-card-dot {
+      width:  4px !important;
+      height: 4px !important;
+    }
+
+    /* Push each card slightly outside the container so it clears the T */
+    .hv-card-0 {          /* Graphic Design — top-left  */
+      top:    -8% !important;
+      left:    5% !important;
+      right:  auto !important;
+      bottom: auto !important;
+    }
+    .hv-card-1 {          /* Video Editing  — right-mid */
+      top:   36% !important;
+      right:  -5% !important;
+      left:  auto !important;
+      bottom: auto !important;
+    }
+    .hv-card-2 {          /* Web Dev        — bottom-left */
+      bottom: -8% !important;
+      left:    5% !important;
+      right:  auto !important;
+      top:    auto !important;
+    }
+  }
 }

@@ -63,6 +63,7 @@ export function HeroVisual() {
 
         {/* Perspective tilt wrapper */}
         <div
+          className="hv-container"
           style={{
             width: "clamp(280px, 42vw, 520px)",
             height: "clamp(280px, 42vw, 520px)",
@@ -193,10 +194,10 @@ export function HeroVisual() {
           </div>
 
           {/* ── Glass service cards ───────────────────────────────── */}
-          {CARDS.map((c) => (
+          {CARDS.map((c, i) => (
             <div
               key={c.label}
-              className="pointer-events-none absolute flex items-center gap-2 rounded-[5px] px-3 py-[7px]"
+              className={`hv-card hv-card-${i} pointer-events-none absolute flex items-center gap-2 rounded-[5px] px-3 py-[7px]`}
               style={{
                 ...c.pos,
                 background: "rgba(10,0,0,0.55)",
@@ -210,10 +211,10 @@ export function HeroVisual() {
             >
               {/* Red indicator dot */}
               <span
-                className="h-[5px] w-[5px] flex-shrink-0 rounded-full bg-[#FF1F1F]"
+                className="hv-card-dot h-[5px] w-[5px] flex-shrink-0 rounded-full bg-[#FF1F1F]"
                 style={{ boxShadow: "0 0 5px rgba(255,31,31,0.9)" }}
               />
-              <span className="text-[0.52rem] font-semibold uppercase tracking-[0.22em] text-white/55">
+              <span className="hv-card-label text-[0.52rem] font-semibold uppercase tracking-[0.22em] text-white/55">
                 {c.label}
               </span>
             </div>
