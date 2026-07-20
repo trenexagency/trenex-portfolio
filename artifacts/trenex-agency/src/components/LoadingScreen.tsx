@@ -366,7 +366,7 @@ export function LoadingScreen({ onEnter }: LoadingScreenProps) {
           }} />
 
           {/* logo mark */}
-          <div ref={logoWrapRef} className="relative z-10 flex items-center justify-center">
+          <div ref={logoWrapRef} className="brand-asset relative z-10 flex items-center justify-center">
             <img
               ref={logoImgRef}
               src={logoUrl}

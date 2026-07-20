@@ -17,6 +17,7 @@ import { TrophySection } from "@/components/sections/TrophySection";
 import { ExpertiseWall } from "@/components/sections/ExpertiseWall";
 import { Contact } from "@/components/sections/Contact";
 import { TransitionProvider } from "@/components/PageTransition";
+import { AssetProtection } from "@/components/AssetProtection";
 import GraphicDesignPage from "@/pages/graphic-design";
 import VideoEditingPage from "@/pages/video-editing";
 import WebDevelopmentPage from "@/pages/web-development";
@@ -66,6 +67,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
+        <AssetProtection />
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
           <TransitionProvider>
             <Router />

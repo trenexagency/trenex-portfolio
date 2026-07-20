@@ -25,7 +25,7 @@ export function Header() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-4 py-2 sm:px-8 md:px-12 md:py-3 lg:px-16">
-      <a href="#hero" className="group flex items-center" data-testid="link-logo">
+      <a href="#hero" className="brand-asset group flex items-center" data-testid="link-logo">
         <img
           src={logoUrl}
           alt="Trenex Agency"

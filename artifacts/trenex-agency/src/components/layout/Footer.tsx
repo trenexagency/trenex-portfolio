@@ -28,7 +28,7 @@ export function Footer() {
             transition={{ duration: 0.7, ease: "easeOut" }}
             className="flex flex-col items-center gap-4 text-center sm:items-start sm:text-left"
           >
-            <a href="#hero" className="group flex items-center gap-3" data-testid="link-footer-logo">
+            <a href="#hero" className="brand-asset group flex items-center gap-3" data-testid="link-footer-logo">
               <img
                 src={logoUrl}
                 alt="Trenex Agency"

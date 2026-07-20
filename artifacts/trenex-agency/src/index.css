@@ -602,6 +602,45 @@ html.custom-cursor-active * {
     100% { opacity: 0; }
   }
 
+  /* ── Global asset-protection rules ────────────────────────────────
+     Deterrence layer: disables browser-native drag, selection, and the
+     pointer affordances that invite "Save Image As" on logo assets.
+     Buttons, links, and nav text keep full interactivity.              */
+
+  /* Prevent browser-native image drag (CSS side; JS handles the rest) */
+  img {
+    -webkit-user-drag: none;
+    user-drag: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /**
+   * .brand-asset — wrapper for logo / branding images.
+   *
+   * Creates a transparent ::after overlay that sits above the <img> so
+   * the browser's "Save Image As" hit-test lands on a generic element,
+   * not on the image itself.  pointer-events: none keeps all clicks and
+   * hover states on the underlying anchor / button fully functional.
+   */
+  .brand-asset {
+    position: relative;
+  }
+  .brand-asset::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: transparent;
+  }
+
+  /* Branding text (logo name, agency label) — no selection */
+  .no-select {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
   /* ── HeroVisual mobile overrides (< 768 px only) ──────────────────
      Larger T, cards pushed outside the container boundary for breathing
      room, slightly smaller card text. Desktop/tablet untouched.        */
