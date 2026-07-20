@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import logoUrl from "@assets/Trenex_Logo_1783248099260.svg";
+import logoUrl from "@assets/Trenex_Logo_1784538025298.svg";
 import { siteConfig } from "@/data/site";
 import { gsap } from "@/lib/gsap";
 
@@ -371,7 +371,7 @@ export function LoadingScreen({ onEnter }: LoadingScreenProps) {
               ref={logoImgRef}
               src={logoUrl}
               alt="Trenex Agency"
-              className="relative h-40 w-40 object-contain sm:h-48 sm:w-48 md:h-52 md:w-52"
+              className="relative h-48 w-48 object-contain sm:h-60 sm:w-60 md:h-64 md:w-64"
               style={{ filter: "drop-shadow(0 0 14px rgba(255,31,31,0.55))", imageRendering: "auto" }}
               decoding="async"
               loading="eager"
