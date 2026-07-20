@@ -8,10 +8,10 @@ export function Contact() {
     <motion.section
       id="contact"
       className="relative flex min-h-[70svh] w-full flex-col items-center justify-center overflow-hidden bg-[#050505]/75 px-5 py-20 text-center sm:px-6 sm:py-28"
-      initial={{ opacity: 0, filter: "blur(8px)" }}
-      whileInView={{ opacity: 1, filter: "blur(0px)" }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
       viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 1.1, ease: "easeOut" }}
+      transition={{ duration: 0.9, ease: "easeOut" }}
     >
       <SectionAmbience variant="contact" />
 

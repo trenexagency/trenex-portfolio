@@ -133,6 +133,19 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          /* Three.js ecosystem — heaviest dependency, cache independently */
+          "vendor-three":  ["three", "@react-three/fiber", "@react-three/drei"],
+          /* Animation libraries */
+          "vendor-framer": ["framer-motion"],
+          "vendor-gsap":   ["gsap"],
+          /* React core — changes infrequently, long-lived cache */
+          "vendor-react":  ["react", "react-dom"],
+        },
+      },
+    },
   },
   server: {
     port,

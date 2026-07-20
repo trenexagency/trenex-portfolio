@@ -2,7 +2,10 @@
  * SectionAmbience — pure-CSS layered ambient glow for individual sections.
  * Zero JS overhead, pointer-events-none, sits at z-0 inside the section.
  * Each variant has a unique composition so every section feels distinct.
+ * Wrapped in React.memo — props never change after mount.
  */
+
+import { memo } from "react";
 
 type AmbienceVariant = "services" | "stats" | "expertise" | "contact" | "signature";
 
@@ -42,7 +45,7 @@ const configs: Record<
   },
 };
 
-export function SectionAmbience({ variant }: Props) {
+export const SectionAmbience = memo(function SectionAmbience({ variant }: Props) {
   const c = configs[variant];
 
   const layers = [c.top, c.bottom, c.left, c.right, c.center, c.extra].filter(Boolean) as string[];
@@ -52,9 +55,9 @@ export function SectionAmbience({ variant }: Props) {
       aria-hidden
       className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
     >
-      {layers.map((gradient, i) => (
+      {layers.map((gradient) => (
         <div
-          key={i}
+          key={gradient}
           className="absolute inset-0"
           style={{ background: gradient }}
         />
@@ -76,4 +79,4 @@ export function SectionAmbience({ variant }: Props) {
       />
     </div>
   );
-}
+});

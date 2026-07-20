@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 
 interface ParticlesProps {
   count?: number;
@@ -30,7 +30,7 @@ interface Particle {
  * - For 100 particles in the hero alone this eliminates ~100 Framer
  *   Motion animators running concurrently.
  */
-export function Particles({
+export const Particles = memo(function Particles({
   count = 40,
   className = "",
   sizeRange = [1, 3.5],
@@ -83,4 +83,4 @@ export function Particles({
       ))}
     </div>
   );
-}
+});

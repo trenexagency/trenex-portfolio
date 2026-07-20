@@ -3,6 +3,9 @@ import logoUrl from "@assets/Trenex_Logo_1783248099260.svg";
 import { siteConfig, navLinks, contactInfo } from "@/data/site";
 import { SocialIcons } from "@/components/SocialIcons";
 
+/* Evaluated once at module load — avoids calling Date each render */
+const CURRENT_YEAR = new Date().getFullYear();
+
 export function Footer() {
   return (
     <footer className="relative w-full overflow-hidden border-t border-white/10 bg-[#050505]">
@@ -116,7 +119,7 @@ export function Footer() {
 
         <div className="mx-auto mt-14 flex max-w-6xl flex-col items-center justify-between gap-3 border-t border-white/10 pt-8 text-center text-[0.65rem] uppercase tracking-[0.15em] text-white/40 sm:mt-16 sm:flex-row sm:gap-4 sm:text-xs sm:tracking-[0.2em]">
           <span>
-            &copy; {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
+            &copy; {CURRENT_YEAR} {siteConfig.name}. All rights reserved.
           </span>
           <span className="text-white/30">Designed &amp; Developed by Trenex Agency</span>
         </div>

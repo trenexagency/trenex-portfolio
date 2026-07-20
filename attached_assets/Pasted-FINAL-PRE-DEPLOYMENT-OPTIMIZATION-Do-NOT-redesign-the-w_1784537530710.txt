@@ -1,0 +1,90 @@
+FINAL PRE-DEPLOYMENT OPTIMIZATION
+
+Do NOT redesign the website.
+Do NOT change layout.
+Do NOT change colors.
+Do NOT change branding.
+Do NOT change animations unless they impact performance.
+
+Perform a complete production-ready optimization pass.
+
+Tasks:
+
+1. Performance Optimization
+- Remove unnecessary re-renders.
+- Optimize React components.
+- Use memoization where appropriate.
+- Eliminate redundant calculations.
+- Reduce DOM complexity where possible.
+- Optimize animation performance using transform and opacity.
+- Remove any animation that causes layout shifts.
+- Ensure smooth 60fps experience.
+
+2. Animation Optimization
+- Detect and fix any animations causing lag or stuttering.
+- Replace expensive animations with GPU-accelerated transforms.
+- Remove unnecessary blur, shadow or filter calculations.
+- Prevent mouse-move effects from causing frame drops.
+- Ensure all floating and rotating elements remain smooth.
+
+3. Asset Optimization
+- Compress and optimize images.
+- Lazy load non-critical images.
+- Optimize SVG rendering.
+- Reduce unnecessary asset requests.
+- Remove unused assets if present.
+
+4. Code Cleanup
+- Remove unused imports.
+- Remove unused variables.
+- Remove dead code.
+- Remove duplicate logic.
+- Fix TypeScript warnings and errors.
+- Fix console warnings and errors.
+
+5. Mobile Optimization
+- Test all sections on mobile.
+- Fix overflow issues.
+- Fix broken spacing.
+- Fix element clipping.
+- Ensure touch interactions work correctly.
+- Maintain visual quality on all screen sizes.
+
+6. Responsive Optimization
+- Verify desktop, tablet and mobile layouts.
+- Prevent horizontal scrolling.
+- Ensure buttons remain accessible.
+- Ensure text scales correctly.
+
+7. Stability Checks
+- Fix any bugs found.
+- Fix memory leaks.
+- Fix event listener cleanup issues.
+- Fix scroll performance issues.
+- Ensure smooth navigation between sections.
+
+8. Loading Optimization
+- Improve initial page load speed.
+- Reduce unnecessary JavaScript execution.
+- Optimize bundle size.
+- Delay non-critical effects until after page load.
+
+9. SEO & Production Readiness
+- Add proper page title.
+- Add meta description.
+- Add Open Graph tags.
+- Add favicon support.
+- Ensure deployment-ready build.
+
+10. Final Validation
+- Verify no visual regressions.
+- Verify no broken links.
+- Verify all buttons work.
+- Verify portfolio videos work.
+- Verify contact methods work.
+
+IMPORTANT:
+Focus ONLY on optimization, bug fixing, responsiveness and performance.
+Do NOT redesign any section.
+Do NOT change the visual identity of Trenex Agency.
+The website should look the same but feel faster, smoother and production-ready.
