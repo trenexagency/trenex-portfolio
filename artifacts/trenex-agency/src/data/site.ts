@@ -12,9 +12,10 @@ export const siteConfig = {
 };
 
 export const navLinks: { label: string; href: string }[] = [
-  { label: "Home", href: "#hero" },
-  { label: "Services", href: "#services" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home",      href: "#hero" },
+  { label: "Services",  href: "#services" },
+  { label: "Signature", href: "#signature" },
+  { label: "Contact",   href: "#contact" },
 ];
 
 export const contactInfo = {
