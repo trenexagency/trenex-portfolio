@@ -134,17 +134,6 @@ export function Hero() {
             ))}
           </motion.div>
 
-          {/* Description */}
-          <motion.p
-            {...fadeUp(0.48)}
-            className="mb-10 max-w-sm text-[0.85rem] leading-relaxed text-white/38 sm:text-sm"
-          >
-            <span className="mb-1 block text-[0.68rem] font-medium uppercase tracking-[0.1em] text-white/65">
-              We build, create &amp; grow digital brands.
-            </span>
-            From software and digital experiences to content, social media and marketing — Trenex brings strategy, creativity and technology together.
-          </motion.p>
-
           {/* CTA buttons */}
           <motion.div
             {...fadeUp(0.6)}
