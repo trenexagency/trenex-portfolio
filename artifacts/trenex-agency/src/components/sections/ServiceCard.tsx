@@ -21,6 +21,7 @@ export function ServiceCard({ service, icon, delay }: ServiceCardProps) {
   // synthetic window.open() call or in-app route change.
   const isNewTabLink = !!service.href;
 
+  const isExpandedDevelopmentCard = service.index === "03";
   const isInteractive = isNewTabLink;
   const CardTag = isNewTabLink ? motion.a : motion.div;
 
@@ -113,7 +114,7 @@ export function ServiceCard({ service, icon, delay }: ServiceCardProps) {
             {icon}
           </div>
 
-          <h3 className="mb-3 text-2xl font-semibold leading-tight tracking-tight text-white sm:mb-4 sm:text-3xl md:text-4xl">
+          <h3 className={`mb-3 font-semibold leading-tight tracking-tight text-white sm:mb-4 ${isExpandedDevelopmentCard ? "text-xl sm:text-2xl md:text-3xl" : "text-2xl sm:text-3xl md:text-4xl"}`}>
             {service.title}
           </h3>
           <p className="max-w-xs text-sm leading-relaxed text-white/55 md:text-base md:leading-[1.65]">
@@ -125,7 +126,7 @@ export function ServiceCard({ service, icon, delay }: ServiceCardProps) {
           {service.capabilities.map((capability) => (
             <span
               key={capability}
-              className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 font-mono text-[0.65rem] uppercase tracking-[0.15em] text-white/40 transition-colors duration-500 group-hover:border-[#FF1F1F]/30 group-hover:text-white/70"
+              className={`rounded-full border border-white/10 bg-white/[0.03] font-mono uppercase text-white/40 transition-colors duration-500 group-hover:border-[#FF1F1F]/30 group-hover:text-white/70 ${isExpandedDevelopmentCard ? "px-2.5 py-1 text-[0.6rem] tracking-[0.1em]" : "px-3 py-1.5 text-[0.65rem] tracking-[0.15em]"}`}
             >
               {capability}
             </span>
