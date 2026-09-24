@@ -1,0 +1,232 @@
+TASK: Update the Trenex homepage service messaging ONLY.
+
+IMPORTANT:
+Do NOT redesign the website.
+Do NOT change the existing Trenex visual identity.
+Do NOT change the overall layout, hero composition, background, grid, glow effects, typography system, animations, T logo artwork, navigation, buttons, spacing system, or responsive behavior unless absolutely necessary to fit the new service text.
+
+The current homepage was designed around 3 services:
+- Graphic Design
+- Video Editing
+- Web Development
+
+Trenex has now expanded into a professional full-service digital agency.
+
+The current services are:
+
+DEVELOPMENT
+- Software Development
+- App Development
+- Web Development
+
+CREATIVE
+- Video Editing
+- Graphic Designing
+- Content Writing
+
+DIGITAL GROWTH
+- Complete Social Media Management
+- Digital Marketing
+
+GOAL:
+Update the homepage so visitors immediately understand that Trenex now provides a broader range of professional digital services, while keeping the existing premium black/red Trenex aesthetic intact.
+
+==================================================
+1. HERO LEFT-SIDE SERVICE LIST
+==================================================
+
+The current hero contains the three old service labels:
+
+GRAPHIC DESIGN
+VIDEO EDITING
+WEB DEVELOPMENT
+
+Replace them with these three concise service groups:
+
+DEVELOPMENT
+CREATIVE
+DIGITAL GROWTH
+
+Do NOT display all 8 individual services here.
+
+The purpose is to keep the hero clean and premium.
+
+Under or alongside these categories, depending on the existing design structure, make it visually clear that they represent:
+
+DEVELOPMENT
+Software • App • Web
+
+CREATIVE
+Video • Graphic • Content
+
+DIGITAL GROWTH
+Social Media • Digital Marketing
+
+Do this in a subtle, elegant way.
+Do NOT create a large block of text.
+
+==================================================
+2. T LOGO / HERO VISUAL LABELS
+==================================================
+
+The existing T logo artwork has floating service labels around it.
+
+Currently these labels represent the old three-service structure.
+
+Update these labels to:
+
+DEVELOPMENT
+CREATIVE
+DIGITAL GROWTH
+
+Place them around the T logo using the EXISTING visual language.
+
+Preserve:
+- Existing label style
+- Existing red accent
+- Existing dark translucent background
+- Existing glow
+- Existing positioning logic
+- Existing animation style
+
+Do NOT add too many labels around the logo.
+
+The T logo must remain the dominant visual element.
+
+The labels should feel like part of the existing futuristic interface, not like ordinary text pasted around the logo.
+
+==================================================
+3. HERO DESCRIPTION
+==================================================
+
+The current hero description focuses on design, content and web experiences.
+
+Update the copy so it reflects the expanded Trenex agency.
+
+Use concise premium agency language.
+
+Suggested copy:
+
+"WE BUILD, CREATE & GROW DIGITAL BRANDS."
+
+Supporting line:
+
+"From software and digital experiences to content, social media and marketing — Trenex brings strategy, creativity and technology together."
+
+Keep the text short enough to preserve the current hero composition.
+
+Do NOT make the paragraph significantly larger than the existing one.
+
+==================================================
+4. VISUAL CONSISTENCY
+==================================================
+
+This is critical.
+
+The existing Trenex homepage has a distinctive:
+- Black background
+- Red glow
+- Futuristic grid
+- Red accent lighting
+- Minimal white typography
+- Premium digital-agency aesthetic
+- Large central T symbol
+
+Preserve this exact visual identity.
+
+Do NOT:
+- Introduce new colors
+- Add gradients that don't already exist
+- Add random cards
+- Add excessive icons
+- Add stock imagery
+- Add generic corporate sections
+- Change the T logo
+- Change the navbar
+- Change the hero structure
+- Replace existing animations
+- Make the page look like a generic SaaS website
+
+==================================================
+5. RESPONSIVE BEHAVIOR
+==================================================
+
+Make sure the updated service messaging works correctly on:
+
+- Desktop
+- Laptop
+- Tablet
+- Mobile
+
+On smaller screens, prevent:
+- Text overlap
+- Label collisions with the T logo
+- Overflow
+- Broken animations
+- Excessive text wrapping
+
+If necessary, reduce font size or spacing responsively rather than changing the design.
+
+==================================================
+6. DO NOT TOUCH OTHER SECTIONS
+==================================================
+
+For this task ONLY update the homepage hero/service messaging.
+
+Do NOT modify:
+- Services pages
+- Portfolio
+- Graphic Design page
+- Video Editing page
+- Web Development page
+- Contact page
+- Navigation structure
+- CMS
+- Backend
+- Database
+- Authentication
+- Routing
+
+We will handle those separately.
+
+==================================================
+7. CODE QUALITY / SAFETY
+==================================================
+
+Before making changes:
+1. Inspect the existing homepage implementation.
+2. Identify the exact components responsible for:
+   - Hero service text
+   - Floating T-logo labels
+   - Hero description
+3. Modify only those components.
+4. Reuse existing components, CSS variables, animation systems and styling wherever possible.
+5. Do not create duplicate components unnecessarily.
+6. Do not remove existing functionality.
+
+After changes:
+- Run the project's typecheck.
+- Run the production build.
+- Fix only issues caused by this change.
+- Do not redesign anything while fixing unrelated issues.
+
+==================================================
+FINAL REQUIREMENT
+==================================================
+
+The finished homepage should still look like the SAME Trenex website.
+
+A visitor should simply understand that Trenex has evolved from a 3-service creative studio into a broader digital agency offering:
+
+Development
+Software • App • Web
+
+Creative
+Video • Graphic • Content
+
+Digital Growth
+Social Media Management • Digital Marketing
+
+The result must feel intentional, minimal, premium and sophisticated — NOT crowded.
+
+Do not make any additional design changes beyond this task.

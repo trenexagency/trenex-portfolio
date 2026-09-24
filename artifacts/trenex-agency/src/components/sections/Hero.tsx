@@ -112,14 +112,23 @@ export function Hero() {
             {...fadeUp(0.36)}
             className="mb-7 flex flex-col gap-1"
           >
-            {["Graphic Design", "Video Editing", "Web Development"].map((s, i) => (
-              <div key={s} className="flex items-center gap-3 justify-center lg:justify-start">
-                <span
-                  className="inline-block h-px w-5 bg-[#FF1F1F]"
-                  style={{ opacity: 1 - i * 0.2 }}
-                />
-                <span className="text-sm font-medium uppercase tracking-[0.22em] text-white/70 sm:text-[0.82rem]">
-                  {s}
+            {[
+              { title: "Development", details: "Software · App · Web" },
+              { title: "Creative", details: "Video · Graphic · Content" },
+              { title: "Digital Growth", details: "Social Media · Digital Marketing" },
+            ].map(({ title, details }, i) => (
+              <div key={title} className="flex flex-col items-center lg:items-start">
+                <div className="flex items-center gap-3 justify-center lg:justify-start">
+                  <span
+                    className="inline-block h-px w-5 bg-[#FF1F1F]"
+                    style={{ opacity: 1 - i * 0.2 }}
+                  />
+                  <span className="text-sm font-medium uppercase tracking-[0.22em] text-white/70 sm:text-[0.82rem]">
+                    {title}
+                  </span>
+                </div>
+                <span className="pl-8 text-[0.58rem] tracking-[0.12em] text-white/35 sm:text-[0.62rem]">
+                  {details}
                 </span>
               </div>
             ))}
@@ -130,7 +139,10 @@ export function Hero() {
             {...fadeUp(0.48)}
             className="mb-10 max-w-sm text-[0.85rem] leading-relaxed text-white/38 sm:text-sm"
           >
-            We help brands grow through design, content and modern web experiences.
+            <span className="mb-1 block text-[0.68rem] font-medium uppercase tracking-[0.1em] text-white/65">
+              We build, create &amp; grow digital brands.
+            </span>
+            From software and digital experiences to content, social media and marketing — Trenex brings strategy, creativity and technology together.
           </motion.p>
 
           {/* CTA buttons */}
