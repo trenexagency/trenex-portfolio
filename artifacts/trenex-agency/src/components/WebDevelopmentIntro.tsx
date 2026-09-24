@@ -73,14 +73,14 @@ export function WebDevelopmentIntro() {
               transition={{ duration: 0.75, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             />
 
-            {/* Step 3 — "WEB DEVELOPMENT" subtitle */}
+            {/* Step 3 — service title */}
             <motion.p
-              className="relative mt-8 text-xl font-semibold uppercase tracking-[0.3em] text-white sm:mt-9 sm:text-2xl md:text-3xl"
+              className="relative mt-8 max-w-full text-base font-semibold uppercase tracking-[0.08em] text-white sm:mt-9 sm:text-xl sm:tracking-[0.16em] md:text-2xl md:tracking-[0.22em]"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1.0, ease: "easeOut" }}
             >
-              Web Development
+              WEB, APP &amp; SOFTWARE DEVELOPMENT
             </motion.p>
 
             {/* Step 4 — supporting line */}
@@ -90,8 +90,8 @@ export function WebDevelopmentIntro() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1.55, ease: "easeOut" }}
             >
-              Modern UI <span className="text-[#eb1b24]">•</span> Responsive Experiences{" "}
-              <span className="text-[#eb1b24]">•</span> Performance
+              MODERN DIGITAL SOLUTIONS <span className="text-[#eb1b24]">•</span> SCALABLE EXPERIENCES{" "}
+              <span className="text-[#eb1b24]">•</span> PERFORMANCE
             </motion.p>
           </div>
         </motion.div>
