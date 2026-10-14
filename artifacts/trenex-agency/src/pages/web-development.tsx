@@ -10,7 +10,6 @@ import { FloatingTechBadges } from "@/components/FloatingTechBadges";
 import { HeroBackground } from "@/components/HeroBackground";
 import { WebDevelopmentIntro } from "@/components/WebDevelopmentIntro";
 import { TechShowcase } from "@/components/sections/TechShowcase";
-import { WebDevPortfolio } from "@/components/sections/WebDevPortfolio";
 
 /* ── Animation presets ────────────────────────────────── */
 const FADE_UP: Variants = {
@@ -97,10 +96,9 @@ export default function WebDevelopmentPage() {
         {/* ══ 2. TECH SHOWCASE ═════════════════════════════════ */}
         <TechShowcase />
 
-        {/* ══ 3. PORTFOLIO CATEGORIES ══════════════════════════ */}
-        <WebDevPortfolio />
+        <div id="services" aria-hidden="true" />
 
-        {/* ══ 4. CAPABILITIES ══════════════════════════════════ */}
+        {/* ══ 3. CAPABILITIES ══════════════════════════════════ */}
         <section id="capabilities" className="relative w-full overflow-hidden bg-[#050505]/75 px-5 py-16 sm:px-6 sm:py-20">
           <div
             className="pointer-events-none absolute left-1/2 top-0 h-[600px] w-[900px] -translate-x-1/2 rounded-full"
@@ -142,7 +140,7 @@ export default function WebDevelopmentPage() {
           </div>
         </section>
 
-        {/* ══ 5. CONTACT CTA ═══════════════════════════════════ */}
+        {/* ══ 4. CONTACT CTA ═══════════════════════════════════ */}
         <section id="contact" className="relative w-full scroll-mt-24 overflow-hidden bg-[#050505] px-5 py-20 text-center sm:scroll-mt-28 sm:px-6 sm:py-24">
           <div
             className="pointer-events-none absolute left-1/2 top-1/2 h-[420px] w-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full"
