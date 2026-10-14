@@ -41,6 +41,24 @@ const CAPABILITIES = [
   },
 ];
 
+const DEVELOPMENT_SERVICES = [
+  {
+    title: "Web Development",
+    description:
+      "We build modern, responsive websites that match your brand and help your business grow",
+  },
+  {
+    title: "Application Development",
+    description:
+      "We create user-friendly mobile and web apps designed around your business needs.",
+  },
+  {
+    title: "Software Development",
+    description:
+      "We develop custom software to simplify your work and solve your business challenges.",
+  },
+];
+
 /* ══════════════════════════════════════════════════════
    PAGE — Web Development
    Opened in its own browser tab from the homepage service
@@ -96,7 +114,28 @@ export default function WebDevelopmentPage() {
         {/* ══ 2. TECH SHOWCASE ═════════════════════════════════ */}
         <TechShowcase />
 
-        <div id="services" aria-hidden="true" />
+        {/* ══ DEVELOPMENT SERVICES ════════════════════════════ */}
+        <section
+          id="services"
+          aria-label="Development services"
+          className="relative w-full bg-[#050505] px-5 py-14 sm:px-6 sm:py-16 md:py-20"
+        >
+          <div className="mx-auto max-w-6xl">
+            <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3">
+              {DEVELOPMENT_SERVICES.map(({ title, description }) => (
+                <article key={title} className="flex flex-col items-start">
+                  <span aria-hidden="true" className="mb-5 h-px w-10 bg-[#eb1b24]/75" />
+                  <h2 className="mb-3 text-xl font-semibold text-white sm:text-2xl">
+                    {title}
+                  </h2>
+                  <p className="max-w-sm text-sm leading-relaxed text-white/55 md:text-base md:leading-[1.65]">
+                    {description}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
 
         {/* ══ 3. CAPABILITIES ══════════════════════════════════ */}
         <section id="capabilities" className="relative w-full overflow-hidden bg-[#050505]/75 px-5 py-16 sm:px-6 sm:py-20">
