@@ -10,6 +10,7 @@ import { FloatingTechBadges } from "@/components/FloatingTechBadges";
 import { HeroBackground } from "@/components/HeroBackground";
 import { WebDevelopmentIntro } from "@/components/WebDevelopmentIntro";
 import { TechShowcase } from "@/components/sections/TechShowcase";
+import { WebProjectsPortfolio } from "@/components/sections/WebProjectsPortfolio";
 
 /* ── Animation presets ────────────────────────────────── */
 const FADE_UP: Variants = {
@@ -136,6 +137,8 @@ export default function WebDevelopmentPage() {
             </div>
           </div>
         </section>
+
+        <WebProjectsPortfolio />
 
         {/* ══ 3. CAPABILITIES ══════════════════════════════════ */}
         <section id="capabilities" className="relative w-full overflow-hidden bg-[#050505]/75 px-5 py-16 sm:px-6 sm:py-20">

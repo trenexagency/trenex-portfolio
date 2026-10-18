@@ -1,0 +1,110 @@
+TASK: Add the 6 website portfolio project cards to the correct location on the existing Trenex Agency Web, App & Software Development service page.
+
+**IMPORTANT: First inspect the existing page structure and identify the exact section containing these three service descriptions. Add the website portfolio grid directly BELOW these three descriptions, within the same Web, App & Software Development service page. Do not place it on the homepage or inside another service page.**
+
+### 1. Identify the exact location
+
+Find the section containing these three headings and descriptions:
+
+**Web Development**  
+"We build modern, responsive websites that match your brand and help your business grow"
+
+**Application Development**  
+"We create user-friendly mobile and web apps designed around your business needs."
+
+**Software Development**  
+"We develop custom software to simplify your work and solve your business challenges."
+
+Keep all three existing service descriptions unchanged.
+
+Immediately after these three service offerings, add a professionally designed website portfolio section.
+
+### 2. Portfolio section heading
+
+Use this heading:
+
+**OUR WEBSITE PROJECTS**
+
+Optional subtitle:
+
+"Explore websites built for different brands and business needs."
+
+The section must feel like a natural continuation of the Web, App & Software Development service page.
+
+### 3. Add these six website project cards in the exact order below
+
+1. Project name: **inamco**  
+   URL: https://inamco.com.au/
+
+2. Project name: **scrapzone**  
+   URL: https://scrapzone.com.au/
+
+3. Project name: **ycdo**  
+   URL: https://ycdo.org.pk/
+
+4. Project name: **briefcase**  
+   URL: https://briefcase.pk/
+
+5. Project name: **rollover**  
+   URL: https://rollover.com.pk/
+
+6. Project name: **hurrcollective**  
+   URL: https://www.hurrcollective.com/
+
+### 4. Match the screenshots correctly
+
+I will provide six website screenshots named `1`, `2`, `3`, `4`, `5`, and `6`, possibly with file extensions such as `.png`.
+
+Match them strictly as follows:
+
+- Screenshot 1 → inamco
+- Screenshot 2 → scrapzone
+- Screenshot 3 → ycdo
+- Screenshot 4 → briefcase
+- Screenshot 5 → rollover
+- Screenshot 6 → hurrcollective
+
+Use the supplied screenshots as the project card images. Do not substitute random images, fetch replacement screenshots, or mix up the image-to-project mapping.
+
+If any screenshot is missing or inaccessible, ask me instead of silently using the wrong image.
+
+### 5. Professional card design
+
+- Use a clean, premium portfolio grid consistent with Trenex Agency's existing black-and-red visual identity.
+- Desktop: 3 columns.
+- Tablet: 2 columns.
+- Mobile: 1 column.
+- Keep all six cards in normal vertical page scrolling, not a horizontal carousel.
+- Each card must include the correct screenshot, project name, and a clearly visible **Visit Website** button.
+- Use consistent spacing, alignment, image containers, borders, and subtle hover effects that match the existing design.
+- Preserve screenshot proportions. Do not stretch images. For very tall full-page screenshots, use a suitable cropped preview within the card.
+- Ensure the layout works properly on mobile, tablet, laptop, and desktop without horizontal overflow.
+
+### 6. Button functionality
+
+Every **Visit Website** button must open its own corresponding URL in a new browser tab.
+
+Use the correct URL for every project and safe external-link attributes: `target="_blank"` and `rel="noopener noreferrer"`.
+
+### 7. Strict scope restrictions
+
+- Add this portfolio section ONLY to the existing Web, App & Software Development service page.
+- Place it directly below the three service descriptions specified above.
+- Do not add these cards to the homepage.
+- Do not modify the homepage, navigation, service intro animation, or other service pages.
+- Do not change the three service descriptions.
+- Do not redesign unrelated sections or change the overall Trenex Agency branding.
+- Do not add duplicate portfolio sections if one already exists; inspect the existing implementation and update the correct section.
+- Reuse existing components and styles wherever possible.
+
+### 8. Verify before finishing
+
+After implementation, confirm that:
+1. The portfolio appears in the correct location on the Web, App & Software Development page.
+2. All six screenshots match the correct project names and URLs.
+3. The projects appear in the specified order.
+4. All six Visit Website buttons work correctly.
+5. The layout is responsive and visually consistent with Trenex Agency.
+6. The available build or typecheck passes, or any errors are clearly reported.
+
+Do not make unrelated changes. Prioritize correct placement, accurate image matching, working links, and a professional result.
