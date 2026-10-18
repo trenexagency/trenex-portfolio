@@ -1,0 +1,73 @@
+TASK: Add a compact, professional portfolio PDF call-to-action section directly below the existing 9 website project cards on the Web, App & Software Development service page.
+
+### 1. Exact placement — very important
+
+- Locate the existing Web, App & Software Development service page containing all 9 website project cards.
+- Add the new section immediately AFTER the complete 9-card website portfolio grid.
+- The section must appear below all 9 cards, not above them, between them, on the homepage, or on another service page.
+- Reuse the existing page structure and components wherever possible.
+- Do not create a duplicate portfolio section.
+
+### 2. Section content
+
+Heading:
+"Explore Our Professional Work"
+
+Short supporting text:
+"Discover our portfolio and completed projects."
+
+Button label:
+"View Our Portfolio PDF"
+
+### 3. PDF integration
+
+I have uploaded my portfolio PDF, named `trenex-portfolio.pdf`.
+
+- First inspect the project files and locate the actual uploaded PDF.
+- Use the actual file path and extension. Do not rename, duplicate, or recreate the PDF unnecessarily.
+- If it is not already in a publicly accessible directory, place it in the appropriate public assets directory for the existing project framework.
+- Use the correct deployed URL for the PDF.
+- If the PDF cannot be found, ask me to upload it instead of creating a fake URL.
+
+### 4. Button functionality
+
+- Clicking "View Our Portfolio PDF" must open the actual PDF in a NEW browser tab.
+- Use `target="_blank"` and `rel="noopener noreferrer"`.
+- The PDF should open in the browser's PDF viewer, not automatically download.
+- Do not use Google Drive.
+- Verify the final PDF URL and button destination.
+
+### 5. Compact, premium design
+
+This section must occupy as little vertical space as reasonably possible while remaining attractive and easy to use.
+
+- Keep the existing Trenex Agency black-and-red branding.
+- Use a compact layout with minimal top and bottom padding.
+- Keep the heading moderately sized, not oversized.
+- Keep the supporting text to one short line where screen width allows.
+- Make the button prominent but not excessively large.
+- Place the heading, supporting text, and button in a well-balanced, compact arrangement.
+- On desktop, use a single horizontal row if it fits naturally: heading and short description on the left, button on the right.
+- On mobile, stack the content neatly with minimal spacing and no horizontal overflow.
+- Use subtle borders, red accents, and restrained glow effects consistent with the existing website.
+- Avoid large empty spaces, oversized containers, unnecessary illustrations, and excessive decorative animations.
+- Do not make this section taller than necessary.
+
+### 6. Preserve existing work
+
+- Do not change or remove any of the existing 9 website project cards.
+- Do not modify their project names, screenshots, URLs, button behavior, ordering, responsive grid, or lazy-loading implementation.
+- Do not change the three service descriptions, homepage, navigation, intro animation, or unrelated sections.
+- Do not redesign the overall service page.
+
+### 7. Final verification
+
+After implementation:
+1. Confirm the section appears directly below all 9 website cards.
+2. Confirm the layout is compact and visually consistent with Trenex Agency.
+3. Test desktop, tablet, and mobile layouts.
+4. Confirm the button opens the correct PDF in a new browser tab.
+5. Verify the PDF URL works after deployment.
+6. Run the available build or typecheck and report any issues.
+
+Make only the changes requested in this task.

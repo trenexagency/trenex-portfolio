@@ -102,6 +102,34 @@ export function WebProjectsPortfolio() {
             </article>
           ))}
         </div>
+
+        <section
+          aria-labelledby="professional-work-heading"
+          className="mt-8 border-t border-white/10 pt-6"
+        >
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+            <div className="min-w-0">
+              <h2
+                id="professional-work-heading"
+                className="text-lg font-semibold tracking-tight text-white sm:text-xl"
+              >
+                Explore Our Professional Work
+              </h2>
+              <p className="mt-1 text-xs leading-relaxed text-white/55 sm:text-sm">
+                Discover our portfolio and completed projects.
+              </p>
+            </div>
+            <a
+              href={`${import.meta.env.BASE_URL}portfolio/trenex-portfolio_1792312947355.pdf`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-[#eb1b24]/55 bg-[#eb1b24]/10 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.1em] text-white transition-all duration-200 hover:border-[#eb1b24] hover:bg-[#eb1b24]/20 hover:shadow-[0_0_20px_rgba(235,27,36,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eb1b24] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505] sm:w-auto"
+            >
+              View Our Portfolio PDF
+              <ExternalLink aria-hidden="true" className="h-3.5 w-3.5" />
+            </a>
+          </div>
+        </section>
       </div>
     </section>
   );
