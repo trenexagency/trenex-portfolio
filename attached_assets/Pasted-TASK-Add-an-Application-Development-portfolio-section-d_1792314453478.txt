@@ -1,0 +1,128 @@
+TASK: Add an Application Development portfolio section directly BELOW the existing portfolio PDF call-to-action section on the Trenex Agency Web, App & Software Development page.
+
+The existing page already contains:
+- 9 website project cards.
+- A compact section with the heading "Explore Our Professional Work".
+- Supporting text: "Discover our portfolio and completed projects."
+- A "View Our Portfolio PDF" button that opens the portfolio PDF in a new tab.
+
+Keep all existing content and functionality unchanged.
+
+## 1. Exact placement — critical
+
+Add the new Application Development section immediately BELOW the entire existing "Explore Our Professional Work" PDF section.
+
+The order on the page must be:
+
+1. Existing 9 website project cards.
+2. Existing "Explore Our Professional Work" heading.
+3. Existing supporting text: "Discover our portfolio and completed projects."
+4. Existing "View Our Portfolio PDF" button.
+5. NEW Application Development portfolio section with 6 app cards.
+
+Do not place the new section above the PDF button, inside the website project grid, or on another page.
+
+## 2. Application Development section
+
+Section heading:
+"Application Development"
+
+Description:
+"Our app development expertise transforms your ideas into functional and engaging mobile applications."
+
+Optional small subheading:
+"Explore Our App Projects"
+
+Keep the text concise and visually consistent with the existing page.
+
+## 3. Add these six app projects in this exact order
+
+**Project 1**
+Name: Dropshipy  
+URL: https://play.google.com/store/apps/details?id=com.ecomlix.dropshipy  
+Image: Screenshot file `1` with its original extension.
+
+**Project 2**
+Name: Black Men Fashion  
+URL: https://play.google.com/store/apps/details?id=com.forefo.black_men_fashion  
+Image: Screenshot file `2` with its original extension.
+
+**Project 3**
+Name: African Fashion Design  
+URL: https://play.google.com/store/apps/details?id=com.fastyle.African.Fashion.Design  
+Image: Screenshot file `3` with its original extension.
+
+**Project 4**
+Name: GharPar  
+URL: https://play.google.com/store/apps/details?id=com.onebyte.gharpar  
+Image: Screenshot file `4` with its original extension.
+
+**Project 5**
+Name: Apni Sawari  
+URL: https://play.google.com/store/apps/details?id=com.apnisawari.customerApp  
+Image: Screenshot file `5` with its original extension.
+
+**Project 6**
+Name: FitHero  
+URL: https://play.google.com/store/apps/details?id=com.fnp.fithero  
+Image: Screenshot file `6` with its original extension.
+
+I will provide the six app images in this exact order. Match image 1 to Dropshipy, image 2 to Black Men Fashion, and so on. Do not mix up the images or substitute unrelated images.
+
+If any image is missing or inaccessible, ask me before proceeding.
+
+## 4. Match the existing website project card design
+
+Use the same reusable card component, visual style, spacing, borders, typography, image treatment, and hover effects used by the existing 9 website project cards.
+
+The app cards should look like they belong to the same professional Trenex Agency portfolio.
+
+Each app card must contain:
+- Its corresponding supplied app image.
+- The exact app name listed above.
+- A button labelled "View on Google Play".
+
+Layout:
+- Desktop: 3 columns.
+- Tablet: 2 columns.
+- Mobile: 1 column.
+- Use normal vertical scrolling, not a horizontal carousel.
+
+Image requirements:
+- Preserve image proportions.
+- Never stretch or distort the supplied images.
+- Keep image containers consistent.
+- Use lazy loading for off-screen images where appropriate.
+- Reserve image space to prevent layout shifts.
+
+## 5. Google Play button functionality
+
+Each "View on Google Play" button must open the exact URL associated with its app in a new browser tab.
+
+Use:
+`target="_blank"` and `rel="noopener noreferrer"`.
+
+Verify that all six buttons point to the correct URLs.
+
+## 6. Preserve all existing work
+
+- Do not change or remove the 9 website project cards.
+- Do not modify their images, names, URLs, order, or Visit Website buttons.
+- Do not change the existing "Explore Our Professional Work" section or its PDF button.
+- Do not break the PDF link or its new-tab behavior.
+- Do not modify the homepage, navigation, service introduction animation, or unrelated pages.
+- Do not redesign the overall Trenex Agency website.
+- Reuse existing components and styles instead of creating an unrelated design.
+
+## 7. Final verification
+
+After implementation, confirm:
+1. The Application Development section appears directly below the PDF section.
+2. All six app images match their correct projects and remain in the specified order.
+3. All six app names and Google Play URLs are correct.
+4. The app cards visually match the existing website portfolio cards.
+5. The layout works on mobile, tablet, and desktop.
+6. The existing 9 website projects and PDF button still work.
+7. The available build or typecheck passes, or any errors are clearly reported.
+
+Implement only the requested changes. Do not invent images or claim a test passed unless it was actually performed.
