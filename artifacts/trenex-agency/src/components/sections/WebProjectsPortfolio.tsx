@@ -31,6 +31,21 @@ const WEB_PROJECTS = [
     url: "https://www.hurrcollective.com/",
     image: "hurrcollective.webp",
   },
+  {
+    name: "officinegullo",
+    url: "https://officinegullo.com/en/",
+    image: "officinegullo.webp",
+  },
+  {
+    name: "soicher-marin",
+    url: "https://soicher-marin.com/",
+    image: "soicher-marin.webp",
+  },
+  {
+    name: "mistore",
+    url: "https://mistore.pk/",
+    image: "mistore.webp",
+  },
 ];
 
 export function WebProjectsPortfolio() {

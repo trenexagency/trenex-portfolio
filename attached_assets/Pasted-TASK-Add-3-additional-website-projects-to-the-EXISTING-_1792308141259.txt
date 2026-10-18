@@ -1,0 +1,71 @@
+TASK: Add 3 additional website projects to the EXISTING Trenex Agency Web, App & Software Development portfolio.
+
+The first 6 website project cards have already been added successfully. Keep all 6 existing projects unchanged and add these 3 new projects after them, in the exact order below. The portfolio must contain 9 projects in total.
+
+### 1. New project details
+
+**Project 7**
+- Project name: `officinegullo`
+- Website URL: https://officinegullo.com/en/
+- Screenshot file: `7` (use its existing file extension, if provided)
+
+**Project 8**
+- Project name: `soicher-marin`
+- Website URL: https://soicher-marin.com/
+- Screenshot file: `8` (use its existing file extension, if provided)
+
+**Project 9**
+- Project name: `mistore`
+- Website URL: https://mistore.pk/
+- Screenshot file: `9` (use its existing file extension, if provided)
+
+I will provide these three screenshots in the same order as the URLs. Match each screenshot strictly to its corresponding project. If any screenshot is missing or inaccessible, ask me instead of using an incorrect image.
+
+### 2. Correct placement
+
+- Find the existing website portfolio grid on the Web, App & Software Development service page.
+- Append these three cards after the existing 6 cards.
+- Preserve the existing project order: projects 1–6 first, then projects 7–9.
+- Do not create a separate portfolio section or add these projects to the homepage.
+
+### 3. Lazy loading — important
+
+Implement proper image lazy loading for all nine portfolio card screenshots, including the six existing cards.
+
+- Use native browser image lazy loading (`loading="lazy"`) for portfolio images that are below the initial viewport.
+- Ensure images load as users scroll near the relevant cards, rather than downloading every off-screen screenshot immediately.
+- Reserve image space using appropriate width/height or aspect-ratio styling to prevent layout shifts.
+- Show a consistent placeholder or background while an image loads.
+- Preserve the correct image proportions and use `object-fit` appropriately for the existing card design.
+- Do not lazy-load critical above-the-fold images unnecessarily.
+- Avoid adding unnecessary JavaScript or new dependencies when native lazy loading is sufficient.
+
+### 4. Maintain the existing design
+
+- Preserve Trenex Agency's black-and-red branding.
+- Reuse the current portfolio card component and styles.
+- Keep the responsive grid: 3 columns on desktop, 2 on tablets, and 1 on mobile.
+- Use normal vertical scrolling, not a horizontal carousel.
+- Each card must display its correct screenshot, project name, and a functional **Visit Website** button.
+- Each button must open the exact project URL in a new tab using `target="_blank"` and `rel="noopener noreferrer"`.
+
+### 5. Strict restrictions
+
+- Do not remove, rename, reorder, or otherwise modify the first 6 projects.
+- Do not replace existing screenshots or URLs.
+- Do not change the homepage, navigation, service descriptions, intro animation, or unrelated sections.
+- Do not invent screenshots or substitute random images.
+- Do not create duplicate portfolio grids.
+- Do not claim lazy loading is working unless you verify the implementation.
+
+### 6. Final verification
+
+After making the changes:
+1. Confirm all 9 projects appear in the correct order.
+2. Verify the image-to-project mapping for projects 7–9.
+3. Verify all 9 Visit Website URLs.
+4. Check lazy loading on the portfolio images and confirm off-screen images are deferred where appropriate.
+5. Check responsive behavior on mobile, tablet, and desktop.
+6. Run the available build or typecheck and report any issues.
+
+Make only the changes requested above.
