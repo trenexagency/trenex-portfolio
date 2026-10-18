@@ -1,0 +1,65 @@
+TASK: Add a compact WhatsApp contact section directly below the existing 6 Application Development portfolio cards on the Trenex Agency Web, App & Software Development page.
+
+### 1. Exact placement
+
+- Add the section immediately below all 6 existing app project cards.
+- Do not insert it between cards or on another page.
+- Keep all 9 website cards, the portfolio PDF section, and all 6 app cards unchanged.
+
+### 2. Exact text
+
+Heading:
+"Have an App Idea?"
+
+Supporting text:
+"Let's turn your idea into reality. Contact us to discuss your app development project."
+
+Button text:
+"Discuss Your App Project"
+
+### 3. WhatsApp button functionality
+
+When the visitor clicks the button, open a WhatsApp chat with this number:
+
++923323848135
+
+Use this exact WhatsApp URL:
+
+https://wa.me/923323848135?text=Hi%20Trenex%20Agency%2C%20I%27m%20interested%20in%20your%20app%20development%20services.%20I%27d%20like%20to%20discuss%20my%20project.
+
+The prefilled message must be:
+
+"Hi Trenex Agency, I'm interested in your app development services. I'd like to discuss my project."
+
+The visitor must be able to review and send the message manually. Do not send it automatically.
+
+### 4. Strict design requirements
+
+- Follow the existing Trenex Agency black-and-red visual identity.
+- Do NOT use WhatsApp green anywhere in this section.
+- Do NOT display the WhatsApp logo or any WhatsApp icon.
+- The button must contain text only: "Discuss Your App Project".
+- Do not add any extra icon inside or beside the button.
+- Style the button using the existing Trenex red accent, black background, borders, typography, and subtle glow effects where appropriate.
+- Keep the section compact with minimal vertical spacing.
+- Use a clean, centered layout with a moderately sized heading and short description.
+- Make the button visually clear without making it oversized.
+- Ensure the section looks professional on desktop, tablet, and mobile.
+
+### 5. Preserve existing functionality
+
+- Do not modify or remove any existing website or app project cards.
+- Do not change the portfolio PDF section or its button.
+- Do not alter the homepage, navigation, service introduction animation, or unrelated sections.
+- Reuse existing components and styles wherever possible.
+
+### 6. Verification
+
+- Confirm the section appears directly below the 6 app cards.
+- Verify the WhatsApp number and prefilled message.
+- Confirm clicking the text-only button opens the WhatsApp chat.
+- Confirm no green colour, WhatsApp logo, or WhatsApp icon appears in the section.
+- Confirm the prefilled message is not sent automatically.
+- Run the available build or typecheck and report any issues.
+
+Implement only the changes requested above.

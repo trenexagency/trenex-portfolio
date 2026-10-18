@@ -233,6 +233,29 @@ export function WebProjectsPortfolio() {
               />
             ))}
           </div>
+
+          <section
+            aria-labelledby="app-contact-heading"
+            className="mt-9 border-t border-white/10 pt-7 text-center sm:mt-10 sm:pt-8"
+          >
+            <h2
+              id="app-contact-heading"
+              className="text-2xl font-semibold tracking-tight text-white sm:text-3xl"
+            >
+              Have an App Idea?
+            </h2>
+            <p className="mx-auto mt-2 max-w-2xl text-sm leading-relaxed text-white/55 md:text-base">
+              Let&apos;s turn your idea into reality. Contact us to discuss your app development project.
+            </p>
+            <a
+              href="https://wa.me/923323848135?text=Hi%20Trenex%20Agency%2C%20I%27m%20interested%20in%20your%20app%20development%20services.%20I%27d%20like%20to%20discuss%20my%20project."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-flex items-center justify-center rounded-lg border border-[#eb1b24]/55 bg-[#eb1b24]/10 px-5 py-3 text-xs font-semibold tracking-[0.08em] text-white transition-all duration-200 hover:border-[#eb1b24] hover:bg-[#eb1b24]/20 hover:shadow-[0_0_20px_rgba(235,27,36,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eb1b24] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505]"
+            >
+              Discuss Your App Project
+            </a>
+          </section>
         </section>
       </div>
     </section>
