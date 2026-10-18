@@ -251,9 +251,15 @@ export function WebProjectsPortfolio() {
               href="https://wa.me/923323848135?text=Hi%20Trenex%20Agency%2C%20I%27m%20interested%20in%20your%20app%20development%20services.%20I%27d%20like%20to%20discuss%20my%20project."
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-5 inline-flex items-center justify-center rounded-lg border border-[#eb1b24]/55 bg-[#eb1b24]/10 px-5 py-3 text-xs font-semibold tracking-[0.08em] text-white transition-all duration-200 hover:border-[#eb1b24] hover:bg-[#eb1b24]/20 hover:shadow-[0_0_20px_rgba(235,27,36,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eb1b24] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505]"
+              className="relative mt-5 inline-flex items-center justify-center rounded-lg border border-[#eb1b24]/55 bg-[#eb1b24]/10 px-5 py-3 text-xs font-semibold tracking-[0.08em] text-white transition-all duration-200 hover:border-[#eb1b24] hover:bg-[#eb1b24]/20 hover:shadow-[0_0_20px_rgba(235,27,36,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#eb1b24] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505]"
             >
               Discuss Your App Project
+              <span
+                aria-hidden="true"
+                className="absolute right-[9px] top-1/2 -translate-y-1/2 text-[13px] leading-none text-white/70"
+              >
+                →
+              </span>
             </a>
           </section>
         </section>
