@@ -262,6 +262,9 @@ export function WebProjectsPortfolio() {
               </span>
             </a>
           </section>
+          <h2 className="mt-12 text-3xl font-semibold uppercase tracking-tight text-white sm:text-4xl">
+            SOFTWARE DEVELOPMENT
+          </h2>
         </section>
       </div>
     </section>
