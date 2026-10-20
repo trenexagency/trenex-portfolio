@@ -1,4 +1,5 @@
 import { ExternalLink } from "lucide-react";
+import { SoftwareServicesCarousel } from "@/components/sections/SoftwareServicesCarousel";
 
 const WEB_PROJECTS = [
   {
@@ -262,9 +263,13 @@ export function WebProjectsPortfolio() {
               </span>
             </a>
           </section>
-          <h2 className="mt-12 text-3xl font-semibold uppercase tracking-tight text-white sm:text-4xl">
+          <h2
+            id="software-development-heading"
+            className="mt-12 text-3xl font-semibold uppercase tracking-tight text-white sm:text-4xl"
+          >
             SOFTWARE DEVELOPMENT
           </h2>
+          <SoftwareServicesCarousel />
         </section>
       </div>
     </section>

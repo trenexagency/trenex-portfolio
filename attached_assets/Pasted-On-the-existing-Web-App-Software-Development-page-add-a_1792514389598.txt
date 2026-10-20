@@ -1,0 +1,25 @@
+On the existing **Web, App & Software Development** page, add a responsive software services carousel directly below the **SOFTWARE DEVELOPMENT** heading.
+
+**Carousel content (6 slides):**
+
+1. **School Management System** — Simplify student records, attendance, fee tracking, and academic administration in one place.
+2. **Restaurant POS System** — Manage orders, billing, menus, and daily restaurant operations with greater speed and accuracy.
+3. **ERP Software** — Connect your core business operations, data, and workflows through one centralized system.
+4. **Bakery Management System** — Track orders, production, inventory, and sales to keep bakery operations organized.
+5. **Gym Management System** — Manage memberships, attendance, payments, and daily gym operations more efficiently.
+6. **Custom Software Development** — Need a better way to manage your workload? Let’s build software around your business processes, goals, and requirements.
+
+**Carousel behavior and design:**
+- Display one prominent card at a time, with a subtle preview of the next card where layout allows, so users can tell more slides are available.
+- On mobile, support natural finger swiping. On desktop, provide clear previous/next arrow buttons.
+- Add subtle visual cues such as partially visible adjacent content or pagination indicators to communicate that the carousel is swipeable.
+- Keep transitions smooth, responsive, and controlled by the user. Avoid aggressive autoplay.
+- Match Trenex Agency’s existing premium black-and-red theme, typography, borders, and restrained red accents. No unrelated colors or excessive decoration.
+- Keep descriptions concise and readable, with consistent card dimensions and spacing.
+- The final custom software slide should include a subtle **“Discuss Your Requirements →”** button linking to the existing WhatsApp contact destination. Reuse the existing WhatsApp URL and pre-filled message where appropriate.
+
+**Restrictions:**
+- Make changes only to this carousel on the existing Web, App & Software Development page.
+- Preserve the Software Development heading, website portfolio, PDF CTA, application cards, existing WhatsApp CTA, and all other sections and functionality.
+- Do not add unrelated content, invented client logos, or unnecessary imagery.
+- Verify that all six slides work, mobile swipe gestures function correctly, desktop arrows work, and the layout does not overflow on smaller screens.

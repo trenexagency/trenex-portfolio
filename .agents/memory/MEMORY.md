@@ -1,2 +1,2 @@
-- [Trenex Agency verification](trenex-agency-verification.md) — LoadingScreen blocks screenshot checks; use typecheck + workflow/console logs instead for this artifact.
+- [Trenex Agency verification](trenex-agency-verification.md) — Intro overlay obscures captures; wait for it to exit and bring page targets into the viewport before gesture tests.
 - [Official brand logos in react-icons](brand-logo-icon-sourcing.md) — simple-icons/react-icons lacks Adobe app icons & CapCut (trademark takedowns); extract official glyph paths from Wikimedia Commons SVGs instead.
